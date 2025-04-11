@@ -107,6 +107,12 @@
             vertical-align: middle;
         }
         
+        /* Estilo para destacar o traste 0 (cordas soltas) */
+        .fret[data-fret="0"] {
+            background-color: #e8e8e8;
+            border-right: 2px solid #999;
+        }
+        
         .string:not(:last-child) .fret {
             border-bottom: 1px solid #ddd;
         }
@@ -296,6 +302,7 @@
         }
     </style>
 </head>
+
 <body>
     <h1>Visualizador de Braço de Guitarra</h1>
     
@@ -394,6 +401,9 @@
                 <div class="legend-color triad-note"></div>
                 <span>Nota da Tríade</span>
             </div>
+            <div class="legend-item" style="background-color: #e8e8e8; padding: 5px; border-radius: 4px;">
+                <span>Cordas Soltas (Traste 0)</span>
+            </div>
         </div>
         
         <div id="intervals-legend" class="intervals-legend" style="display: none;">
@@ -426,6 +436,7 @@
             <!-- Lista de todos os tipos de tríades será gerada dinamicamente -->
         </div>
     </div>
+    
     
     <script>
         // Definições globais
@@ -812,8 +823,8 @@
                 if (i < triadTypes.length) {
                     const triadType = triadTypes[i];
                     
- // Gera notas da tríade
- const triadNotes = generateChordNotes(rootNote, triadType);
+                    // Gera notas da tríade
+                    const triadNotes = generateChordNotes(rootNote, triadType);
                     
                     // Gera dados de intervalos da tríade
                     const triadIntervals = triadNotes.map(note => {
@@ -1006,8 +1017,9 @@
                 });
             });
         }
-// Renderiza tríades da escala
-function renderScaleTriads() {
+        
+        // Renderiza tríades da escala
+        function renderScaleTriads() {
             // Primeiro exibe a escala
             renderNotes();
             
