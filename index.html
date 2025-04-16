@@ -2,8 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título da página -->
+    
     <title>Guitar Fretboard Visualizer - Visualize Escalas e Acordes na Guitarra</title>
     
     <!-- Meta descrição -->
@@ -21,11 +20,18 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Guitar Fretboard Visualizer">
     <meta name="twitter:description" content="Visualizador de escalas e acordes para guitarra. Interativo, gratuito e online.">
-
+    
     <style>
+        /* Reset e estilos gerais */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             font-family: 'Arial', sans-serif;
-            max-width: 1200px;
+            width: 1000px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
@@ -34,8 +40,11 @@
         h1 {
             text-align: center;
             color: #333;
+            font-size: 24px;
+            margin: 20px 0;
         }
         
+        /* Estilos dos controles */
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -51,12 +60,13 @@
         .control-group {
             display: flex;
             flex-direction: column;
-            min-width: 150px;
+            width: 150px;
         }
         
         label {
             margin-bottom: 5px;
             font-weight: bold;
+            font-size: 14px;
         }
         
         select, button {
@@ -64,6 +74,7 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
+            width: 100%;
         }
         
         button {
@@ -97,18 +108,20 @@
             color: white;
         }
         
+        /* Estilos do braço da guitarra */
         .fretboard-container {
             overflow-x: auto;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 20px;
+            margin-bottom: 20px;
         }
         
         .fretboard {
             display: table;
             border-collapse: collapse;
-            min-width: 100%;
+            width: 100%;
         }
         
         .string {
@@ -151,6 +164,7 @@
             font-weight: bold;
             background-color: #ddd;
             color: #333;
+            font-size: 14px;
         }
         
         .note {
@@ -166,6 +180,7 @@
             font-size: 12px;
         }
         
+        /* Estilos da legenda */
         .legend {
             margin-top: 40px;
             padding: 15px;
@@ -176,6 +191,8 @@
         
         .legend h3 {
             margin-top: 0;
+            font-size: 18px;
+            margin-bottom: 15px;
         }
         
         .legend-items {
@@ -188,14 +205,37 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            font-size: 14px;
         }
         
         .legend-color {
             width: 20px;
             height: 20px;
             border-radius: 50%;
+            flex-shrink: 0;
         }
         
+        /* Botão menor para as tríades - Removido */
+        
+        /* Layout horizontal para as notas das tríades - agora clicável */
+        .triad-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 3px;
+            flex-wrap: nowrap;
+            min-width: 200px;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+        
+        .triad-info:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Cores para as notas */
         .root {
             background-color: #f44336;
         }
@@ -212,6 +252,7 @@
             background-color: #f44336;
         }
         
+        /* Cores para os intervalos */
         .interval-1P {
             background-color: #f44336; /* Vermelho - Fundamental */
         }
@@ -244,20 +285,21 @@
             background-color: #9c27b0; /* Rosa - Sétimas */
         }
         
-        .triad-i {
-            background-color: #f44336;
-        }
-        
-        .triad-ii {
-            background-color: #ff9800;
-        }
-        
-        .triad-iii {
-            background-color: #ffeb3b;
-        }
-        
-        .triad-iv {
+        /* Cores para as tríades */
+        .triad-i, .triad-major {
             background-color: #4caf50;
+        }
+        
+        .triad-ii, .triad-minor {
+            background-color: #2196f3;
+        }
+        
+        .triad-iii, .triad-dim {
+            background-color: #9c27b0;
+        }
+        
+        .triad-iv, .triad-aug {
+            background-color: #ff9800;
         }
         
         .triad-v {
@@ -272,22 +314,6 @@
             background-color: #795548;
         }
         
-        .triad-major {
-            background-color: #4caf50;
-        }
-        
-        .triad-minor {
-            background-color: #2196f3;
-        }
-        
-        .triad-dim {
-            background-color: #9c27b0;
-        }
-        
-        .triad-aug {
-            background-color: #ff9800;
-        }
-        
         .triad-badge {
             display: inline-block;
             padding: 3px 6px;
@@ -299,10 +325,10 @@
         }
         
         .intervals-legend {
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
         
         .interval-badge {
@@ -312,33 +338,27 @@
             font-weight: bold;
             font-size: 12px;
         }
-        
-        @media (max-width: 768px) {
-            .fret {
-                width: 50px;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <h1>Visualizador de Braço de Guitarra</h1>
+    <h1 data-lang-pt="Visualizador de Braço de Guitarra v6" data-lang-en="Guitar Fretboard Visualizer v6" data-lang-es="Visualizador de Mástil de Guitarra v6">Visualizador de Braço de Guitarra v6</h1>
     
     <div class="controls">
         <div class="control-group">
-            <label for="display-mode">Modo de Exibição:</label>
+            <label for="display-mode" data-lang-pt="Modo de Exibição:" data-lang-en="Display Mode:" data-lang-es="Modo de Visualización:">Modo de Exibição:</label>
             <select id="display-mode">
-                <option value="notes">Todas as Notas</option>
-                <option value="intervals">Intervalos</option>
-                <option value="scale">Escala</option>
-                <option value="chord">Acorde</option>
-                <option value="scale-triads">Tríades da Escala</option>
-                <option value="all-triads">Todos os Tipos de Tríades</option>
+                <option value="notes" data-lang-pt="Todas as Notas" data-lang-en="All Notes" data-lang-es="Todas las Notas">Todas as Notas</option>
+                <option value="intervals" data-lang-pt="Intervalos" data-lang-en="Intervals" data-lang-es="Intervalos">Intervalos</option>
+                <option value="scale" data-lang-pt="Escala" data-lang-en="Scale" data-lang-es="Escala">Escala</option>
+                <option value="chord" data-lang-pt="Acorde" data-lang-en="Chord" data-lang-es="Acorde">Acorde</option>
+                <option value="scale-triads" data-lang-pt="Tríades da Escala" data-lang-en="Scale Triads" data-lang-es="Tríadas de la Escala">Tríades da Escala</option>
+                <option value="all-triads" data-lang-pt="Todos os Tipos de Tríades" data-lang-en="All Triad Types" data-lang-es="Todos los Tipos de Tríadas">Todos os Tipos de Tríades</option>
             </select>
         </div>
         
         <div class="control-group">
-            <label for="root-note">Nota Raiz:</label>
+            <label for="root-note" data-lang-pt="Nota Raiz:" data-lang-en="Root Note:" data-lang-es="Nota Raíz:">Nota Raiz:</label>
             <select id="root-note">
                 <option value="C">C</option>
                 <option value="C#">C#</option>
@@ -356,41 +376,41 @@
         </div>
         
         <div class="control-group" id="scale-type-group">
-            <label for="scale-type">Tipo de Escala:</label>
+            <label for="scale-type" data-lang-pt="Tipo de Escala:" data-lang-en="Scale Type:" data-lang-es="Tipo de Escala:">Tipo de Escala:</label>
             <select id="scale-type">
-                <option value="major">Maior</option>
-                <option value="minor">Menor</option>
-                <option value="pentatonic_major">Pentatônica Maior</option>
-                <option value="pentatonic_minor">Pentatônica Menor</option>
-                <option value="blues">Blues</option>
+                <option value="major" data-lang-pt="Maior" data-lang-en="Major" data-lang-es="Mayor">Maior</option>
+                <option value="minor" data-lang-pt="Menor" data-lang-en="Minor" data-lang-es="Menor">Menor</option>
+                <option value="pentatonic_major" data-lang-pt="Pentatônica Maior" data-lang-en="Major Pentatonic" data-lang-es="Pentatónica Mayor">Pentatônica Maior</option>
+                <option value="pentatonic_minor" data-lang-pt="Pentatônica Menor" data-lang-en="Minor Pentatonic" data-lang-es="Pentatónica Menor">Pentatônica Menor</option>
+                <option value="blues" data-lang-pt="Blues" data-lang-en="Blues" data-lang-es="Blues">Blues</option>
             </select>
         </div>
         
         <div class="control-group" id="chord-type-group" style="display: none;">
-            <label for="chord-type">Tipo de Acorde:</label>
+            <label for="chord-type" data-lang-pt="Tipo de Acorde:" data-lang-en="Chord Type:" data-lang-es="Tipo de Acorde:">Tipo de Acorde:</label>
             <select id="chord-type">
-                <option value="major">Maior</option>
-                <option value="minor">Menor</option>
-                <option value="7">Dominante 7</option>
-                <option value="maj7">Maior 7</option>
-                <option value="m7">Menor 7</option>
-                <option value="dim">Diminuto</option>
-                <option value="aug">Aumentado</option>
-                <option value="m7b5">Meio-Diminuto (m7b5)</option>
+                <option value="major" data-lang-pt="Maior" data-lang-en="Major" data-lang-es="Mayor">Maior</option>
+                <option value="minor" data-lang-pt="Menor" data-lang-en="Minor" data-lang-es="Menor">Menor</option>
+                <option value="7" data-lang-pt="Dominante 7" data-lang-en="Dominant 7" data-lang-es="Dominante 7">Dominante 7</option>
+                <option value="maj7" data-lang-pt="Maior 7" data-lang-en="Major 7" data-lang-es="Mayor 7">Maior 7</option>
+                <option value="m7" data-lang-pt="Menor 7" data-lang-en="Minor 7" data-lang-es="Menor 7">Menor 7</option>
+                <option value="dim" data-lang-pt="Diminuto" data-lang-en="Diminished" data-lang-es="Disminuido">Diminuto</option>
+                <option value="aug" data-lang-pt="Aumentado" data-lang-en="Augmented" data-lang-es="Aumentado">Aumentado</option>
+                <option value="m7b5" data-lang-pt="Meio-Diminuto (m7b5)" data-lang-en="Half-Diminished (m7b5)" data-lang-es="Semi-Disminuido (m7b5)">Meio-Diminuto (m7b5)</option>
             </select>
         </div>
         
         <div class="control-group">
-            <label for="display-toggle">Exibir:</label>
+            <label for="display-toggle" data-lang-pt="Exibir:" data-lang-en="Display:" data-lang-es="Mostrar:">Exibir:</label>
             <div class="toggle-group" id="display-toggle">
-                <button class="toggle-btn active" data-show="notes">Notas</button>
-                <button class="toggle-btn" data-show="intervals">Intervalos</button>
+                <button class="toggle-btn active" data-show="notes" data-lang-pt="Notas" data-lang-en="Notes" data-lang-es="Notas">Notas</button>
+                <button class="toggle-btn" data-show="intervals" data-lang-pt="Intervalos" data-lang-en="Intervals" data-lang-es="Intervalos">Intervalos</button>
             </div>
         </div>
         
         <div class="control-group">
             <label>&nbsp;</label>
-            <button id="update-button">Atualizar</button>
+            <button id="update-button" data-lang-pt="Atualizar" data-lang-en="Update" data-lang-es="Actualizar">Atualizar</button>
         </div>
     </div>
     
@@ -401,31 +421,31 @@
     </div>
     
     <div class="legend">
-        <h3>Legenda</h3>
+        <h3 data-lang-pt="Legenda" data-lang-en="Legend" data-lang-es="Leyenda">Legenda</h3>
         <div class="legend-items">
             <div class="legend-item">
                 <div class="legend-color root"></div>
-                <span>Nota Raiz</span>
+                <span data-lang-pt="Nota Raiz" data-lang-en="Root Note" data-lang-es="Nota Raíz">Nota Raiz</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color scale-note"></div>
-                <span>Nota da Escala</span>
+                <span data-lang-pt="Nota da Escala" data-lang-en="Scale Note" data-lang-es="Nota de la Escala">Nota da Escala</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color chord-note"></div>
-                <span>Nota do Acorde</span>
+                <span data-lang-pt="Nota do Acorde" data-lang-en="Chord Note" data-lang-es="Nota del Acorde">Nota do Acorde</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color triad-note"></div>
-                <span>Nota da Tríade</span>
+                <span data-lang-pt="Nota da Tríade" data-lang-en="Triad Note" data-lang-es="Nota de la Tríada">Nota da Tríade</span>
             </div>
             <div class="legend-item" style="background-color: #e8e8e8; padding: 5px; border-radius: 4px;">
-                <span>Cordas Soltas (Traste 0)</span>
+                <span data-lang-pt="Cordas Soltas (Traste 0)" data-lang-en="Open Strings (Fret 0)" data-lang-es="Cuerdas al Aire (Traste 0)">Cordas Soltas (Traste 0)</span>
             </div>
         </div>
         
         <div id="intervals-legend" class="intervals-legend" style="display: none;">
-            <h4>Intervalos:</h4>
+            <h4 data-lang-pt="Intervalos:" data-lang-en="Intervals:" data-lang-es="Intervalos:">Intervalos:</h4>
             <div class="interval-badge interval-1P">1P</div>
             <div class="interval-badge interval-2m">2m</div>
             <div class="interval-badge interval-2M">2M</div>
@@ -442,44 +462,33 @@
     </div>
     
     <div id="triads-info" class="legend" style="display: none;">
-        <h3>Tríades da Escala</h3>
+        <h3 data-lang-pt="Tríades da Escala" data-lang-en="Scale Triads" data-lang-es="Tríadas de la Escala">Tríades da Escala</h3>
         <div id="triads-list" class="legend-items">
             <!-- Lista de tríades será gerada dinamicamente -->
         </div>
     </div>
     
     <div id="all-triads-info" class="legend" style="display: none;">
-        <h3>Tipos de Tríades</h3>
+        <h3 data-lang-pt="Tipos de Tríades" data-lang-en="Triad Types" data-lang-es="Tipos de Tríadas">Tipos de Tríades</h3>
         <div id="all-triads-list" class="legend-items">
             <!-- Lista de todos os tipos de tríades será gerada dinamicamente -->
         </div>
     </div>
     
+    <footer style="text-align: center; margin-top: 30px; padding: 15px; color: #666; font-size: 14px; border-top: 1px solid #ddd;">
+        &copy; 2025 <span data-lang-pt="Direitos Autorais" data-lang-en="Copyright" data-lang-es="Derechos de Autor">Direitos Autorais</span> - Fabio Alberti (<a href="mailto:fabiocax@gmail.com" style="color: #4285f4; text-decoration: none;">fabiocax@gmail.com</a>)
+    </footer>
     
     <script>
         // Definições globais
         const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-        
-        // Afinação padrão da guitarra (do agudo para o grave)
         const STANDARD_TUNING = ['E', 'B', 'G', 'D', 'A', 'E'];
-        
-        // Quantidade de trastes a serem exibidos
         const NUM_FRETS = 12;
         
         // Definição de intervalos
         const INTERVAL_NAMES = {
-            0: '1P', // Primeira Justa/Uníssono
-            1: '2m', // Segunda menor
-            2: '2M', // Segunda Maior
-            3: '3m', // Terça menor
-            4: '3M', // Terça Maior
-            5: '4P', // Quarta Justa
-            6: 'Tr', // Trítono
-            7: '5P', // Quinta Justa
-            8: '6m', // Sexta menor
-            9: '6M', // Sexta Maior
-            10: '7m', // Sétima menor
-            11: '7M', // Sétima Maior
+            0: '1P', 1: '2m', 2: '2M', 3: '3m', 4: '3M', 5: '4P', 
+            6: 'Tr', 7: '5P', 8: '6m', 9: '6M', 10: '7m', 11: '7M'
         };
         
         // Definição de escalas
@@ -501,6 +510,37 @@
             'maj7': [0, 4, 7, 11],
             'm7': [0, 3, 7, 10],
             'm7b5': [0, 3, 6, 10]
+        };
+        
+        // Traduções
+        const TRANSLATIONS = {
+            'pt': {
+                'showButton': 'Visualizar',
+                'triadNames': {
+                    'major': 'Maior',
+                    'minor': 'Menor',
+                    'dim': 'Diminuta',
+                    'aug': 'Aumentada'
+                }
+            },
+            'en': {
+                'showButton': 'View',
+                'triadNames': {
+                    'major': 'Major',
+                    'minor': 'Minor',
+                    'dim': 'Diminished',
+                    'aug': 'Augmented'
+                }
+            },
+            'es': {
+                'showButton': 'Ver',
+                'triadNames': {
+                    'major': 'Mayor',
+                    'minor': 'Menor',
+                    'dim': 'Disminuida',
+                    'aug': 'Aumentada'
+                }
+            }
         };
         
         // Elementos DOM
@@ -526,18 +566,48 @@
         let allTriads = {};
         let currentTriadIndex = 0;
         let currentTriadType = '';
-        let showNotation = 'notes'; // 'notes' ou 'intervals'
+        let showNotation = 'notes';
+        let currentLanguage = 'pt';
+        
+        // Detectar idioma do navegador
+        function detectBrowserLanguage() {
+            let browserLang = navigator.language || navigator.userLanguage;
+            browserLang = browserLang.substring(0, 2).toLowerCase();
+            
+            if (browserLang === 'pt' || browserLang === 'en' || browserLang === 'es') {
+                currentLanguage = browserLang;
+            } else {
+                currentLanguage = 'en';
+            }
+        }
+        
+        // Função para mudar o idioma
+        function changeLanguage() {
+            document.querySelectorAll('[data-lang-' + currentLanguage + ']').forEach(el => {
+                el.textContent = el.getAttribute('data-lang-' + currentLanguage);
+            });
+            
+            document.querySelectorAll('option[data-lang-' + currentLanguage + ']').forEach(option => {
+                option.textContent = option.getAttribute('data-lang-' + currentLanguage);
+            });
+            
+            document.querySelectorAll('#display-toggle .toggle-btn').forEach(btn => {
+                btn.textContent = btn.getAttribute('data-lang-' + currentLanguage);
+            });
+            
+            updateButtonEl.textContent = updateButtonEl.getAttribute('data-lang-' + currentLanguage);
+            document.documentElement.lang = currentLanguage;
+            updateFretboard();
+        }
         
         // Inicialização
         function init() {
-            // Inicializar braço
+            detectBrowserLanguage();
             initFretboard();
             
-            // Event listeners
             displayModeEl.addEventListener('change', updateControlsVisibility);
             updateButtonEl.addEventListener('click', updateFretboard);
             
-            // Event listener para os botões de toggle (notas/intervalos)
             const toggleBtns = displayToggleEl.querySelectorAll('.toggle-btn');
             toggleBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -548,34 +618,61 @@
                 });
             });
             
-            // Inicializar controles
             updateControlsVisibility();
-            
-            // Gerar dados do braço
             generateFretboardData();
-            
-            // Atualizar visualização
+            changeLanguage();
             updateFretboard();
+        }
+        
+        // Cria o braço da guitarra no DOM
+        function initFretboard() {
+            fretboardEl.innerHTML = '';
+            
+            for (let i = 0; i < STANDARD_TUNING.length; i++) {
+                const stringEl = document.createElement('div');
+                stringEl.className = 'string';
+                
+                const stringNameEl = document.createElement('div');
+                stringNameEl.className = 'string-name';
+                stringNameEl.textContent = STANDARD_TUNING[i];
+                stringEl.appendChild(stringNameEl);
+                
+                for (let j = 0; j <= NUM_FRETS; j++) {
+                    const fretEl = document.createElement('div');
+                    fretEl.className = 'fret';
+                    fretEl.dataset.string = i + 1;
+                    fretEl.dataset.fret = j;
+                    
+                    if (i === 0) {
+                        const fretNumberEl = document.createElement('div');
+                        fretNumberEl.className = 'fret-number';
+                        fretNumberEl.textContent = j;
+                        fretEl.appendChild(fretNumberEl);
+                    }
+                    
+                    stringEl.appendChild(fretEl);
+                }
+                
+                fretboardEl.appendChild(stringEl);
+            }
         }
         
         // Gera os dados do braço da guitarra
         function generateFretboardData() {
             fretboardData = [];
             
-            // Para cada corda
             for (let stringIdx = 0; stringIdx < STANDARD_TUNING.length; stringIdx++) {
                 const string = [];
                 const openNote = STANDARD_TUNING[stringIdx];
                 const openNoteIdx = NOTES.indexOf(openNote);
                 
-                // Para cada traste
                 for (let fret = 0; fret <= NUM_FRETS; fret++) {
                     const noteIdx = (openNoteIdx + fret) % NOTES.length;
                     const note = NOTES[noteIdx];
                     
                     string.push({
                         note: note,
-                        string: stringIdx + 1, // String começa em 1
+                        string: stringIdx + 1,
                         fret: fret
                     });
                 }
@@ -583,7 +680,6 @@
                 fretboardData.push(string);
             }
             
-            // Gera também os dados de intervalos
             generateIntervalsData(rootNoteEl.value);
         }
         
@@ -592,18 +688,15 @@
             fretboardIntervalsData = [];
             const rootIdx = NOTES.indexOf(root);
             
-            // Para cada corda
             for (let stringIdx = 0; stringIdx < STANDARD_TUNING.length; stringIdx++) {
                 const string = [];
                 const openNote = STANDARD_TUNING[stringIdx];
                 const openNoteIdx = NOTES.indexOf(openNote);
                 
-                // Para cada traste
                 for (let fret = 0; fret <= NUM_FRETS; fret++) {
                     const noteIdx = (openNoteIdx + fret) % NOTES.length;
                     const note = NOTES[noteIdx];
                     
-                    // Calcular intervalo
                     const interval = (noteIdx - rootIdx + 12) % 12;
                     const intervalName = INTERVAL_NAMES[interval];
                     
@@ -620,95 +713,26 @@
             }
         }
         
-        // Cria o braço da guitarra no DOM
-        function initFretboard() {
-            // Limpar braço
-            fretboardEl.innerHTML = '';
-            
-            // Criar cada corda
-            for (let i = 0; i < STANDARD_TUNING.length; i++) {
-                const stringEl = document.createElement('div');
-                stringEl.className = 'string';
-                
-                // Adicionar nome da corda
-                const stringNameEl = document.createElement('div');
-                stringNameEl.className = 'string-name';
-                stringNameEl.textContent = STANDARD_TUNING[i];
-                stringEl.appendChild(stringNameEl);
-                
-                // Adicionar trastes
-                for (let j = 0; j <= NUM_FRETS; j++) {
-                    const fretEl = document.createElement('div');
-                    fretEl.className = 'fret';
-                    fretEl.dataset.string = i + 1;
-                    fretEl.dataset.fret = j;
-                    
-                    // Adicionar número do traste na primeira corda
-                    if (i === 0) {
-                        const fretNumberEl = document.createElement('div');
-                        fretNumberEl.className = 'fret-number';
-                        fretNumberEl.textContent = j;
-                        fretEl.appendChild(fretNumberEl);
-                    }
-                    
-                    stringEl.appendChild(fretEl);
-                }
-                
-                fretboardEl.appendChild(stringEl);
-            }
-        }
-        
         // Atualiza visibilidade dos controles
         function updateControlsVisibility() {
             const mode = displayModeEl.value;
             
-            // Mostrar/esconder controles baseado no modo
-            if (mode === 'scale' || mode === 'scale-triads') {
-                scaleTypeGroupEl.style.display = 'flex';
-                chordTypeGroupEl.style.display = 'none';
-                triadsInfoEl.style.display = mode === 'scale-triads' ? 'block' : 'none';
-                allTriadsInfoEl.style.display = 'none';
-                intervalsLegendEl.style.display = showNotation === 'intervals' ? 'flex' : 'none';
-            } else if (mode === 'chord') {
-                scaleTypeGroupEl.style.display = 'none';
-                chordTypeGroupEl.style.display = 'flex';
-                triadsInfoEl.style.display = 'none';
-                allTriadsInfoEl.style.display = 'none';
-                intervalsLegendEl.style.display = showNotation === 'intervals' ? 'flex' : 'none';
-            } else if (mode === 'all-triads') {
-                scaleTypeGroupEl.style.display = 'none';
-                chordTypeGroupEl.style.display = 'none';
-                triadsInfoEl.style.display = 'none';
-                allTriadsInfoEl.style.display = 'block';
-                intervalsLegendEl.style.display = showNotation === 'intervals' ? 'flex' : 'none';
-            } else if (mode === 'intervals') {
-                scaleTypeGroupEl.style.display = 'none';
-                chordTypeGroupEl.style.display = 'none';
-                triadsInfoEl.style.display = 'none';
-                allTriadsInfoEl.style.display = 'none';
-                intervalsLegendEl.style.display = 'flex';
-            } else {
-                scaleTypeGroupEl.style.display = 'none';
-                chordTypeGroupEl.style.display = 'none';
-                triadsInfoEl.style.display = 'none';
-                allTriadsInfoEl.style.display = 'none';
-                intervalsLegendEl.style.display = 'none';
-            }
+            scaleTypeGroupEl.style.display = (mode === 'scale' || mode === 'scale-triads') ? 'flex' : 'none';
+            chordTypeGroupEl.style.display = mode === 'chord' ? 'flex' : 'none';
+            triadsInfoEl.style.display = mode === 'scale-triads' ? 'block' : 'none';
+            allTriadsInfoEl.style.display = mode === 'all-triads' ? 'block' : 'none';
+            intervalsLegendEl.style.display = (showNotation === 'intervals' || mode === 'intervals') ? 'flex' : 'none';
         }
         
         // Atualiza o braço
         function updateFretboard() {
-            // Limpar notas existentes
             document.querySelectorAll('.note').forEach(el => el.remove());
             
-            // Obter modo atual
             const mode = displayModeEl.value;
             const rootNote = rootNoteEl.value;
             
-            // Atualizar dados de intervalos
             generateIntervalsData(rootNote);
             
-            // Gerar e exibir dados com base no modo
             if (mode === 'scale') {
                 generateScaleData(rootNote, scaleTypeEl.value);
                 renderNotes();
@@ -725,7 +749,6 @@
             } else if (mode === 'intervals') {
                 renderIntervals();
             } else {
-                // Modo de todas as notas
                 renderNotes();
             }
         }
@@ -750,10 +773,7 @@
                 });
             }
             
-            scaleData = {
-                notes: notes,
-                intervals: intervals
-            };
+            scaleData = { notes, intervals };
         }
         
         // Gera dados de acorde
@@ -776,15 +796,11 @@
                 });
             }
             
-            chordData = {
-                notes: notes,
-                intervals: intervals
-            };
+            chordData = { notes, intervals };
         }
         
         // Gera dados de tríades da escala
         function generateScaleTriads(root, scaleType) {
-            // Primeiro gera dados da escala se ainda não existirem
             if (!scaleData.notes.length) {
                 generateScaleData(root, scaleType);
             }
@@ -792,16 +808,13 @@
             const scaleNotes = scaleData.notes;
             const triads = [];
             
-            // Determina os tipos de tríade com base no tipo de escala
             let triadTypes = [];
             if (scaleType === 'major') {
                 triadTypes = ['major', 'minor', 'minor', 'major', 'major', 'minor', 'dim'];
             } else if (scaleType === 'minor') {
                 triadTypes = ['minor', 'dim', 'major', 'minor', 'minor', 'major', 'major'];
             } else {
-                // Para outros tipos de escala, determina os tipos de acordo com os intervalos
                 for (let i = 0; i < scaleNotes.length; i++) {
-                    // Pega as notas da tríade
                     const rootNote = scaleNotes[i];
                     const thirdIdx = (i + 2) % scaleNotes.length;
                     const fifthIdx = (i + 4) % scaleNotes.length;
@@ -809,7 +822,6 @@
                     const thirdNote = scaleNotes[thirdIdx];
                     const fifthNote = scaleNotes[fifthIdx];
                     
-                    // Calcula intervalos
                     const rootIdx = NOTES.indexOf(rootNote);
                     const thirdNoteIdx = NOTES.indexOf(thirdNote);
                     const fifthNoteIdx = NOTES.indexOf(fifthNote);
@@ -817,7 +829,6 @@
                     const thirdInterval = (thirdNoteIdx - rootIdx + 12) % 12;
                     const fifthInterval = (fifthNoteIdx - rootIdx + 12) % 12;
                     
-                    // Determina o tipo de tríade
                     let triadType;
                     if (thirdInterval === 4 && fifthInterval === 7) {
                         triadType = 'major';
@@ -835,16 +846,12 @@
                 }
             }
             
-            // Construir tríades
             for (let i = 0; i < scaleNotes.length; i++) {
                 const rootNote = scaleNotes[i];
                 if (i < triadTypes.length) {
                     const triadType = triadTypes[i];
-                    
-                    // Gera notas da tríade
                     const triadNotes = generateChordNotes(rootNote, triadType);
                     
-                    // Gera dados de intervalos da tríade
                     const triadIntervals = triadNotes.map(note => {
                         const noteIdx = NOTES.indexOf(note);
                         const rootNoteIdx = NOTES.indexOf(rootNote);
@@ -888,7 +895,6 @@
             triadTypes.forEach(type => {
                 const notes = generateChordNotes(root, type);
                 
-                // Gera dados de intervalos
                 const intervals = notes.map(note => {
                     const noteIdx = NOTES.indexOf(note);
                     const rootIdx = NOTES.indexOf(root);
@@ -900,10 +906,7 @@
                     };
                 });
                 
-                triads[type] = {
-                    notes: notes,
-                    intervals: intervals
-                };
+                triads[type] = { notes, intervals };
             });
             
             allTriads = triads;
@@ -914,34 +917,26 @@
             const mode = displayModeEl.value;
             const rootNote = rootNoteEl.value;
             
-            // Para cada corda no braço
             fretboardData.forEach((string, stringIdx) => {
-                // Para cada nota na corda
                 string.forEach((noteData, fretIdx) => {
                     const { note, string: stringNum, fret } = noteData;
-                    
-                    // Obter dados de intervalo correspondentes
                     const intervalData = fretboardIntervalsData[stringIdx][fretIdx];
                     
-                    // Determinar se a nota deve ser mostrada
                     let showNote = false;
                     let noteClass = 'note';
-                    let displayText = note; // Texto a ser exibido (nota ou intervalo)
+                    let displayText = note;
                     
                     if (mode === 'notes') {
-                        // Modo de notas - mostrar todas as notas
                         showNote = true;
                         if (note === rootNote) {
                             noteClass += ' root';
                         }
                         
-                        // Se a notação for de intervalos, mostrar o nome do intervalo
                         if (showNotation === 'intervals') {
                             displayText = intervalData.interval_name;
                             noteClass += ` interval-${intervalData.interval_name}`;
                         }
                     } else if (mode === 'scale') {
-                        // Mostrar notas da escala
                         const scaleNotes = scaleData.notes || [];
                         
                         if (scaleNotes.includes(note)) {
@@ -952,7 +947,6 @@
                                 noteClass += ' scale-note';
                             }
                             
-                            // Se a notação for de intervalos, busque o intervalo
                             if (showNotation === 'intervals') {
                                 const interval = scaleData.intervals.find(i => i.note === note);
                                 if (interval) {
@@ -962,7 +956,6 @@
                             }
                         }
                     } else if (mode === 'chord') {
-                        // Mostrar notas do acorde
                         const chordNotes = chordData.notes || [];
                         
                         if (chordNotes.includes(note)) {
@@ -973,7 +966,6 @@
                                 noteClass += ' chord-note';
                             }
                             
-                            // Se a notação for de intervalos, busque o intervalo
                             if (showNotation === 'intervals') {
                                 const interval = chordData.intervals.find(i => i.note === note);
                                 if (interval) {
@@ -985,16 +977,12 @@
                     }
                     
                     if (showNote) {
-                        // Encontrar o elemento do traste
                         const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                         
                         if (fretEl) {
-                            // Criar elemento da nota
                             const noteEl = document.createElement('div');
                             noteEl.className = noteClass;
                             noteEl.textContent = displayText;
-                            
-                            // Adicionar a nota ao traste
                             fretEl.appendChild(noteEl);
                         }
                     }
@@ -1006,30 +994,22 @@
         function renderIntervals() {
             const rootNote = rootNoteEl.value;
             
-            // Para cada corda no braço
             fretboardIntervalsData.forEach(string => {
-                // Para cada nota na corda
                 string.forEach(noteData => {
                     const { note, string: stringNum, fret, interval_name } = noteData;
                     
-                    // Encontrar o elemento do traste
                     const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                     
                     if (fretEl) {
-                        // Criar elemento da nota
                         const noteEl = document.createElement('div');
                         
-                        // Formatação baseada se é nota raiz ou outro intervalo
                         if (note === rootNote) {
                             noteEl.className = 'note root';
                         } else {
                             noteEl.className = `note interval-${interval_name}`;
                         }
                         
-                        // Exibir o nome do intervalo ou a nota dependendo do modo
                         noteEl.textContent = showNotation === 'intervals' ? interval_name : note;
-                        
-                        // Adicionar ao traste
                         fretEl.appendChild(noteEl);
                     }
                 });
@@ -1038,10 +1018,8 @@
         
         // Renderiza tríades da escala
         function renderScaleTriads() {
-            // Primeiro exibe a escala
             renderNotes();
             
-            // Renderiza a lista de tríades
             const triadsListEl = document.getElementById('triads-list');
             triadsListEl.innerHTML = '';
             
@@ -1049,13 +1027,14 @@
                 const triadEl = document.createElement('div');
                 triadEl.className = 'legend-item';
                 
-                // Cria a badge colorida para o grau da escala
                 const degreeBadge = document.createElement('span');
                 degreeBadge.className = `triad-badge triad-${getRomanNumeral(triad.degree).toLowerCase()}`;
                 degreeBadge.textContent = getRomanNumeral(triad.degree);
                 
-                // Cria o texto de descrição da tríade
-                const descriptionEl = document.createElement('span');
+                const triadInfoEl = document.createElement('div');
+                triadInfoEl.className = 'triad-info';
+                triadInfoEl.title = TRANSLATIONS[currentLanguage].showButton;
+                
                 let chordName = triad.root;
                 switch(triad.type) {
                     case 'major': chordName += ''; break;
@@ -1069,52 +1048,39 @@
                     triad.notes.join(', ') : 
                     triad.intervals.map(i => i.interval_name).join(', ');
                 
-                descriptionEl.textContent = `${chordName} (${noteNames})`;
+                triadInfoEl.textContent = `${chordName} (${noteNames})`;
                 
-                // Cria um botão para mostrar a tríade no braço
-                const showButton = document.createElement('button');
-                showButton.textContent = 'Mostrar';
-                showButton.style.marginLeft = '10px';
-                showButton.addEventListener('click', () => {
+                // Fazer o elemento de informações clicável
+                triadInfoEl.addEventListener('click', () => {
                     showTriadOnFretboard(triad, index);
                 });
                 
-                // Adiciona os elementos ao item de tríade
                 triadEl.appendChild(degreeBadge);
-                triadEl.appendChild(descriptionEl);
-                triadEl.appendChild(showButton);
-                
-                // Adiciona o item à lista
+                triadEl.appendChild(triadInfoEl);
                 triadsListEl.appendChild(triadEl);
             });
         }
         
         // Renderiza todos os tipos de tríades
         function renderAllTriads() {
-            // Renderiza a lista de todos os tipos de tríades
             const allTriadsListEl = document.getElementById('all-triads-list');
             allTriadsListEl.innerHTML = '';
             
             const rootNote = rootNoteEl.value;
             const triadTypes = ['major', 'minor', 'dim', 'aug'];
-            const triadNames = {
-                'major': 'Maior',
-                'minor': 'Menor',
-                'dim': 'Diminuta',
-                'aug': 'Aumentada'
-            };
             
             triadTypes.forEach(type => {
                 const triadEl = document.createElement('div');
                 triadEl.className = 'legend-item';
                 
-                // Cria a badge colorida para o tipo de tríade
                 const typeBadge = document.createElement('span');
                 typeBadge.className = `triad-badge triad-${type}`;
-                typeBadge.textContent = triadNames[type];
+                typeBadge.textContent = TRANSLATIONS[currentLanguage].triadNames[type];
                 
-                // Cria o texto de descrição da tríade
-                const descriptionEl = document.createElement('span');
+                const triadInfoEl = document.createElement('div');
+                triadInfoEl.className = 'triad-info';
+                triadInfoEl.title = TRANSLATIONS[currentLanguage].showButton;
+                
                 const triadData = allTriads[type];
                 
                 let chordName = rootNote;
@@ -1130,53 +1096,36 @@
                     triadData.notes.join(', ') : 
                     triadData.intervals.map(i => i.interval_name).join(', ');
                 
-                descriptionEl.textContent = `${chordName} (${noteNames})`;
+                triadInfoEl.textContent = `${chordName} (${noteNames})`;
                 
-                // Cria um botão para mostrar a tríade no braço
-                const showButton = document.createElement('button');
-                showButton.textContent = 'Mostrar';
-                showButton.style.marginLeft = '10px';
-                showButton.addEventListener('click', () => {
+                // Fazer o elemento de informações clicável
+                triadInfoEl.addEventListener('click', () => {
                     showAllTriadType(type);
                 });
                 
-                // Adiciona os elementos ao item de tríade
                 triadEl.appendChild(typeBadge);
-                triadEl.appendChild(descriptionEl);
-                triadEl.appendChild(showButton);
-                
-                // Adiciona o item à lista
+                triadEl.appendChild(triadInfoEl);
                 allTriadsListEl.appendChild(triadEl);
             });
             
-            // Mostra a tríade maior por padrão
             showAllTriadType('major');
         }
         
         // Exibe uma tríade da escala no braço
         function showTriadOnFretboard(triad, triadIndex) {
-            // Remove todas as notas existentes
             document.querySelectorAll('.note').forEach(el => el.remove());
             
-            // Guarda o índice da tríade atual
             currentTriadIndex = triadIndex;
             
-            // Para cada corda no braço
             fretboardData.forEach(string => {
-                // Para cada nota na corda
                 string.forEach(noteData => {
                     const { note, string: stringNum, fret } = noteData;
                     
-                    // Verifica se a nota faz parte da tríade
                     if (triad.notes.includes(note)) {
-                        // Encontra o elemento do traste
                         const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                         
                         if (fretEl) {
-                            // Cria elemento da nota
                             const noteEl = document.createElement('div');
-                            
-                            // Determina a classe e o texto a exibir
                             let displayText = note;
                             
                             if (note === triad.root) {
@@ -1185,7 +1134,6 @@
                                 noteEl.className = `note chord-note`;
                             }
                             
-                            // Se estamos no modo de intervalos, exiba o nome do intervalo
                             if (showNotation === 'intervals') {
                                 const interval = triad.intervals.find(i => i.note === note);
                                 if (interval) {
@@ -1195,8 +1143,6 @@
                             }
                             
                             noteEl.textContent = displayText;
-                            
-                            // Adiciona a nota ao traste
                             fretEl.appendChild(noteEl);
                         }
                     }
@@ -1206,32 +1152,21 @@
         
         // Exibe um tipo de tríade no braço
         function showAllTriadType(triadType) {
-            // Remove todas as notas existentes
             document.querySelectorAll('.note').forEach(el => el.remove());
             
-            // Guarda o tipo de tríade atual
             currentTriadType = triadType;
-            
-            // Obtém as notas da tríade
             const triadData = allTriads[triadType];
             const rootNote = rootNoteEl.value;
             
-            // Para cada corda no braço
             fretboardData.forEach(string => {
-                // Para cada nota na corda
                 string.forEach(noteData => {
                     const { note, string: stringNum, fret } = noteData;
                     
-                    // Verifica se a nota faz parte da tríade
                     if (triadData.notes.includes(note)) {
-                        // Encontra o elemento do traste
                         const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                         
                         if (fretEl) {
-                            // Cria elemento da nota
                             const noteEl = document.createElement('div');
-                            
-                            // Determina a classe e o texto a exibir
                             let displayText = note;
                             
                             if (note === rootNote) {
@@ -1240,7 +1175,6 @@
                                 noteEl.className = `note triad-${triadType}`;
                             }
                             
-                            // Se estamos no modo de intervalos, exiba o nome do intervalo
                             if (showNotation === 'intervals') {
                                 const interval = triadData.intervals.find(i => i.note === note);
                                 if (interval) {
@@ -1250,8 +1184,6 @@
                             }
                             
                             noteEl.textContent = displayText;
-                            
-                            // Adiciona a nota ao traste
                             fretEl.appendChild(noteEl);
                         }
                     }
