@@ -178,6 +178,26 @@
             font-weight: bold;
             text-align: center;
             font-size: 12px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        
+        .note:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Nota destacada pelo usuário */
+        .user-highlighted {
+            background-color: #9c27b0 !important; /* Roxo - prioridade com !important */
+            transform: scale(1.15);
+            box-shadow: 0 0 8px rgba(156, 39, 176, 0.6);
+            z-index: 10; /* Garantir que fique acima das outras */
+        }
+        
+        .note.user-highlighted:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.8);
         }
         
         /* Estilos da legenda */
@@ -215,26 +235,6 @@
             flex-shrink: 0;
         }
         
-        /* Botão menor para as tríades - Removido */
-        
-        /* Layout horizontal para as notas das tríades - agora clicável */
-        .triad-info {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 3px;
-            flex-wrap: nowrap;
-            min-width: 200px;
-            cursor: pointer;
-            padding: 3px 6px;
-            border-radius: 3px;
-            transition: background-color 0.2s;
-        }
-        
-        .triad-info:hover {
-            background-color: #e0e0e0;
-        }
-        
         /* Cores para as notas */
         .root {
             background-color: #f44336;
@@ -255,6 +255,11 @@
         /* Blue note - destacada em azul escuro */
         .blue-note {
             background-color: #1a237e;
+        }
+        
+        /* User highlighted note */
+        .highlight-note {
+            background-color: #9c27b0;
         }
         
         /* Cores para os intervalos */
@@ -343,11 +348,40 @@
             font-weight: bold;
             font-size: 12px;
         }
+        
+        /* Layout horizontal para as notas das tríades - clicável */
+        .triad-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 3px;
+            flex-wrap: nowrap;
+            min-width: 200px;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+        
+        .triad-info:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Status de seleção */
+        .selection-status {
+            display: block;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+            margin-bottom: -10px;
+            font-style: italic;
+        }
     </style>
 </head>
 
 <body>
-    <h1 data-lang-pt="Visualizador de Braço de Guitarra v6" data-lang-en="Guitar Fretboard Visualizer v6" data-lang-es="Visualizador de Mástil de Guitarra v6">Visualizador de Braço de Guitarra v6</h1>
+    <h1 data-lang-pt="Visualizador de Braço de Guitarra" data-lang-en="Guitar Fretboard Visualizer" data-lang-es="Visualizador de Mástil de Guitarra">Visualizador de Braço de Guitarra</h1>
     
     <div class="controls">
         <div class="control-group">
@@ -419,7 +453,14 @@
             <label>&nbsp;</label>
             <button id="update-button" data-lang-pt="Atualizar" data-lang-en="Update" data-lang-es="Actualizar">Atualizar</button>
         </div>
+        
+        <div class="control-group">
+            <label>&nbsp;</label>
+            <button id="clear-highlighted" data-lang-pt="Limpar Seleção" data-lang-en="Clear Selection" data-lang-es="Limpiar Selección">Limpar Seleção</button>
+        </div>
     </div>
+    
+    <div class="selection-status" id="selection-status"></div>
     
     <div class="fretboard-container">
         <div class="fretboard" id="fretboard">
@@ -449,6 +490,10 @@
             <div class="legend-item">
                 <div class="legend-color triad-note"></div>
                 <span data-lang-pt="Nota da Tríade" data-lang-en="Triad Note" data-lang-es="Nota de la Tríada">Nota da Tríade</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color highlight-note"></div>
+                <span data-lang-pt="Nota Destacada" data-lang-en="Highlighted Note" data-lang-es="Nota Destacada">Nota Destacada</span>
             </div>
             <div class="legend-item" style="background-color: #e8e8e8; padding: 5px; border-radius: 4px;">
                 <span data-lang-pt="Cordas Soltas (Traste 0)" data-lang-en="Open Strings (Fret 0)" data-lang-es="Cuerdas al Aire (Traste 0)">Cordas Soltas (Traste 0)</span>
@@ -534,7 +579,8 @@
                     'minor': 'Menor',
                     'dim': 'Diminuta',
                     'aug': 'Aumentada'
-                }
+                },
+                'selectionStatus': 'Clique em qualquer nota para destacá-la. Notas destacadas: {count}'
             },
             'en': {
                 'showButton': 'View',
@@ -543,7 +589,8 @@
                     'minor': 'Minor',
                     'dim': 'Diminished',
                     'aug': 'Augmented'
-                }
+                },
+                'selectionStatus': 'Click on any note to highlight it. Highlighted notes: {count}'
             },
             'es': {
                 'showButton': 'Ver',
@@ -552,7 +599,8 @@
                     'minor': 'Menor',
                     'dim': 'Disminuida',
                     'aug': 'Aumentada'
-                }
+                },
+                'selectionStatus': 'Haga clic en cualquier nota para destacarla. Notas destacadas: {count}'
             }
         };
         
@@ -565,10 +613,12 @@
         const scaleTypeGroupEl = document.getElementById('scale-type-group');
         const chordTypeGroupEl = document.getElementById('chord-type-group');
         const updateButtonEl = document.getElementById('update-button');
+        const clearHighlightedEl = document.getElementById('clear-highlighted');
         const displayToggleEl = document.getElementById('display-toggle');
         const intervalsLegendEl = document.getElementById('intervals-legend');
         const triadsInfoEl = document.getElementById('triads-info');
         const allTriadsInfoEl = document.getElementById('all-triads-info');
+        const selectionStatusEl = document.getElementById('selection-status');
         
         // Estado da aplicação
         let fretboardData = [];
@@ -581,6 +631,9 @@
         let currentTriadType = '';
         let showNotation = 'notes';
         let currentLanguage = 'pt';
+        
+        // Notas que o usuário destacou manualmente
+        let userHighlightedNotes = new Set();
         
         // Detectar idioma do navegador
         function detectBrowserLanguage() {
@@ -609,8 +662,17 @@
             });
             
             updateButtonEl.textContent = updateButtonEl.getAttribute('data-lang-' + currentLanguage);
+            clearHighlightedEl.textContent = clearHighlightedEl.getAttribute('data-lang-' + currentLanguage);
             document.documentElement.lang = currentLanguage;
+            
+            updateSelectionStatus();
             updateFretboard();
+        }
+        
+        // Atualiza o status de seleção
+        function updateSelectionStatus() {
+            const statusTemplate = TRANSLATIONS[currentLanguage].selectionStatus;
+            selectionStatusEl.textContent = statusTemplate.replace('{count}', userHighlightedNotes.size);
         }
         
         // Inicialização
@@ -620,6 +682,7 @@
             
             displayModeEl.addEventListener('change', updateControlsVisibility);
             updateButtonEl.addEventListener('click', updateFretboard);
+            clearHighlightedEl.addEventListener('click', clearHighlightedNotes);
             
             const toggleBtns = displayToggleEl.querySelectorAll('.toggle-btn');
             toggleBtns.forEach(btn => {
@@ -730,6 +793,9 @@
         function updateControlsVisibility() {
             const mode = displayModeEl.value;
             
+            // Atualizar o status de seleção
+            updateSelectionStatus();
+            
             scaleTypeGroupEl.style.display = (mode === 'scale' || mode === 'scale-triads') ? 'flex' : 'none';
             chordTypeGroupEl.style.display = mode === 'chord' ? 'flex' : 'none';
             triadsInfoEl.style.display = mode === 'scale-triads' ? 'block' : 'none';
@@ -745,6 +811,7 @@
             const rootNote = rootNoteEl.value;
             
             generateIntervalsData(rootNote);
+            updateSelectionStatus();
             
             if (mode === 'scale') {
                 generateScaleData(rootNote, scaleTypeEl.value);
@@ -763,6 +830,138 @@
                 renderIntervals();
             } else {
                 renderNotes();
+            }
+        }
+        
+        // Função para limpar notas destacadas pelo usuário
+        function clearHighlightedNotes() {
+            userHighlightedNotes.clear();
+            updateSelectionStatus();
+            updateFretboard();
+        }
+        
+        // Alternar destaque de uma nota
+        function toggleHighlightNote(noteKey) {
+            if (userHighlightedNotes.has(noteKey)) {
+                userHighlightedNotes.delete(noteKey);
+            } else {
+                userHighlightedNotes.add(noteKey);
+            }
+            updateSelectionStatus();
+            
+            // Importante: Não chame updateFretboard() aqui para evitar redesenhar tudo
+            // Em vez disso, atualize apenas a nota clicada
+            updateSingleNote(noteKey);
+        }
+        
+        // Atualiza apenas a nota específica que foi clicada
+        function updateSingleNote(noteKey) {
+            const [stringNum, fret] = noteKey.split('-').map(Number);
+            const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+            
+            if (fretEl) {
+                // Remove a nota atual
+                const existingNote = fretEl.querySelector('.note');
+                if (existingNote) {
+                    existingNote.remove();
+                }
+                
+                // Recupera os dados da nota
+                const stringIdx = stringNum - 1;
+                const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                const intervalData = fretboardIntervalsData[stringIdx].find(n => n.fret === fret);
+                
+                if (!noteData) return;
+                
+                const { note } = noteData;
+                const mode = displayModeEl.value;
+                const rootNote = rootNoteEl.value;
+                const isHighlighted = userHighlightedNotes.has(noteKey);
+                
+                // Recria a nota com o estado correto
+                let noteClass = 'note';
+                let displayText = note;
+                
+                if (isHighlighted) {
+                    noteClass += ' user-highlighted';
+                } else {
+                    // Aplica as classes normais baseadas no modo atual
+                    if (mode === 'notes' || mode === 'intervals') {
+                        if (note === rootNote) {
+                            noteClass += ' root';
+                        }
+                    } else if (mode === 'scale' || mode === 'scale-triads') {
+                        const scaleNotes = scaleData.notes || [];
+                        const scaleType = scaleTypeEl.value;
+                        
+                        if (scaleNotes.includes(note)) {
+                            if (note === rootNote) {
+                                noteClass += ' root';
+                            } else {
+                                // Verificar se é uma blue note
+                                const rootIdx = NOTES.indexOf(rootNote);
+                                const noteIdx = NOTES.indexOf(note);
+                                const interval = (noteIdx - rootIdx + 12) % 12;
+                                
+                                if ((interval === 6) && 
+                                   (scaleType === 'blues' || 
+                                    scaleType === 'pentatonic_minor_blue' || 
+                                    scaleType === 'pentatonic_major_blue')) {
+                                    noteClass += ' blue-note';
+                                } else {
+                                    noteClass += ' scale-note';
+                                }
+                            }
+                        }
+                    } else if (mode === 'chord') {
+                        const chordNotes = chordData.notes || [];
+                        
+                        if (chordNotes.includes(note)) {
+                            if (note === rootNote) {
+                                noteClass += ' root';
+                            } else {
+                                noteClass += ' chord-note';
+                            }
+                        }
+                    } else if (mode === 'all-triads') {
+                        const triadData = allTriads[currentTriadType];
+                        
+                        if (triadData && triadData.notes.includes(note)) {
+                            if (note === rootNote) {
+                                noteClass += ' triad-note';
+                            } else {
+                                noteClass += ` triad-${currentTriadType}`;
+                            }
+                        }
+                    }
+                }
+                
+                // Determina o texto a ser exibido (notas ou intervalos)
+                if (showNotation === 'intervals' && !isHighlighted) {
+                    if (intervalData) {
+                        displayText = intervalData.interval_name;
+                        noteClass += ` interval-${intervalData.interval_name}`;
+                    }
+                }
+                
+                // Cria a nova nota
+                if (mode === 'notes' || mode === 'intervals' || isHighlighted || 
+                    (mode === 'scale' && scaleData.notes.includes(note)) ||
+                    (mode === 'chord' && chordData.notes.includes(note)) ||
+                    (mode === 'all-triads' && allTriads[currentTriadType] && allTriads[currentTriadType].notes.includes(note)) ||
+                    (mode === 'scale-triads' && scaleData.notes.includes(note))) {
+                    
+                    const noteEl = document.createElement('div');
+                    noteEl.className = noteClass;
+                    noteEl.textContent = displayText;
+                    
+                    // Adiciona o evento de clique
+                    noteEl.addEventListener('click', function() {
+                        toggleHighlightNote(noteKey);
+                    });
+                    
+                    fretEl.appendChild(noteEl);
+                }
             }
         }
         
@@ -935,19 +1134,25 @@
                     const { note, string: stringNum, fret } = noteData;
                     const intervalData = fretboardIntervalsData[stringIdx][fretIdx];
                     
+                    // Verificar se a nota está destacada pelo usuário
+                    const noteKey = `${stringNum}-${fret}`;
+                    const isHighlighted = userHighlightedNotes.has(noteKey);
+                    
                     let showNote = false;
                     let noteClass = 'note';
                     let displayText = note;
                     
                     if (mode === 'notes') {
                         showNote = true;
-                        if (note === rootNote) {
+                        if (note === rootNote && !isHighlighted) {
                             noteClass += ' root';
                         }
                         
                         if (showNotation === 'intervals') {
                             displayText = intervalData.interval_name;
-                            noteClass += ` interval-${intervalData.interval_name}`;
+                            if (!isHighlighted) {
+                                noteClass += ` interval-${intervalData.interval_name}`;
+                            }
                         }
                     } else if (mode === 'scale') {
                         const scaleNotes = scaleData.notes || [];
@@ -955,9 +1160,9 @@
                         
                         if (scaleNotes.includes(note)) {
                             showNote = true;
-                            if (note === rootNote) {
+                            if (note === rootNote && !isHighlighted) {
                                 noteClass += ' root';
-                            } else {
+                            } else if (!isHighlighted) {
                                 // Verificar se é uma blue note
                                 const rootIdx = NOTES.indexOf(rootNote);
                                 const noteIdx = NOTES.indexOf(note);
@@ -975,7 +1180,7 @@
                             
                             if (showNotation === 'intervals') {
                                 const interval = scaleData.intervals.find(i => i.note === note);
-                                if (interval) {
+                                if (interval && !isHighlighted) {
                                     displayText = interval.interval_name;
                                     noteClass += ` interval-${interval.interval_name}`;
                                 }
@@ -986,15 +1191,15 @@
                         
                         if (chordNotes.includes(note)) {
                             showNote = true;
-                            if (note === rootNote) {
+                            if (note === rootNote && !isHighlighted) {
                                 noteClass += ' root';
-                            } else {
+                            } else if (!isHighlighted) {
                                 noteClass += ' chord-note';
                             }
                             
                             if (showNotation === 'intervals') {
                                 const interval = chordData.intervals.find(i => i.note === note);
-                                if (interval) {
+                                if (interval && !isHighlighted) {
                                     displayText = interval.interval_name;
                                     noteClass += ` interval-${interval.interval_name}`;
                                 }
@@ -1002,6 +1207,13 @@
                         }
                     }
                     
+                    // Garantir que mostra notas destacadas pelo usuário em qualquer modo
+                    if (isHighlighted) {
+                        showNote = true;
+                        noteClass = 'note user-highlighted';
+                    }
+                    
+                    // Exibe a nota se pertencer ao modo atual ou se estiver destacada
                     if (showNote) {
                         const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                         
@@ -1009,6 +1221,13 @@
                             const noteEl = document.createElement('div');
                             noteEl.className = noteClass;
                             noteEl.textContent = displayText;
+                            
+                            // Adicionar evento de clique para destacar a nota
+                            noteEl.addEventListener('click', function(e) {
+                                e.stopPropagation(); // Evita propagação para outros elementos
+                                toggleHighlightNote(noteKey);
+                            });
+                            
                             fretEl.appendChild(noteEl);
                         }
                     }
@@ -1024,18 +1243,31 @@
                 string.forEach(noteData => {
                     const { note, string: stringNum, fret, interval_name } = noteData;
                     
+                    // Verificar se a nota está destacada pelo usuário
+                    const noteKey = `${stringNum}-${fret}`;
+                    const isHighlighted = userHighlightedNotes.has(noteKey);
+                    
                     const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                     
                     if (fretEl) {
                         const noteEl = document.createElement('div');
                         
-                        if (note === rootNote) {
+                        if (isHighlighted) {
+                            noteEl.className = 'note user-highlighted';
+                        } else if (note === rootNote) {
                             noteEl.className = 'note root';
                         } else {
                             noteEl.className = `note interval-${interval_name}`;
                         }
                         
                         noteEl.textContent = showNotation === 'intervals' ? interval_name : note;
+                        
+                        // Adicionar evento de clique para destacar a nota
+                        noteEl.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            toggleHighlightNote(noteKey);
+                        });
+                        
                         fretEl.appendChild(noteEl);
                     }
                 });
@@ -1147,20 +1379,26 @@
                 string.forEach(noteData => {
                     const { note, string: stringNum, fret } = noteData;
                     
-                    if (triad.notes.includes(note)) {
+                    // Verificar se a nota está destacada pelo usuário
+                    const noteKey = `${stringNum}-${fret}`;
+                    const isHighlighted = userHighlightedNotes.has(noteKey);
+                    
+                    if (triad.notes.includes(note) || isHighlighted) {
                         const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                         
                         if (fretEl) {
                             const noteEl = document.createElement('div');
                             let displayText = note;
                             
-                            if (note === triad.root) {
+                            if (isHighlighted) {
+                                noteEl.className = 'note user-highlighted';
+                            } else if (note === triad.root) {
                                 noteEl.className = `note triad-note`;
                             } else {
                                 noteEl.className = `note chord-note`;
                             }
                             
-                            if (showNotation === 'intervals') {
+                            if (showNotation === 'intervals' && !isHighlighted) {
                                 const interval = triad.intervals.find(i => i.note === note);
                                 if (interval) {
                                     displayText = interval.interval_name;
@@ -1169,6 +1407,13 @@
                             }
                             
                             noteEl.textContent = displayText;
+                            
+                            // Adicionar evento de clique para destacar a nota
+                            noteEl.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                toggleHighlightNote(noteKey);
+                            });
+                            
                             fretEl.appendChild(noteEl);
                         }
                     }
@@ -1188,20 +1433,26 @@
                 string.forEach(noteData => {
                     const { note, string: stringNum, fret } = noteData;
                     
-                    if (triadData.notes.includes(note)) {
+                    // Verificar se a nota está destacada pelo usuário
+                    const noteKey = `${stringNum}-${fret}`;
+                    const isHighlighted = userHighlightedNotes.has(noteKey);
+                    
+                    if (triadData.notes.includes(note) || isHighlighted) {
                         const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                         
                         if (fretEl) {
                             const noteEl = document.createElement('div');
                             let displayText = note;
                             
-                            if (note === rootNote) {
+                            if (isHighlighted) {
+                                noteEl.className = 'note user-highlighted';
+                            } else if (note === rootNote) {
                                 noteEl.className = `note triad-note`;
                             } else {
                                 noteEl.className = `note triad-${triadType}`;
                             }
                             
-                            if (showNotation === 'intervals') {
+                            if (showNotation === 'intervals' && !isHighlighted) {
                                 const interval = triadData.intervals.find(i => i.note === note);
                                 if (interval) {
                                     displayText = interval.interval_name;
@@ -1210,6 +1461,13 @@
                             }
                             
                             noteEl.textContent = displayText;
+                            
+                            // Adicionar evento de clique para destacar a nota
+                            noteEl.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                toggleHighlightNote(noteKey);
+                            });
+                            
                             fretEl.appendChild(noteEl);
                         }
                     }
