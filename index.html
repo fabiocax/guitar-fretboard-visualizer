@@ -252,6 +252,11 @@
             background-color: #f44336;
         }
         
+        /* Blue note - destacada em azul escuro */
+        .blue-note {
+            background-color: #1a237e;
+        }
+        
         /* Cores para os intervalos */
         .interval-1P {
             background-color: #f44336; /* Vermelho - Fundamental */
@@ -382,6 +387,8 @@
                 <option value="minor" data-lang-pt="Menor" data-lang-en="Minor" data-lang-es="Menor">Menor</option>
                 <option value="pentatonic_major" data-lang-pt="Pentatônica Maior" data-lang-en="Major Pentatonic" data-lang-es="Pentatónica Mayor">Pentatônica Maior</option>
                 <option value="pentatonic_minor" data-lang-pt="Pentatônica Menor" data-lang-en="Minor Pentatonic" data-lang-es="Pentatónica Menor">Pentatônica Menor</option>
+                <option value="pentatonic_minor_blue" data-lang-pt="Pentatônica Menor com Blue Note" data-lang-en="Minor Pentatonic with Blue Note" data-lang-es="Pentatónica Menor con Blue Note">Pentatônica Menor com Blue Note</option>
+                <option value="pentatonic_major_blue" data-lang-pt="Pentatônica Maior com Blue Note" data-lang-en="Major Pentatonic with Blue Note" data-lang-es="Pentatónica Mayor con Blue Note">Pentatônica Maior com Blue Note</option>
                 <option value="blues" data-lang-pt="Blues" data-lang-en="Blues" data-lang-es="Blues">Blues</option>
             </select>
         </div>
@@ -430,6 +437,10 @@
             <div class="legend-item">
                 <div class="legend-color scale-note"></div>
                 <span data-lang-pt="Nota da Escala" data-lang-en="Scale Note" data-lang-es="Nota de la Escala">Nota da Escala</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color blue-note"></div>
+                <span data-lang-pt="Blue Note (b5)" data-lang-en="Blue Note (b5)" data-lang-es="Blue Note (b5)">Blue Note (b5)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color chord-note"></div>
@@ -497,7 +508,9 @@
             'minor': [0, 2, 3, 5, 7, 8, 10],
             'pentatonic_major': [0, 2, 4, 7, 9],
             'pentatonic_minor': [0, 3, 5, 7, 10],
-            'blues': [0, 3, 5, 6, 7, 10]
+            'pentatonic_minor_blue': [0, 3, 5, 6, 7, 10],  // Pentatônica menor com blue note (b5)
+            'pentatonic_major_blue': [0, 2, 4, 6, 7, 9],   // Pentatônica maior com blue note
+            'blues': [0, 3, 5, 6, 7, 10]                   // Escala de blues (menor pentatônica + blue note)
         };
         
         // Definição de acordes
@@ -938,13 +951,26 @@
                         }
                     } else if (mode === 'scale') {
                         const scaleNotes = scaleData.notes || [];
+                        const scaleType = scaleTypeEl.value;
                         
                         if (scaleNotes.includes(note)) {
                             showNote = true;
                             if (note === rootNote) {
                                 noteClass += ' root';
                             } else {
-                                noteClass += ' scale-note';
+                                // Verificar se é uma blue note
+                                const rootIdx = NOTES.indexOf(rootNote);
+                                const noteIdx = NOTES.indexOf(note);
+                                const interval = (noteIdx - rootIdx + 12) % 12;
+                                
+                                if ((interval === 6) && 
+                                   (scaleType === 'blues' || 
+                                    scaleType === 'pentatonic_minor_blue' || 
+                                    scaleType === 'pentatonic_major_blue')) {
+                                    noteClass += ' blue-note';
+                                } else {
+                                    noteClass += ' scale-note';
+                                }
                             }
                             
                             if (showNotation === 'intervals') {
