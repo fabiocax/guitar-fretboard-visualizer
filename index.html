@@ -1,26 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    
-    <title>Guitar Fretboard Visualizer - Visualize Escalas e Acordes na Guitarra</title>
-    
-    <!-- Meta descrição -->
-    <meta name="description" content="Visualize escalas, acordes e notas no braço da guitarra com o Guitar Fretboard Visualizer. Ideal para iniciantes e músicos avançados. Explore modos, tonalidades e afinações.">
-    
-    <!-- Palavras-chave relevantes -->
-    <meta name="keywords" content="guitarra, escalas, acordes, braço da guitarra, triades guitarra, escala de blues, visualizador de escalas, modos musicais, teoria musical, afinação, guitarra online, fretboard visualizer">
-    
-    <!-- Meta tags para redes sociais (Open Graph e Twitter Cards) -->
-    <meta property="og:title" content="Guitar Fretboard Visualizer">
-    <meta property="og:description" content="Ferramenta online para visualizar escalas e acordes no braço da guitarra. Aprenda teoria musical com praticidade.">
-    <meta property="og:url" content="https://guitar-fretboard-visualizer.onrender.com/">
-    <meta property="og:type" content="website">
-    
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Guitar Fretboard Visualizer">
-    <meta name="twitter:description" content="Visualizador de escalas e acordes para guitarra. Interativo, gratuito e online.">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Braço de Guitarra</title>
     <style>
         /* Reset e estilos gerais */
         * {
@@ -30,11 +13,12 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
-            width: 1000px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
+            color: #333;
         }
         
         h1 {
@@ -42,6 +26,22 @@
             color: #333;
             font-size: 24px;
             margin: 20px 0;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        /* Container principal com sombra */
+        .main-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 30px;
         }
         
         /* Estilos dos controles */
@@ -60,7 +60,7 @@
         .control-group {
             display: flex;
             flex-direction: column;
-            width: 150px;
+            min-width: 150px;
         }
         
         label {
@@ -202,7 +202,7 @@
         
         /* Estilos da legenda */
         .legend {
-            margin-top: 40px;
+            margin-top: 20px;
             padding: 15px;
             background-color: #fff;
             border-radius: 8px;
@@ -213,6 +213,9 @@
             margin-top: 0;
             font-size: 18px;
             margin-bottom: 15px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
         }
         
         .legend-items {
@@ -374,134 +377,542 @@
             font-size: 14px;
             color: #666;
             margin-top: 5px;
-            margin-bottom: -10px;
+            margin-bottom: 10px;
             font-style: italic;
+        }
+        
+        /* Estilo para marcadores de traste (inlays) */
+        .inlay-markers {
+            display: flex;
+            margin-bottom: 10px;
+            padding-left: 40px; /* Espaço para a identificação das cordas */
+        }
+        
+        .inlay-marker {
+            width: 60px;
+            height: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .inlay-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #aaa;
+        }
+        
+        .inlay-dot.double-dot {
+            position: relative;
+        }
+        
+        .inlay-dot.double-dot:before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #aaa;
+            left: -15px;
+        }
+        
+        .inlay-dot.double-dot:after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #aaa;
+            right: -15px;
+        }
+        
+        /* Tabs para organizar a interface */
+        .tabs {
+            display: flex;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .tab-button {
+            flex: 1;
+            background-color: #f1f1f1;
+            border: none;
+            border-right: 1px solid #ddd;
+            cursor: pointer;
+            padding: 10px;
+            transition: 0.3s;
+            font-weight: 600;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .tab-button:last-child {
+            border-right: none;
+        }
+        
+        .tab-button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .tab-button.active {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        /* Botões de ação secundários */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .secondary-button {
+            flex: 1;
+            padding: 6px 12px;
+            background-color: #f1f1f1;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        
+        .secondary-button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Card de informações */
+        .info-card {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #4285f4;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .info-card h4 {
+            margin-top: 0;
+            color: #4285f4;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .info-card p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #555;
+        }
+        
+        /* Estilos para o Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 80%;
+            animation: slideIn 0.3s;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-body {
+            padding: 15px 0;
+        }
+        
+        .modal-footer {
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: right;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #333;
+        }
+        
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        
+        @keyframes slideIn {
+            from {transform: translateY(-50px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-group {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .fret {
+                width: 50px;
+            }
+            
+            .note {
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                font-size: 11px;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-button {
+                flex-basis: 33.33%;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .fret {
+                width: 45px;
+            }
+            
+            .note {
+                width: 22px;
+                height: 22px;
+                line-height: 22px;
+                font-size: 10px;
+            }
+            
+            .tab-button {
+                flex-basis: 50%;
+            }
+        }
+        
+        /* Modo escuro para suportar preferências do sistema */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #222;
+                color: #f1f1f1;
+            }
+            
+            h1 {
+                color: #f1f1f1;
+            }
+            
+            .main-container,
+            .controls,
+            .fretboard-container,
+            .legend {
+                background-color: #333;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
+            
+            .subtitle {
+                color: #ccc;
+            }
+            
+            .fret {
+                border-right-color: #555;
+            }
+            
+            .string:not(:last-child) .fret {
+                border-bottom-color: #444;
+            }
+            
+            .fret[data-fret="0"] {
+                background-color: #444;
+                border-right-color: #555;
+            }
+            
+            .string-name {
+                background-color: #444;
+                color: #f1f1f1;
+            }
+            
+            select, button {
+                background-color: #444;
+                color: #f1f1f1;
+                border-color: #555;
+            }
+            
+            .toggle-btn {
+                background-color: #444;
+                color: #f1f1f1;
+            }
+            
+            .secondary-button {
+                background-color: #444;
+                color: #f1f1f1;
+                border-color: #555;
+            }
+            
+            .secondary-button:hover {
+                background-color: #555;
+            }
+            
+            .info-card {
+                background-color: #3a3a3a;
+                border-left-color: #4285f4;
+            }
+            
+            .info-box {
+                background-color: #2a3542;
+                border-left-color: #4285f4;
+                color: #e0e0e0;
+            }
+            
+            .info-card p {
+                color: #ddd;
+            }
+            
+            .tab-button {
+                background-color: #444;
+                color: #f1f1f1;
+                border-color: #555;
+            }
+            
+            .tab-button:hover {
+                background-color: #555;
+            }
+            
+            .legend h3 {
+                color: #f1f1f1;
+                border-bottom-color: #444;
+            }
+            
+            label {
+                color: #f1f1f1;
+            }
+            
+            .triad-info:hover {
+                background-color: #444;
+            }
+            
+            .modal-content {
+                background-color: #333;
+                color: #f1f1f1;
+            }
+            
+            .modal-header, .modal-footer {
+                border-color: #444;
+            }
+            
+            .close {
+                color: #f1f1f1;
+            }
+            
+            .close:hover {
+                color: #fff;
+            }
         }
     </style>
 </head>
-
 <body>
-    <h1 data-lang-pt="Visualizador de Braço de Guitarra" data-lang-en="Guitar Fretboard Visualizer" data-lang-es="Visualizador de Mástil de Guitarra">Visualizador de Braço de Guitarra</h1>
+    <h1>Visualizador de Braço de Guitarra</h1>
+    <p class="subtitle">Uma ferramenta interativa para aprender teoria musical aplicada à guitarra</p>
     
-    <div class="controls">
-        <div class="control-group">
-            <label for="display-mode" data-lang-pt="Modo de Exibição:" data-lang-en="Display Mode:" data-lang-es="Modo de Visualización:">Modo de Exibição:</label>
-            <select id="display-mode">
-                <option value="notes" data-lang-pt="Todas as Notas" data-lang-en="All Notes" data-lang-es="Todas las Notas">Todas as Notas</option>
-                <option value="intervals" data-lang-pt="Intervalos" data-lang-en="Intervals" data-lang-es="Intervalos">Intervalos</option>
-                <option value="scale" data-lang-pt="Escala" data-lang-en="Scale" data-lang-es="Escala">Escala</option>
-                <option value="chord" data-lang-pt="Acorde" data-lang-en="Chord" data-lang-es="Acorde">Acorde</option>
-                <option value="scale-triads" data-lang-pt="Tríades da Escala" data-lang-en="Scale Triads" data-lang-es="Tríadas de la Escala">Tríades da Escala</option>
-                <option value="all-triads" data-lang-pt="Todos os Tipos de Tríades" data-lang-en="All Triad Types" data-lang-es="Todos los Tipos de Tríadas">Todos os Tipos de Tríades</option>
-            </select>
+    <div class="main-container">
+        <div class="tabs">
+            <button class="tab-button active" data-mode="notes">🎵 Notas</button>
+            <button class="tab-button" data-mode="scales">🎼 Escalas</button>
+            <button class="tab-button" data-mode="chord">🎸 Acordes</button>
+            <button class="tab-button" data-mode="scale-triads">🎶 Tríades da Escala</button>
+            <button class="tab-button" data-mode="all-triads">🎹 Tipos de Tríades</button>
+            <button class="tab-button" data-mode="intervals">📏 Intervalos</button>
         </div>
         
-        <div class="control-group">
-            <label for="root-note" data-lang-pt="Nota Raiz:" data-lang-en="Root Note:" data-lang-es="Nota Raíz:">Nota Raiz:</label>
-            <select id="root-note">
-                <option value="C">C</option>
-                <option value="C#">C#</option>
-                <option value="D">D</option>
-                <option value="D#">D#</option>
-                <option value="E">E</option>
-                <option value="F">F</option>
-                <option value="F#">F#</option>
-                <option value="G">G</option>
-                <option value="G#">G#</option>
-                <option value="A">A</option>
-                <option value="A#">A#</option>
-                <option value="B">B</option>
-            </select>
-        </div>
-        
-        <div class="control-group" id="scale-type-group">
-            <label for="scale-type" data-lang-pt="Tipo de Escala:" data-lang-en="Scale Type:" data-lang-es="Tipo de Escala:">Tipo de Escala:</label>
-            <select id="scale-type">
-                <option value="major" data-lang-pt="Maior" data-lang-en="Major" data-lang-es="Mayor">Maior</option>
-                <option value="minor" data-lang-pt="Menor" data-lang-en="Minor" data-lang-es="Menor">Menor</option>
-                <option value="pentatonic_major" data-lang-pt="Pentatônica Maior" data-lang-en="Major Pentatonic" data-lang-es="Pentatónica Mayor">Pentatônica Maior</option>
-                <option value="pentatonic_minor" data-lang-pt="Pentatônica Menor" data-lang-en="Minor Pentatonic" data-lang-es="Pentatónica Menor">Pentatônica Menor</option>
-                <option value="pentatonic_minor_blue" data-lang-pt="Pentatônica Menor com Blue Note" data-lang-en="Minor Pentatonic with Blue Note" data-lang-es="Pentatónica Menor con Blue Note">Pentatônica Menor com Blue Note</option>
-                <option value="pentatonic_major_blue" data-lang-pt="Pentatônica Maior com Blue Note" data-lang-en="Major Pentatonic with Blue Note" data-lang-es="Pentatónica Mayor con Blue Note">Pentatônica Maior com Blue Note</option>
-                <option value="blues" data-lang-pt="Blues" data-lang-en="Blues" data-lang-es="Blues">Blues</option>
-            </select>
-        </div>
-        
-        <div class="control-group" id="chord-type-group" style="display: none;">
-            <label for="chord-type" data-lang-pt="Tipo de Acorde:" data-lang-en="Chord Type:" data-lang-es="Tipo de Acorde:">Tipo de Acorde:</label>
-            <select id="chord-type">
-                <option value="major" data-lang-pt="Maior" data-lang-en="Major" data-lang-es="Mayor">Maior</option>
-                <option value="minor" data-lang-pt="Menor" data-lang-en="Minor" data-lang-es="Menor">Menor</option>
-                <option value="7" data-lang-pt="Dominante 7" data-lang-en="Dominant 7" data-lang-es="Dominante 7">Dominante 7</option>
-                <option value="maj7" data-lang-pt="Maior 7" data-lang-en="Major 7" data-lang-es="Mayor 7">Maior 7</option>
-                <option value="m7" data-lang-pt="Menor 7" data-lang-en="Minor 7" data-lang-es="Menor 7">Menor 7</option>
-                <option value="dim" data-lang-pt="Diminuto" data-lang-en="Diminished" data-lang-es="Disminuido">Diminuto</option>
-                <option value="aug" data-lang-pt="Aumentado" data-lang-en="Augmented" data-lang-es="Aumentado">Aumentado</option>
-                <option value="m7b5" data-lang-pt="Meio-Diminuto (m7b5)" data-lang-en="Half-Diminished (m7b5)" data-lang-es="Semi-Disminuido (m7b5)">Meio-Diminuto (m7b5)</option>
-            </select>
-        </div>
-        
-        <div class="control-group">
-            <label for="display-toggle" data-lang-pt="Exibir:" data-lang-en="Display:" data-lang-es="Mostrar:">Exibir:</label>
-            <div class="toggle-group" id="display-toggle">
-                <button class="toggle-btn active" data-show="notes" data-lang-pt="Notas" data-lang-en="Notes" data-lang-es="Notas">Notas</button>
-                <button class="toggle-btn" data-show="intervals" data-lang-pt="Intervalos" data-lang-en="Intervals" data-lang-es="Intervalos">Intervalos</button>
+        <div class="controls">
+            <div class="control-group">
+                <label for="instrument-select">Instrumento:</label>
+                <select id="instrument-select">
+                    <option value="guitar">🎸 Guitarra</option>
+                    <option value="bass">🎻 Baixo</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <button id="tuning-button">🎸 Afinação</button>
+            </div>
+            
+            <div class="control-group">
+                <label for="root-note">Nota Raiz:</label>
+                <select id="root-note">
+                    <option value="C">C</option>
+                    <option value="C#">C#</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="B">B</option>
+                </select>
+            </div>
+            
+            <div class="control-group" id="scale-type-group" style="display: none;">
+                <label for="scale-type">Tipo de Escala:</label>
+                <select id="scale-type">
+                    <optgroup label="Escalas Básicas">
+                        <option value="major">Maior</option>
+                        <option value="minor">Menor</option>
+                        <option value="pentatonic_major">Pentatônica Maior</option>
+                        <option value="pentatonic_minor">Pentatônica Menor</option>
+                        <option value="pentatonic_minor_blue">Pentatônica Menor com Blue Note</option>
+                        <option value="pentatonic_major_blue">Pentatônica Maior com Blue Note</option>
+                        <option value="blues">Blues</option>
+                    </optgroup>
+                    <optgroup label="Modos Gregos">
+                        <option value="ionian">Jônio (Maior)</option>
+                        <option value="dorian">Dórico</option>
+                        <option value="phrygian">Frígio</option>
+                        <option value="lydian">Lídio</option>
+                        <option value="mixolydian">Mixolídio</option>
+                        <option value="aeolian">Eólio (Menor)</option>
+                        <option value="locrian">Lócrio</option>
+                    </optgroup>
+                </select>
+            </div>
+            
+            <div class="control-group" id="chord-type-group" style="display: none;">
+                <label for="chord-type">Tipo de Acorde:</label>
+                <select id="chord-type">
+                    <option value="major">Maior</option>
+                    <option value="minor">Menor</option>
+                    <option value="7">Dominante 7</option>
+                    <option value="maj7">Maior 7</option>
+                    <option value="m7">Menor 7</option>
+                    <option value="dim">Diminuto</option>
+                    <option value="aug">Aumentado</option>
+                    <option value="m7b5">Meio-Diminuto (m7b5)</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="display-toggle">Exibir:</label>
+                <div class="toggle-group" id="display-toggle">
+                    <button class="toggle-btn active" data-show="notes">🎵 Notas</button>
+                    <button class="toggle-btn" data-show="intervals">📏 Intervalos</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <button id="clear-highlighted">🧹 Limpar Seleção</button>
             </div>
         </div>
         
-        <div class="control-group">
-            <label>&nbsp;</label>
-            <button id="update-button" data-lang-pt="Atualizar" data-lang-en="Update" data-lang-es="Actualizar">Atualizar</button>
+        <div class="selection-status" id="selection-status">Clique em qualquer nota para destacá-la. Notas destacadas: 0</div>
+        
+        <div class="inlay-markers" id="inlay-markers">
+            <!-- Marcadores de inlay serão gerados pelo JavaScript -->
         </div>
         
-        <div class="control-group">
-            <label>&nbsp;</label>
-            <button id="clear-highlighted" data-lang-pt="Limpar Seleção" data-lang-en="Clear Selection" data-lang-es="Limpiar Selección">Limpar Seleção</button>
+        <div class="fretboard-container">
+            <div class="fretboard" id="fretboard">
+                <!-- O braço da guitarra será gerado com JavaScript -->
+            </div>
         </div>
-    </div>
-    
-    <div class="selection-status" id="selection-status"></div>
-    
-    <div class="fretboard-container">
-        <div class="fretboard" id="fretboard">
-            <!-- O braço da guitarra será gerado dinamicamente via JavaScript -->
+        
+        <div id="triads-info" class="legend" style="display: none; margin-top: 20px; margin-bottom: 20px;">
+            <h3>Tríades da Escala</h3>
+            <div id="triads-list" class="legend-items">
+                <!-- Lista de tríades será gerada dinamicamente -->
+            </div>
+        </div>
+        
+        <div id="all-triads-info" class="legend" style="display: none; margin-top: 20px; margin-bottom: 20px;">
+            <h3>Tipos de Tríades</h3>
+            <div id="all-triads-list" class="legend-items">
+                <!-- Lista de todos os tipos de tríades será gerada dinamicamente -->
+            </div>
+        </div>
+        
+        <div class="info-card" id="info-card">
+            <h4>Visualizador de Braço de Guitarra</h4>
+            <p>Selecione um modo de visualização nas abas acima para começar a explorar o braço da guitarra. Clique em qualquer nota para destacá-la.</p>
         </div>
     </div>
     
     <div class="legend">
-        <h3 data-lang-pt="Legenda" data-lang-en="Legend" data-lang-es="Leyenda">Legenda</h3>
+        <h3>Legenda</h3>
         <div class="legend-items">
             <div class="legend-item">
                 <div class="legend-color root"></div>
-                <span data-lang-pt="Nota Raiz" data-lang-en="Root Note" data-lang-es="Nota Raíz">Nota Raiz</span>
+                <span>Nota Raiz</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color scale-note"></div>
-                <span data-lang-pt="Nota da Escala" data-lang-en="Scale Note" data-lang-es="Nota de la Escala">Nota da Escala</span>
+                <span>Nota da Escala</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color blue-note"></div>
-                <span data-lang-pt="Blue Note (b5)" data-lang-en="Blue Note (b5)" data-lang-es="Blue Note (b5)">Blue Note (b5)</span>
+                <span>Blue Note (b5)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color chord-note"></div>
-                <span data-lang-pt="Nota do Acorde" data-lang-en="Chord Note" data-lang-es="Nota del Acorde">Nota do Acorde</span>
+                <span>Nota do Acorde</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color triad-note"></div>
-                <span data-lang-pt="Nota da Tríade" data-lang-en="Triad Note" data-lang-es="Nota de la Tríada">Nota da Tríade</span>
+                <span>Nota da Tríade</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color highlight-note"></div>
-                <span data-lang-pt="Nota Destacada" data-lang-en="Highlighted Note" data-lang-es="Nota Destacada">Nota Destacada</span>
+                <span>Nota Destacada</span>
             </div>
             <div class="legend-item" style="background-color: #e8e8e8; padding: 5px; border-radius: 4px;">
-                <span data-lang-pt="Cordas Soltas (Traste 0)" data-lang-en="Open Strings (Fret 0)" data-lang-es="Cuerdas al Aire (Traste 0)">Cordas Soltas (Traste 0)</span>
+                <span>Cordas Soltas (Traste 0)</span>
             </div>
         </div>
         
         <div id="intervals-legend" class="intervals-legend" style="display: none;">
-            <h4 data-lang-pt="Intervalos:" data-lang-en="Intervals:" data-lang-es="Intervalos:">Intervalos:</h4>
+            <h4>Intervalos:</h4>
             <div class="interval-badge interval-1P">1P</div>
             <div class="interval-badge interval-2m">2m</div>
             <div class="interval-badge interval-2M">2M</div>
@@ -517,752 +928,847 @@
         </div>
     </div>
     
-    <div id="triads-info" class="legend" style="display: none;">
-        <h3 data-lang-pt="Tríades da Escala" data-lang-en="Scale Triads" data-lang-es="Tríadas de la Escala">Tríades da Escala</h3>
-        <div id="triads-list" class="legend-items">
-            <!-- Lista de tríades será gerada dinamicamente -->
-        </div>
-    </div>
-    
-    <div id="all-triads-info" class="legend" style="display: none;">
-        <h3 data-lang-pt="Tipos de Tríades" data-lang-en="Triad Types" data-lang-es="Tipos de Tríadas">Tipos de Tríades</h3>
-        <div id="all-triads-list" class="legend-items">
-            <!-- Lista de todos os tipos de tríades será gerada dinamicamente -->
+    <!-- Modal de Afinação -->
+    <div id="tuning-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Selecionar Afinação</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="control-group">
+                    <label for="tuning-select">Afinação:</label>
+                    <select id="tuning-select">
+                        <option value="standard">Padrão (E A D G B E)</option>
+                        <option value="drop-d">Drop D (D A D G B E)</option>
+                        <option value="drop-c">Drop C (C G C F A D)</option>
+                        <option value="open-g">Open G (D G D G B D)</option>
+                        <option value="open-d">Open D (D A D F# A D)</option>
+                        <option value="dadgad">DADGAD (D A D G A D)</option>
+                        <option value="open-e">Open E (E B E G# B E)</option>
+                        <option value="custom">Personalizada</option>
+                    </select>
+                </div>
+                
+                <div id="custom-tuning-group" style="display: none; margin-top: 15px;">
+                    <label>Afinação Personalizada:</label>
+                    <div id="custom-tuning-container" style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;">
+                        <!-- Selects de afinação personalizada para guitarra (6 cordas) -->
+                        <div style="display: block;">
+                            <select class="custom-tuning" data-string="6">
+                                <option value="C">C</option>
+                                <option value="C#">C#</option>
+                                <option value="D">D</option>
+                                <option value="D#">D#</option>
+                                <option value="E" selected>E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G">G</option>
+                                <option value="G#">G#</option>
+                                <option value="A">A</option>
+                                <option value="A#">A#</option>
+                                <option value="B">B</option>
+                            </select>
+                        </div>
+                        <div style="display: block;">
+                            <select class="custom-tuning" data-string="5">
+                                <option value="C">C</option>
+                                <option value="C#">C#</option>
+                                <option value="D">D</option>
+                                <option value="D#">D#</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G">G</option>
+                                <option value="G#">G#</option>
+                                <option value="A" selected>A</option>
+                                <option value="A#">A#</option>
+                                <option value="B">B</option>
+                            </select>
+                        </div>
+                        <div style="display: block;">
+                            <select class="custom-tuning" data-string="4">
+                                <option value="C">C</option>
+                                <option value="C#">C#</option>
+                                <option value="D" selected>D</option>
+                                <option value="D#">D#</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G">G</option>
+                                <option value="G#">G#</option>
+                                <option value="A">A</option>
+                                <option value="A#">A#</option>
+                                <option value="B">B</option>
+                            </select>
+                        </div>
+                        <div style="display: block;">
+                            <select class="custom-tuning" data-string="3">
+                                <option value="C">C</option>
+                                <option value="C#">C#</option>
+                                <option value="D">D</option>
+                                <option value="D#">D#</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G" selected>G</option>
+                                <option value="G#">G#</option>
+                                <option value="A">A</option>
+                                <option value="A#">A#</option>
+                                <option value="B">B</option>
+                            </select>
+                        </div>
+                        <div style="display: block;">
+                            <select class="custom-tuning" data-string="2">
+                                <option value="C">C</option>
+                                <option value="C#">C#</option>
+                                <option value="D">D</option>
+                                <option value="D#">D#</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G">G</option>
+                                <option value="G#">G#</option>
+                                <option value="A">A</option>
+                                <option value="A#">A#</option>
+                                <option value="B" selected>B</option>
+                            </select>
+                        </div>
+                        <div style="display: block;">
+                            <select class="custom-tuning" data-string="1">
+                                <option value="C">C</option>
+                                <option value="C#">C#</option>
+                                <option value="D">D</option>
+                                <option value="D#">D#</option>
+                                <option value="E" selected>E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G">G</option>
+                                <option value="G#">G#</option>
+                                <option value="A">A</option>
+                                <option value="A#">A#</option>
+                                <option value="B">B</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="apply-tuning" class="secondary-button">✅ Aplicar</button>
+                <button id="cancel-tuning" class="secondary-button">❌ Cancelar</button>
+            </div>
         </div>
     </div>
     
     <footer style="text-align: center; margin-top: 30px; padding: 15px; color: #666; font-size: 14px; border-top: 1px solid #ddd;">
-        &copy; 2025 <span data-lang-pt="Direitos Autorais" data-lang-en="Copyright" data-lang-es="Derechos de Autor">Direitos Autorais</span> - Fabio Alberti (<a href="mailto:fabiocax@gmail.com" style="color: #4285f4; text-decoration: none;">fabiocax@gmail.com</a>)
+        © 2025 Direitos Autorais - Fabio Alberti (fabiocax@gmail.com)
     </footer>
     
     <script>
-        // Definições globais
-        const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-        const STANDARD_TUNING = ['E', 'B', 'G', 'D', 'A', 'E'];
-        const NUM_FRETS = 12;
-        
-        // Definição de intervalos
-        const INTERVAL_NAMES = {
-            0: '1P', 1: '2m', 2: '2M', 3: '3m', 4: '3M', 5: '4P', 
-            6: 'Tr', 7: '5P', 8: '6m', 9: '6M', 10: '7m', 11: '7M'
-        };
-        
-        // Definição de escalas
-        const SCALES = {
-            'major': [0, 2, 4, 5, 7, 9, 11],
-            'minor': [0, 2, 3, 5, 7, 8, 10],
-            'pentatonic_major': [0, 2, 4, 7, 9],
-            'pentatonic_minor': [0, 3, 5, 7, 10],
-            'pentatonic_minor_blue': [0, 3, 5, 6, 7, 10],  // Pentatônica menor com blue note (b5)
-            'pentatonic_major_blue': [0, 2, 4, 6, 7, 9],   // Pentatônica maior com blue note
-            'blues': [0, 3, 5, 6, 7, 10]                   // Escala de blues (menor pentatônica + blue note)
-        };
-        
-        // Definição de acordes
-        const CHORDS = {
-            'major': [0, 4, 7],
-            'minor': [0, 3, 7],
-            'dim': [0, 3, 6],
-            'aug': [0, 4, 8],
-            '7': [0, 4, 7, 10],
-            'maj7': [0, 4, 7, 11],
-            'm7': [0, 3, 7, 10],
-            'm7b5': [0, 3, 6, 10]
-        };
-        
-        // Traduções
-        const TRANSLATIONS = {
-            'pt': {
-                'showButton': 'Visualizar',
-                'triadNames': {
+                    document.addEventListener('DOMContentLoaded', function() {
+            // Definições globais
+            const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            
+            // Instrumento atual (guitarra por padrão)
+            let currentInstrument = 'guitar';
+            
+            // Afinações de guitarra (da corda mais aguda para a mais grave)
+            const GUITAR_TUNINGS = {
+                'standard': ['E', 'B', 'G', 'D', 'A', 'E'],
+                'drop-d': ['E', 'B', 'G', 'D', 'A', 'D'],
+                'drop-c': ['D', 'A', 'F', 'C', 'G', 'C'],
+                'open-g': ['D', 'B', 'G', 'D', 'G', 'D'],
+                'open-d': ['D', 'A', 'F#', 'D', 'A', 'D'],
+                'dadgad': ['D', 'A', 'G', 'D', 'A', 'D'],
+                'open-e': ['E', 'B', 'G#', 'E', 'B', 'E'],
+                'custom': ['E', 'B', 'G', 'D', 'A', 'E']
+            };
+            
+            // Afinações de baixo (da corda mais aguda para a mais grave)
+            const BASS_TUNINGS = {
+                'standard': ['G', 'D', 'A', 'E'],
+                'drop-d': ['G', 'D', 'A', 'D'],
+                'five-string': ['G', 'D', 'A', 'E', 'B'],
+                'six-string': ['C', 'G', 'D', 'A', 'E', 'B'],
+                'custom': ['G', 'D', 'A', 'E']
+            };
+            
+            // Afinação inicial da guitarra - padrão
+            let currentTuning = [...GUITAR_TUNINGS.standard];
+            
+            // Objeto de referência para as afinações do instrumento atual
+            let TUNINGS = GUITAR_TUNINGS;
+            
+            const NUM_FRETS = 12; // Número de trastes a mostrar
+            
+            // Definição de intervalos
+            const INTERVAL_NAMES = {
+                0: '1P', 1: '2m', 2: '2M', 3: '3m', 4: '3M', 5: '4P', 
+                6: 'Tr', 7: '5P', 8: '6m', 9: '6M', 10: '7m', 11: '7M'
+            };
+            
+            // Definição de escalas (intervalos em relação à raiz)
+            const SCALES = {
+                'major': [0, 2, 4, 5, 7, 9, 11],
+                'minor': [0, 2, 3, 5, 7, 8, 10],
+                'pentatonic_major': [0, 2, 4, 7, 9],
+                'pentatonic_minor': [0, 3, 5, 7, 10],
+                'pentatonic_minor_blue': [0, 3, 5, 6, 7, 10],
+                'pentatonic_major_blue': [0, 2, 4, 6, 7, 9],
+                'blues': [0, 3, 5, 6, 7, 10],
+                'ionian': [0, 2, 4, 5, 7, 9, 11],
+                'dorian': [0, 2, 3, 5, 7, 9, 10],
+                'phrygian': [0, 1, 3, 5, 7, 8, 10],
+                'lydian': [0, 2, 4, 6, 7, 9, 11],
+                'mixolydian': [0, 2, 4, 5, 7, 9, 10],
+                'aeolian': [0, 2, 3, 5, 7, 8, 10],
+                'locrian': [0, 1, 3, 5, 6, 8, 10]
+            };
+            
+            // Definição de acordes (intervalos em relação à raiz)
+            const CHORDS = {
+                'major': [0, 4, 7],
+                'minor': [0, 3, 7],
+                'dim': [0, 3, 6],
+                'aug': [0, 4, 8],
+                '7': [0, 4, 7, 10],
+                'maj7': [0, 4, 7, 11],
+                'm7': [0, 3, 7, 10],
+                'm7b5': [0, 3, 6, 10]
+            };
+            
+            // Elementos DOM
+            const fretboardEl = document.getElementById('fretboard');
+            const inlayMarkersEl = document.getElementById('inlay-markers');
+            const tabButtonsEl = document.querySelectorAll('.tab-button');
+            const rootNoteEl = document.getElementById('root-note');
+            const scaleTypeEl = document.getElementById('scale-type');
+            const chordTypeEl = document.getElementById('chord-type');
+            const scaleTypeGroupEl = document.getElementById('scale-type-group');
+            const chordTypeGroupEl = document.getElementById('chord-type-group');
+            const clearHighlightedEl = document.getElementById('clear-highlighted');
+            const displayToggleEl = document.getElementById('display-toggle');
+            const intervalsLegendEl = document.getElementById('intervals-legend');
+            const triadsInfoEl = document.getElementById('triads-info');
+            const allTriadsInfoEl = document.getElementById('all-triads-info');
+            const selectionStatusEl = document.getElementById('selection-status');
+            const infoCardEl = document.getElementById('info-card');
+            
+            // Elementos do Modal de Afinação
+            const tuningButtonEl = document.getElementById('tuning-button');
+            const tuningModalEl = document.getElementById('tuning-modal');
+            const tuningSelectEl = document.getElementById('tuning-select');
+            const customTuningGroupEl = document.getElementById('custom-tuning-group');
+            const customTuningEls = document.querySelectorAll('.custom-tuning');
+            const applyTuningEl = document.getElementById('apply-tuning');
+            const cancelTuningEl = document.getElementById('cancel-tuning');
+            const closeModalEl = document.querySelector('.close');
+            
+            // Elemento seletor de instrumento
+            const instrumentSelectEl = document.getElementById('instrument-select');
+            
+            // Estado da aplicação
+            let fretboardData = [];
+            let fretboardIntervalsData = [];
+            let scaleData = { notes: [], intervals: [] };
+            let chordData = { notes: [], intervals: [] };
+            let scaleTriads = [];
+            let allTriads = {};
+            let currentTriadIndex = 0;
+            let currentTriadType = '';
+            let showNotation = 'notes';
+            let currentMode = 'notes';
+            
+            // Armazenar temporariamente as mudanças de afinação antes de aplicar
+            let tempTuning = [...currentTuning];
+            
+            // Notas que o usuário destacou manualmente
+            let userHighlightedNotes = new Set();
+            
+            // Inicialização principal
+            initFretboard();
+            initInlayMarkers();
+            setupEventListeners();
+            updateControlsVisibility();
+            updateTuningOptions();
+            generateFretboardData();
+            updateFretboard();
+            updateInfoCard();
+            
+            // Configura todos os event listeners
+            function setupEventListeners() {
+                // Event listeners para os botões de tab
+                tabButtonsEl.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        currentMode = this.dataset.mode;
+                        
+                        // Atualizar botões ativos
+                        tabButtonsEl.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Atualizar visibilidade dos controles
+                        updateControlsVisibility();
+                        
+                        // Atualizar o braço
+                        updateFretboard();
+                        
+                        // Atualizar o card de informações
+                        updateInfoCard();
+                    });
+                });
+                
+                // Botão para limpar seleção
+                clearHighlightedEl.addEventListener('click', clearHighlightedNotes);
+                
+                // Botões toggle para exibição (notas/intervalos)
+                const toggleBtns = displayToggleEl.querySelectorAll('.toggle-btn');
+                toggleBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        toggleBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        showNotation = this.dataset.show;
+                        updateFretboard();
+                    });
+                });
+                
+                // Event listeners para alterações em selects
+                rootNoteEl.addEventListener('change', updateFretboard);
+                scaleTypeEl.addEventListener('change', updateFretboard);
+                chordTypeEl.addEventListener('change', updateFretboard);
+                
+                // Event listener para alteração de instrumento
+                instrumentSelectEl.addEventListener('change', function() {
+                    const newInstrument = this.value;
+                    
+                    if (newInstrument !== currentInstrument) {
+                        currentInstrument = newInstrument;
+                        
+                        // Atualizar as afinações disponíveis
+                        if (currentInstrument === 'guitar') {
+                            TUNINGS = GUITAR_TUNINGS;
+                            currentTuning = [...GUITAR_TUNINGS.standard];
+                            tuningButtonEl.innerHTML = '🎸 Afinação';
+                        } else if (currentInstrument === 'bass') {
+                            TUNINGS = BASS_TUNINGS;
+                            currentTuning = [...BASS_TUNINGS.standard];
+                            tuningButtonEl.innerHTML = '🎻 Afinação';
+                        }
+                        
+                        // Reconstruir o braço com a nova afinação
+                        initFretboard();
+                        generateFretboardData();
+                        updateFretboard();
+                        updateTuningOptions();
+                    }
+                });
+                
+                // Modal de Afinação
+                tuningButtonEl.addEventListener('click', openTuningModal);
+                closeModalEl.addEventListener('click', closeTuningModal);
+                cancelTuningEl.addEventListener('click', closeTuningModal);
+                applyTuningEl.addEventListener('click', applyTuningChanges);
+                
+                // Evento para afinação padrão vs. personalizada
+                tuningSelectEl.addEventListener('change', function() {
+                    const selectedTuning = this.value;
+                    
+                    if (selectedTuning === 'custom') {
+                        customTuningGroupEl.style.display = 'block';
+                        
+                        // Atualizar os selects da afinação personalizada
+                        updateCustomTuningSelects();
+                    } else {
+                        customTuningGroupEl.style.display = 'none';
+                        tempTuning = [...TUNINGS[selectedTuning]];
+                    }
+                });
+                
+                // Atualização da afinação personalizada
+                customTuningEls.forEach(select => {
+                    select.addEventListener('change', function() {
+                        const stringIndex = parseInt(this.dataset.string) - 1;
+                        const reversedIndex = (currentTuning.length - stringIndex) - 1;
+                        tempTuning[reversedIndex] = this.value;
+                    });
+                });
+                
+                // Fechar o modal ao clicar fora dele
+                window.addEventListener('click', function(event) {
+                    if (event.target === tuningModalEl) {
+                        closeTuningModal();
+                    }
+                });
+            }
+            
+            // Atualiza as opções de afinação no modal com base no instrumento selecionado
+            function updateTuningOptions() {
+                tuningSelectEl.innerHTML = '';
+                
+                let tuningOptions;
+                if (currentInstrument === 'guitar') {
+                    tuningOptions = {
+                        'standard': 'Padrão (E A D G B E)',
+                        'drop-d': 'Drop D (D A D G B E)',
+                        'drop-c': 'Drop C (C G C F A D)',
+                        'open-g': 'Open G (D G D G B D)',
+                        'open-d': 'Open D (D A D F# A D)',
+                        'dadgad': 'DADGAD (D A D G A D)',
+                        'open-e': 'Open E (E B E G# B E)',
+                        'custom': 'Personalizada'
+                    };
+                } else if (currentInstrument === 'bass') {
+                    tuningOptions = {
+                        'standard': 'Padrão (E A D G)',
+                        'drop-d': 'Drop D (D A D G)',
+                        'five-string': '5 Cordas (B E A D G)',
+                        'six-string': '6 Cordas (B E A D G C)',
+                        'custom': 'Personalizada'
+                    };
+                }
+                
+                for (const [value, label] of Object.entries(tuningOptions)) {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = label;
+                    tuningSelectEl.appendChild(option);
+                }
+            }
+            
+            // Atualiza os selects de afinação personalizada com base no instrumento
+            function updateCustomTuningSelects() {
+                // Esconder todos os selects primeiro
+                customTuningEls.forEach(select => {
+                    const parent = select.parentElement;
+                    if (parent) {
+                        parent.style.display = 'none';
+                    }
+                });
+                
+                // Mostrar apenas os necessários para o instrumento atual
+                const numStrings = currentTuning.length;
+                
+                for (let i = 1; i <= numStrings; i++) {
+                    const select = document.querySelector(`.custom-tuning[data-string="${i}"]`);
+                    if (select) {
+                        const parent = select.parentElement;
+                        if (parent) {
+                            parent.style.display = 'block';
+                        }
+                        const stringIndex = i - 1;
+                        const reversedIndex = (numStrings - stringIndex) - 1;
+                        select.value = tempTuning[reversedIndex];
+                    }
+                }
+            }
+            
+            // Funções do Modal de Afinação
+            function openTuningModal() {
+                // Copiar a afinação atual para a temporária
+                tempTuning = [...currentTuning];
+                
+                // Atualizar as opções de afinação com base no instrumento atual
+                updateTuningOptions();
+                
+                // Selecionar a afinação atual no select se for uma afinação conhecida
+                let matchFound = false;
+                for (const [key, tuning] of Object.entries(TUNINGS)) {
+                    if (arraysEqual(tuning, currentTuning)) {
+                        tuningSelectEl.value = key;
+                        matchFound = true;
+                        break;
+                    }
+                }
+                
+                if (!matchFound) {
+                    tuningSelectEl.value = 'custom';
+                    customTuningGroupEl.style.display = 'block';
+                    updateCustomTuningSelects();
+                } else {
+                    customTuningGroupEl.style.display = tuningSelectEl.value === 'custom' ? 'block' : 'none';
+                    if (tuningSelectEl.value === 'custom') {
+                        updateCustomTuningSelects();
+                    }
+                }
+                
+                tuningModalEl.style.display = 'block';
+            }
+            
+            function closeTuningModal() {
+                tuningModalEl.style.display = 'none';
+            }
+            
+            function applyTuningChanges() {
+                // Aplicar as mudanças da afinação temporária para a atual
+                currentTuning = [...tempTuning];
+                
+                // Salvar em custom se for personalizada
+                if (tuningSelectEl.value === 'custom') {
+                    TUNINGS.custom = [...tempTuning];
+                }
+                
+                // Reconstruir o braço com a nova afinação
+                initFretboard();
+                generateFretboardData();
+                updateFretboard();
+                
+                closeTuningModal();
+            }
+            
+            // Função auxiliar para comparar arrays
+            function arraysEqual(a, b) {
+                if (a.length !== b.length) return false;
+                for (let i = 0; i < a.length; i++) {
+                    if (a[i] !== b[i]) return false;
+                }
+                return true;
+            }
+            
+            // Inicializa os marcadores de inlay (bolinhas nos trastes)
+            function initInlayMarkers() {
+                inlayMarkersEl.innerHTML = '';
+                
+                // Adicionar espaço para nomes das cordas
+                const spacer = document.createElement('div');
+                spacer.style.width = '30px';
+                inlayMarkersEl.appendChild(spacer);
+                
+                // Criar marcadores para cada traste
+                for (let i = 0; i <= NUM_FRETS; i++) {
+                    const markerEl = document.createElement('div');
+                    markerEl.className = 'inlay-marker';
+                    
+                    // Adicionar bolinhas nos trastes 3, 5, 7, 9
+                    if ([3, 5, 7, 9].includes(i)) {
+                        const dotEl = document.createElement('div');
+                        dotEl.className = 'inlay-dot';
+                        markerEl.appendChild(dotEl);
+                    }
+                    // Adicionar bolinhas duplas no traste 12
+                    else if (i === 12) {
+                        const dotEl = document.createElement('div');
+                        dotEl.className = 'inlay-dot double-dot';
+                        markerEl.appendChild(dotEl);
+                    }
+                    
+                    inlayMarkersEl.appendChild(markerEl);
+                }
+            }
+            
+            // Cria o braço da guitarra no DOM
+            function initFretboard() {
+                fretboardEl.innerHTML = '';
+                
+                for (let i = 0; i < currentTuning.length; i++) {
+                    const stringEl = document.createElement('div');
+                    stringEl.className = 'string';
+                    
+                    const stringNameEl = document.createElement('div');
+                    stringNameEl.className = 'string-name';
+                    stringNameEl.textContent = currentTuning[i];
+                    stringEl.appendChild(stringNameEl);
+                    
+                    for (let j = 0; j <= NUM_FRETS; j++) {
+                        const fretEl = document.createElement('div');
+                        fretEl.className = 'fret';
+                        fretEl.dataset.string = i + 1;
+                        fretEl.dataset.fret = j;
+                        
+                        if (i === 0) {
+                            const fretNumberEl = document.createElement('div');
+                            fretNumberEl.className = 'fret-number';
+                            fretNumberEl.textContent = j;
+                            fretEl.appendChild(fretNumberEl);
+                        }
+                        
+                        stringEl.appendChild(fretEl);
+                    }
+                    
+                    fretboardEl.appendChild(stringEl);
+                }
+            }
+            
+            // Atualizar o card de informações
+            function updateInfoCard() {
+                const titleEl = document.createElement('h4');
+                const contentEl = document.createElement('p');
+                
+                switch (currentMode) {
+                    case 'notes':
+                        titleEl.textContent = 'Todas as Notas';
+                        contentEl.textContent = 'Visualizando todas as notas no braço da guitarra. Clique em qualquer nota para destacá-la.';
+                        break;
+                    case 'intervals':
+                        titleEl.textContent = 'Intervalos';
+                        contentEl.textContent = 'Visualizando os intervalos em relação à nota raiz selecionada. Os intervalos são codificados por cores.';
+                        break;
+                    case 'scales':
+                        titleEl.textContent = `Escala ${getScaleTypeName(scaleTypeEl.value)} de ${rootNoteEl.value}`;
+                        contentEl.textContent = `Visualizando as notas da escala. As notas em vermelho são a nota raiz, as verdes são notas da escala, e as azuis escuras são blue notes (quando aplicável).`;
+                        break;
+                    case 'chord':
+                        titleEl.textContent = `Acorde ${getChordName(rootNoteEl.value, chordTypeEl.value)}`;
+                        contentEl.textContent = `Visualizando as notas do acorde. A nota raiz está em vermelho e as demais notas do acorde em azul.`;
+                        break;
+                    case 'scale-triads':
+                        titleEl.textContent = 'Tríades da Escala';
+                        contentEl.textContent = `Visualizando as tríades formadas em cada grau da escala ${getScaleTypeName(scaleTypeEl.value)} de ${rootNoteEl.value}. Clique em uma tríade abaixo para vê-la no braço.`;
+                        break;
+                    case 'all-triads':
+                        titleEl.textContent = 'Tipos de Tríades';
+                        contentEl.textContent = `Visualizando os diferentes tipos de tríades para a nota raiz ${rootNoteEl.value}. Clique em um tipo de tríade abaixo para vê-la no braço.`;
+                        break;
+                }
+                
+                infoCardEl.innerHTML = '';
+                infoCardEl.appendChild(titleEl);
+                infoCardEl.appendChild(contentEl);
+            }
+            
+            // Retorna o nome do tipo de escala
+            function getScaleTypeName(type) {
+                const scaleNames = {
                     'major': 'Maior',
                     'minor': 'Menor',
-                    'dim': 'Diminuta',
-                    'aug': 'Aumentada'
-                },
-                'selectionStatus': 'Clique em qualquer nota para destacá-la. Notas destacadas: {count}'
-            },
-            'en': {
-                'showButton': 'View',
-                'triadNames': {
-                    'major': 'Major',
-                    'minor': 'Minor',
-                    'dim': 'Diminished',
-                    'aug': 'Augmented'
-                },
-                'selectionStatus': 'Click on any note to highlight it. Highlighted notes: {count}'
-            },
-            'es': {
-                'showButton': 'Ver',
-                'triadNames': {
-                    'major': 'Mayor',
-                    'minor': 'Menor',
-                    'dim': 'Disminuida',
-                    'aug': 'Aumentada'
-                },
-                'selectionStatus': 'Haga clic en cualquier nota para destacarla. Notas destacadas: {count}'
-            }
-        };
-        
-        // Elementos DOM
-        const fretboardEl = document.getElementById('fretboard');
-        const displayModeEl = document.getElementById('display-mode');
-        const rootNoteEl = document.getElementById('root-note');
-        const scaleTypeEl = document.getElementById('scale-type');
-        const chordTypeEl = document.getElementById('chord-type');
-        const scaleTypeGroupEl = document.getElementById('scale-type-group');
-        const chordTypeGroupEl = document.getElementById('chord-type-group');
-        const updateButtonEl = document.getElementById('update-button');
-        const clearHighlightedEl = document.getElementById('clear-highlighted');
-        const displayToggleEl = document.getElementById('display-toggle');
-        const intervalsLegendEl = document.getElementById('intervals-legend');
-        const triadsInfoEl = document.getElementById('triads-info');
-        const allTriadsInfoEl = document.getElementById('all-triads-info');
-        const selectionStatusEl = document.getElementById('selection-status');
-        
-        // Estado da aplicação
-        let fretboardData = [];
-        let fretboardIntervalsData = [];
-        let scaleData = { notes: [], intervals: [] };
-        let chordData = { notes: [], intervals: [] };
-        let scaleTriads = [];
-        let allTriads = {};
-        let currentTriadIndex = 0;
-        let currentTriadType = '';
-        let showNotation = 'notes';
-        let currentLanguage = 'pt';
-        
-        // Notas que o usuário destacou manualmente
-        let userHighlightedNotes = new Set();
-        
-        // Detectar idioma do navegador
-        function detectBrowserLanguage() {
-            let browserLang = navigator.language || navigator.userLanguage;
-            browserLang = browserLang.substring(0, 2).toLowerCase();
-            
-            if (browserLang === 'pt' || browserLang === 'en' || browserLang === 'es') {
-                currentLanguage = browserLang;
-            } else {
-                currentLanguage = 'en';
-            }
-        }
-        
-        // Função para mudar o idioma
-        function changeLanguage() {
-            document.querySelectorAll('[data-lang-' + currentLanguage + ']').forEach(el => {
-                el.textContent = el.getAttribute('data-lang-' + currentLanguage);
-            });
-            
-            document.querySelectorAll('option[data-lang-' + currentLanguage + ']').forEach(option => {
-                option.textContent = option.getAttribute('data-lang-' + currentLanguage);
-            });
-            
-            document.querySelectorAll('#display-toggle .toggle-btn').forEach(btn => {
-                btn.textContent = btn.getAttribute('data-lang-' + currentLanguage);
-            });
-            
-            updateButtonEl.textContent = updateButtonEl.getAttribute('data-lang-' + currentLanguage);
-            clearHighlightedEl.textContent = clearHighlightedEl.getAttribute('data-lang-' + currentLanguage);
-            document.documentElement.lang = currentLanguage;
-            
-            updateSelectionStatus();
-            updateFretboard();
-        }
-        
-        // Atualiza o status de seleção
-        function updateSelectionStatus() {
-            const statusTemplate = TRANSLATIONS[currentLanguage].selectionStatus;
-            selectionStatusEl.textContent = statusTemplate.replace('{count}', userHighlightedNotes.size);
-        }
-        
-        // Inicialização
-        function init() {
-            detectBrowserLanguage();
-            initFretboard();
-            
-            displayModeEl.addEventListener('change', updateControlsVisibility);
-            updateButtonEl.addEventListener('click', updateFretboard);
-            clearHighlightedEl.addEventListener('click', clearHighlightedNotes);
-            
-            const toggleBtns = displayToggleEl.querySelectorAll('.toggle-btn');
-            toggleBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    toggleBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    showNotation = this.dataset.show;
-                    updateFretboard();
-                });
-            });
-            
-            updateControlsVisibility();
-            generateFretboardData();
-            changeLanguage();
-            updateFretboard();
-        }
-        
-        // Cria o braço da guitarra no DOM
-        function initFretboard() {
-            fretboardEl.innerHTML = '';
-            
-            for (let i = 0; i < STANDARD_TUNING.length; i++) {
-                const stringEl = document.createElement('div');
-                stringEl.className = 'string';
+                    'pentatonic_major': 'Pentatônica Maior',
+                    'pentatonic_minor': 'Pentatônica Menor',
+                    'pentatonic_minor_blue': 'Pentatônica Menor com Blue Note',
+                    'pentatonic_major_blue': 'Pentatônica Maior com Blue Note',
+                    'blues': 'Blues',
+                    'ionian': 'Jônio (Maior)',
+                    'dorian': 'Dórico',
+                    'phrygian': 'Frígio',
+                    'lydian': 'Lídio',
+                    'mixolydian': 'Mixolídio',
+                    'aeolian': 'Eólio (Menor)',
+                    'locrian': 'Lócrio'
+                };
                 
-                const stringNameEl = document.createElement('div');
-                stringNameEl.className = 'string-name';
-                stringNameEl.textContent = STANDARD_TUNING[i];
-                stringEl.appendChild(stringNameEl);
+                return scaleNames[type] || type;
+            }
+            
+            // Gera os dados do braço da guitarra
+            function generateFretboardData() {
+                fretboardData = [];
                 
-                for (let j = 0; j <= NUM_FRETS; j++) {
-                    const fretEl = document.createElement('div');
-                    fretEl.className = 'fret';
-                    fretEl.dataset.string = i + 1;
-                    fretEl.dataset.fret = j;
+                for (let stringIdx = 0; stringIdx < currentTuning.length; stringIdx++) {
+                    const string = [];
+                    const openNote = currentTuning[stringIdx];
+                    const openNoteIdx = NOTES.indexOf(openNote);
                     
-                    if (i === 0) {
-                        const fretNumberEl = document.createElement('div');
-                        fretNumberEl.className = 'fret-number';
-                        fretNumberEl.textContent = j;
-                        fretEl.appendChild(fretNumberEl);
-                    }
-                    
-                    stringEl.appendChild(fretEl);
-                }
-                
-                fretboardEl.appendChild(stringEl);
-            }
-        }
-        
-        // Gera os dados do braço da guitarra
-        function generateFretboardData() {
-            fretboardData = [];
-            
-            for (let stringIdx = 0; stringIdx < STANDARD_TUNING.length; stringIdx++) {
-                const string = [];
-                const openNote = STANDARD_TUNING[stringIdx];
-                const openNoteIdx = NOTES.indexOf(openNote);
-                
-                for (let fret = 0; fret <= NUM_FRETS; fret++) {
-                    const noteIdx = (openNoteIdx + fret) % NOTES.length;
-                    const note = NOTES[noteIdx];
-                    
-                    string.push({
-                        note: note,
-                        string: stringIdx + 1,
-                        fret: fret
-                    });
-                }
-                
-                fretboardData.push(string);
-            }
-            
-            generateIntervalsData(rootNoteEl.value);
-        }
-        
-        // Gera dados de intervalos
-        function generateIntervalsData(root) {
-            fretboardIntervalsData = [];
-            const rootIdx = NOTES.indexOf(root);
-            
-            for (let stringIdx = 0; stringIdx < STANDARD_TUNING.length; stringIdx++) {
-                const string = [];
-                const openNote = STANDARD_TUNING[stringIdx];
-                const openNoteIdx = NOTES.indexOf(openNote);
-                
-                for (let fret = 0; fret <= NUM_FRETS; fret++) {
-                    const noteIdx = (openNoteIdx + fret) % NOTES.length;
-                    const note = NOTES[noteIdx];
-                    
-                    const interval = (noteIdx - rootIdx + 12) % 12;
-                    const intervalName = INTERVAL_NAMES[interval];
-                    
-                    string.push({
-                        note: note,
-                        string: stringIdx + 1,
-                        fret: fret,
-                        interval: interval,
-                        interval_name: intervalName
-                    });
-                }
-                
-                fretboardIntervalsData.push(string);
-            }
-        }
-        
-        // Atualiza visibilidade dos controles
-        function updateControlsVisibility() {
-            const mode = displayModeEl.value;
-            
-            // Atualizar o status de seleção
-            updateSelectionStatus();
-            
-            scaleTypeGroupEl.style.display = (mode === 'scale' || mode === 'scale-triads') ? 'flex' : 'none';
-            chordTypeGroupEl.style.display = mode === 'chord' ? 'flex' : 'none';
-            triadsInfoEl.style.display = mode === 'scale-triads' ? 'block' : 'none';
-            allTriadsInfoEl.style.display = mode === 'all-triads' ? 'block' : 'none';
-            intervalsLegendEl.style.display = (showNotation === 'intervals' || mode === 'intervals') ? 'flex' : 'none';
-        }
-        
-        // Atualiza o braço
-        function updateFretboard() {
-            document.querySelectorAll('.note').forEach(el => el.remove());
-            
-            const mode = displayModeEl.value;
-            const rootNote = rootNoteEl.value;
-            
-            generateIntervalsData(rootNote);
-            updateSelectionStatus();
-            
-            if (mode === 'scale') {
-                generateScaleData(rootNote, scaleTypeEl.value);
-                renderNotes();
-            } else if (mode === 'chord') {
-                generateChordData(rootNote, chordTypeEl.value);
-                renderNotes();
-            } else if (mode === 'scale-triads') {
-                generateScaleData(rootNote, scaleTypeEl.value);
-                generateScaleTriads(rootNote, scaleTypeEl.value);
-                renderScaleTriads();
-            } else if (mode === 'all-triads') {
-                generateAllTriads(rootNote);
-                renderAllTriads();
-            } else if (mode === 'intervals') {
-                renderIntervals();
-            } else {
-                renderNotes();
-            }
-        }
-        
-        // Função para limpar notas destacadas pelo usuário
-        function clearHighlightedNotes() {
-            userHighlightedNotes.clear();
-            updateSelectionStatus();
-            updateFretboard();
-        }
-        
-        // Alternar destaque de uma nota
-        function toggleHighlightNote(noteKey) {
-            if (userHighlightedNotes.has(noteKey)) {
-                userHighlightedNotes.delete(noteKey);
-            } else {
-                userHighlightedNotes.add(noteKey);
-            }
-            updateSelectionStatus();
-            
-            // Importante: Não chame updateFretboard() aqui para evitar redesenhar tudo
-            // Em vez disso, atualize apenas a nota clicada
-            updateSingleNote(noteKey);
-        }
-        
-        // Atualiza apenas a nota específica que foi clicada
-        function updateSingleNote(noteKey) {
-            const [stringNum, fret] = noteKey.split('-').map(Number);
-            const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
-            
-            if (fretEl) {
-                // Remove a nota atual
-                const existingNote = fretEl.querySelector('.note');
-                if (existingNote) {
-                    existingNote.remove();
-                }
-                
-                // Recupera os dados da nota
-                const stringIdx = stringNum - 1;
-                const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
-                const intervalData = fretboardIntervalsData[stringIdx].find(n => n.fret === fret);
-                
-                if (!noteData) return;
-                
-                const { note } = noteData;
-                const mode = displayModeEl.value;
-                const rootNote = rootNoteEl.value;
-                const isHighlighted = userHighlightedNotes.has(noteKey);
-                
-                // Recria a nota com o estado correto
-                let noteClass = 'note';
-                let displayText = note;
-                
-                if (isHighlighted) {
-                    noteClass += ' user-highlighted';
-                } else {
-                    // Aplica as classes normais baseadas no modo atual
-                    if (mode === 'notes' || mode === 'intervals') {
-                        if (note === rootNote) {
-                            noteClass += ' root';
-                        }
-                    } else if (mode === 'scale' || mode === 'scale-triads') {
-                        const scaleNotes = scaleData.notes || [];
-                        const scaleType = scaleTypeEl.value;
+                    for (let fret = 0; fret <= NUM_FRETS; fret++) {
+                        const noteIdx = (openNoteIdx + fret) % NOTES.length;
+                        const note = NOTES[noteIdx];
                         
-                        if (scaleNotes.includes(note)) {
-                            if (note === rootNote) {
-                                noteClass += ' root';
-                            } else {
-                                // Verificar se é uma blue note
-                                const rootIdx = NOTES.indexOf(rootNote);
-                                const noteIdx = NOTES.indexOf(note);
-                                const interval = (noteIdx - rootIdx + 12) % 12;
-                                
-                                if ((interval === 6) && 
-                                   (scaleType === 'blues' || 
-                                    scaleType === 'pentatonic_minor_blue' || 
-                                    scaleType === 'pentatonic_major_blue')) {
-                                    noteClass += ' blue-note';
-                                } else {
-                                    noteClass += ' scale-note';
-                                }
-                            }
-                        }
-                    } else if (mode === 'chord') {
-                        const chordNotes = chordData.notes || [];
+                        string.push({
+                            note: note,
+                            string: stringIdx + 1,
+                            fret: fret
+                        });
+                    }
+                    
+                    fretboardData.push(string);
+                }
+                
+                generateIntervalsData(rootNoteEl.value);
+            }
+            
+            // Gera dados de intervalos
+            function generateIntervalsData(root) {
+                fretboardIntervalsData = [];
+                const rootIdx = NOTES.indexOf(root);
+                
+                for (let stringIdx = 0; stringIdx < currentTuning.length; stringIdx++) {
+                    const string = [];
+                    const openNote = currentTuning[stringIdx];
+                    const openNoteIdx = NOTES.indexOf(openNote);
+                    
+                    for (let fret = 0; fret <= NUM_FRETS; fret++) {
+                        const noteIdx = (openNoteIdx + fret) % NOTES.length;
+                        const note = NOTES[noteIdx];
                         
-                        if (chordNotes.includes(note)) {
-                            if (note === rootNote) {
-                                noteClass += ' root';
-                            } else {
-                                noteClass += ' chord-note';
-                            }
-                        }
-                    } else if (mode === 'all-triads') {
-                        const triadData = allTriads[currentTriadType];
+                        const interval = (noteIdx - rootIdx + 12) % 12;
+                        const intervalName = INTERVAL_NAMES[interval];
                         
-                        if (triadData && triadData.notes.includes(note)) {
-                            if (note === rootNote) {
-                                noteClass += ' triad-note';
-                            } else {
-                                noteClass += ` triad-${currentTriadType}`;
-                            }
-                        }
-                    }
-                }
-                
-                // Determina o texto a ser exibido (notas ou intervalos)
-                if (showNotation === 'intervals' && !isHighlighted) {
-                    if (intervalData) {
-                        displayText = intervalData.interval_name;
-                        noteClass += ` interval-${intervalData.interval_name}`;
-                    }
-                }
-                
-                // Cria a nova nota
-                if (mode === 'notes' || mode === 'intervals' || isHighlighted || 
-                    (mode === 'scale' && scaleData.notes.includes(note)) ||
-                    (mode === 'chord' && chordData.notes.includes(note)) ||
-                    (mode === 'all-triads' && allTriads[currentTriadType] && allTriads[currentTriadType].notes.includes(note)) ||
-                    (mode === 'scale-triads' && scaleData.notes.includes(note))) {
-                    
-                    const noteEl = document.createElement('div');
-                    noteEl.className = noteClass;
-                    noteEl.textContent = displayText;
-                    
-                    // Adiciona o evento de clique
-                    noteEl.addEventListener('click', function() {
-                        toggleHighlightNote(noteKey);
-                    });
-                    
-                    fretEl.appendChild(noteEl);
-                }
-            }
-        }
-        
-        // Gera dados de escala
-        function generateScaleData(root, scaleType) {
-            const rootIdx = NOTES.indexOf(root);
-            const scaleIntervals = SCALES[scaleType] || SCALES.major;
-            
-            let notes = [];
-            let intervals = [];
-            
-            for (const interval of scaleIntervals) {
-                const noteIdx = (rootIdx + interval) % 12;
-                const note = NOTES[noteIdx];
-                
-                notes.push(note);
-                intervals.push({
-                    interval: interval,
-                    interval_name: INTERVAL_NAMES[interval],
-                    note: note
-                });
-            }
-            
-            scaleData = { notes, intervals };
-        }
-        
-        // Gera dados de acorde
-        function generateChordData(root, chordType) {
-            const rootIdx = NOTES.indexOf(root);
-            const chordIntervals = CHORDS[chordType] || CHORDS.major;
-            
-            let notes = [];
-            let intervals = [];
-            
-            for (const interval of chordIntervals) {
-                const noteIdx = (rootIdx + interval) % 12;
-                const note = NOTES[noteIdx];
-                
-                notes.push(note);
-                intervals.push({
-                    interval: interval,
-                    interval_name: INTERVAL_NAMES[interval],
-                    note: note
-                });
-            }
-            
-            chordData = { notes, intervals };
-        }
-        
-        // Gera dados de tríades da escala
-        function generateScaleTriads(root, scaleType) {
-            if (!scaleData.notes.length) {
-                generateScaleData(root, scaleType);
-            }
-            
-            const scaleNotes = scaleData.notes;
-            const triads = [];
-            
-            let triadTypes = [];
-            if (scaleType === 'major') {
-                triadTypes = ['major', 'minor', 'minor', 'major', 'major', 'minor', 'dim'];
-            } else if (scaleType === 'minor') {
-                triadTypes = ['minor', 'dim', 'major', 'minor', 'minor', 'major', 'major'];
-            } else {
-                for (let i = 0; i < scaleNotes.length; i++) {
-                    const rootNote = scaleNotes[i];
-                    const thirdIdx = (i + 2) % scaleNotes.length;
-                    const fifthIdx = (i + 4) % scaleNotes.length;
-                    
-                    const thirdNote = scaleNotes[thirdIdx];
-                    const fifthNote = scaleNotes[fifthIdx];
-                    
-                    const rootIdx = NOTES.indexOf(rootNote);
-                    const thirdNoteIdx = NOTES.indexOf(thirdNote);
-                    const fifthNoteIdx = NOTES.indexOf(fifthNote);
-                    
-                    const thirdInterval = (thirdNoteIdx - rootIdx + 12) % 12;
-                    const fifthInterval = (fifthNoteIdx - rootIdx + 12) % 12;
-                    
-                    let triadType;
-                    if (thirdInterval === 4 && fifthInterval === 7) {
-                        triadType = 'major';
-                    } else if (thirdInterval === 3 && fifthInterval === 7) {
-                        triadType = 'minor';
-                    } else if (thirdInterval === 3 && fifthInterval === 6) {
-                        triadType = 'dim';
-                    } else if (thirdInterval === 4 && fifthInterval === 8) {
-                        triadType = 'aug';
-                    } else {
-                        triadType = 'unknown';
-                    }
-                    
-                    triadTypes.push(triadType);
-                }
-            }
-            
-            for (let i = 0; i < scaleNotes.length; i++) {
-                const rootNote = scaleNotes[i];
-                if (i < triadTypes.length) {
-                    const triadType = triadTypes[i];
-                    const triadNotes = generateChordNotes(rootNote, triadType);
-                    
-                    const triadIntervals = triadNotes.map(note => {
-                        const noteIdx = NOTES.indexOf(note);
-                        const rootNoteIdx = NOTES.indexOf(rootNote);
-                        const interval = (noteIdx - rootNoteIdx + 12) % 12;
-                        return {
+                        string.push({
+                            note: note,
+                            string: stringIdx + 1,
+                            fret: fret,
                             interval: interval,
-                            interval_name: INTERVAL_NAMES[interval],
-                            note: note
-                        };
-                    });
+                            interval_name: intervalName
+                        });
+                    }
                     
-                    triads.push({
-                        root: rootNote,
-                        type: triadType,
-                        notes: triadNotes,
-                        intervals: triadIntervals,
-                        degree: i + 1
-                    });
+                    fretboardIntervalsData.push(string);
                 }
             }
             
-            scaleTriads = triads;
-        }
-        
-        // Gera notas de um acorde
-        function generateChordNotes(root, chordType) {
-            const rootIdx = NOTES.indexOf(root);
-            const intervals = CHORDS[chordType] || CHORDS.major;
-            
-            return intervals.map(interval => {
-                const noteIdx = (rootIdx + interval) % 12;
-                return NOTES[noteIdx];
-            });
-        }
-        
-        // Gera todos os tipos de tríades para uma nota
-        function generateAllTriads(root) {
-            const triadTypes = ['major', 'minor', 'dim', 'aug'];
-            const triads = {};
-            
-            triadTypes.forEach(type => {
-                const notes = generateChordNotes(root, type);
+            // Atualiza visibilidade dos controles
+            function updateControlsVisibility() {
+                // Atualizar o status de seleção
+                updateSelectionStatus();
                 
-                const intervals = notes.map(note => {
-                    const noteIdx = NOTES.indexOf(note);
-                    const rootIdx = NOTES.indexOf(root);
-                    const interval = (noteIdx - rootIdx + 12) % 12;
-                    return {
-                        interval: interval,
-                        interval_name: INTERVAL_NAMES[interval],
-                        note: note
-                    };
-                });
+                scaleTypeGroupEl.style.display = (currentMode === 'scales' || currentMode === 'scale-triads') ? 'flex' : 'none';
+                chordTypeGroupEl.style.display = currentMode === 'chord' ? 'flex' : 'none';
+                triadsInfoEl.style.display = currentMode === 'scale-triads' ? 'block' : 'none';
+                allTriadsInfoEl.style.display = currentMode === 'all-triads' ? 'block' : 'none';
+                intervalsLegendEl.style.display = (showNotation === 'intervals' || currentMode === 'intervals') ? 'flex' : 'none';
+            }
+            
+            // Atualiza o braço
+            function updateFretboard() {
+                document.querySelectorAll('.note').forEach(el => el.remove());
                 
-                triads[type] = { notes, intervals };
-            });
+                const rootNote = rootNoteEl.value;
+                
+                generateIntervalsData(rootNote);
+                updateSelectionStatus();
+                
+                if (currentMode === 'scales') {
+                    generateScaleData(rootNote, scaleTypeEl.value);
+                    renderNotes();
+                } else if (currentMode === 'chord') {
+                    generateChordData(rootNote, chordTypeEl.value);
+                    renderNotes();
+                } else if (currentMode === 'scale-triads') {
+                    generateScaleData(rootNote, scaleTypeEl.value);
+                    generateScaleTriads(rootNote, scaleTypeEl.value);
+                    renderScaleTriads();
+                } else if (currentMode === 'all-triads') {
+                    generateAllTriads(rootNote);
+                    renderAllTriads();
+                } else if (currentMode === 'intervals') {
+                    renderIntervals();
+                } else {
+                    renderNotes();
+                }
+                
+                updateInfoCard();
+            }
             
-            allTriads = triads;
-        }
-        
-        // Renderiza notas no braço
-        function renderNotes() {
-            const mode = displayModeEl.value;
-            const rootNote = rootNoteEl.value;
+            // Função para limpar notas destacadas pelo usuário
+            function clearHighlightedNotes() {
+                userHighlightedNotes.clear();
+                updateSelectionStatus();
+                updateFretboard();
+            }
             
-            fretboardData.forEach((string, stringIdx) => {
-                string.forEach((noteData, fretIdx) => {
-                    const { note, string: stringNum, fret } = noteData;
-                    const intervalData = fretboardIntervalsData[stringIdx][fretIdx];
+            // Alternar destaque de uma nota
+            function toggleHighlightNote(noteKey) {
+                if (userHighlightedNotes.has(noteKey)) {
+                    userHighlightedNotes.delete(noteKey);
+                } else {
+                    userHighlightedNotes.add(noteKey);
+                }
+                updateSelectionStatus();
+                updateSingleNote(noteKey);
+            }
+            
+            // Atualiza o status de seleção
+            function updateSelectionStatus() {
+                selectionStatusEl.textContent = `Clique em qualquer nota para destacá-la. Notas destacadas: ${userHighlightedNotes.size}`;
+            }
+            
+            // Atualiza apenas a nota específica que foi clicada
+            function updateSingleNote(noteKey) {
+                const [stringNum, fret] = noteKey.split('-').map(Number);
+                const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                
+                if (fretEl) {
+                    // Remove a nota atual
+                    const existingNote = fretEl.querySelector('.note');
+                    if (existingNote) {
+                        existingNote.remove();
+                    }
                     
-                    // Verificar se a nota está destacada pelo usuário
-                    const noteKey = `${stringNum}-${fret}`;
+                    // Recupera os dados da nota
+                    const stringIdx = stringNum - 1;
+                    const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                    const intervalData = fretboardIntervalsData[stringIdx].find(n => n.fret === fret);
+                    
+                    if (!noteData) return;
+                    
+                    const { note } = noteData;
+                    const rootNote = rootNoteEl.value;
                     const isHighlighted = userHighlightedNotes.has(noteKey);
                     
-                    let showNote = false;
+                    // Recria a nota com o estado correto
                     let noteClass = 'note';
                     let displayText = note;
                     
-                    if (mode === 'notes') {
-                        showNote = true;
-                        if (note === rootNote && !isHighlighted) {
-                            noteClass += ' root';
-                        }
-                        
-                        if (showNotation === 'intervals') {
-                            displayText = intervalData.interval_name;
-                            if (!isHighlighted) {
-                                noteClass += ` interval-${intervalData.interval_name}`;
-                            }
-                        }
-                    } else if (mode === 'scale') {
-                        const scaleNotes = scaleData.notes || [];
-                        const scaleType = scaleTypeEl.value;
-                        
-                        if (scaleNotes.includes(note)) {
-                            showNote = true;
-                            if (note === rootNote && !isHighlighted) {
-                                noteClass += ' root';
-                            } else if (!isHighlighted) {
-                                // Verificar se é uma blue note
-                                const rootIdx = NOTES.indexOf(rootNote);
-                                const noteIdx = NOTES.indexOf(note);
-                                const interval = (noteIdx - rootIdx + 12) % 12;
-                                
-                                if ((interval === 6) && 
-                                   (scaleType === 'blues' || 
-                                    scaleType === 'pentatonic_minor_blue' || 
-                                    scaleType === 'pentatonic_major_blue')) {
-                                    noteClass += ' blue-note';
-                                } else {
-                                    noteClass += ' scale-note';
-                                }
-                            }
-                            
-                            if (showNotation === 'intervals') {
-                                const interval = scaleData.intervals.find(i => i.note === note);
-                                if (interval && !isHighlighted) {
-                                    displayText = interval.interval_name;
-                                    noteClass += ` interval-${interval.interval_name}`;
-                                }
-                            }
-                        }
-                    } else if (mode === 'chord') {
-                        const chordNotes = chordData.notes || [];
-                        
-                        if (chordNotes.includes(note)) {
-                            showNote = true;
-                            if (note === rootNote && !isHighlighted) {
-                                noteClass += ' root';
-                            } else if (!isHighlighted) {
-                                noteClass += ' chord-note';
-                            }
-                            
-                            if (showNotation === 'intervals') {
-                                const interval = chordData.intervals.find(i => i.note === note);
-                                if (interval && !isHighlighted) {
-                                    displayText = interval.interval_name;
-                                    noteClass += ` interval-${interval.interval_name}`;
-                                }
-                            }
-                        }
-                    }
-                    
-                    // Garantir que mostra notas destacadas pelo usuário em qualquer modo
                     if (isHighlighted) {
-                        showNote = true;
-                        noteClass = 'note user-highlighted';
-                    }
-                    
-                    // Exibe a nota se pertencer ao modo atual ou se estiver destacada
-                    if (showNote) {
-                        const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
-                        
-                        if (fretEl) {
-                            const noteEl = document.createElement('div');
-                            noteEl.className = noteClass;
-                            noteEl.textContent = displayText;
+                        noteClass += ' user-highlighted';
+                    } else {
+                        // Aplica as classes normais baseadas no modo atual
+                        if (currentMode === 'notes' || currentMode === 'intervals') {
+                            if (note === rootNote) {
+                                noteClass += ' root';
+                            }
+                        } else if (currentMode === 'scales' || currentMode === 'scale-triads') {
+                            const scaleNotes = scaleData.notes || [];
+                            const scaleType = scaleTypeEl.value;
                             
-                            // Adicionar evento de clique para destacar a nota
-                            noteEl.addEventListener('click', function(e) {
-                                e.stopPropagation(); // Evita propagação para outros elementos
-                                toggleHighlightNote(noteKey);
-                            });
+                            if (scaleNotes.includes(note)) {
+                                if (note === rootNote) {
+                                    noteClass += ' root';
+                                } else {
+                                    // Verificar se é uma blue note
+                                    const rootIdx = NOTES.indexOf(rootNote);
+                                    const noteIdx = NOTES.indexOf(note);
+                                    const interval = (noteIdx - rootIdx + 12) % 12;
+                                    
+                                    if ((interval === 6) && 
+                                       (scaleType === 'blues' || 
+                                        scaleType === 'pentatonic_minor_blue' || 
+                                        scaleType === 'pentatonic_major_blue')) {
+                                        noteClass += ' blue-note';
+                                    } else {
+                                        noteClass += ' scale-note';
+                                    }
+                                }
+                            }
+                        } else if (currentMode === 'chord') {
+                            const chordNotes = chordData.notes || [];
                             
-                            fretEl.appendChild(noteEl);
+                            if (chordNotes.includes(note)) {
+                                if (note === rootNote) {
+                                    noteClass += ' root';
+                                } else {
+                                    noteClass += ' chord-note';
+                                }
+                            }
+                        } else if (currentMode === 'all-triads') {
+                            const triadData = allTriads[currentTriadType];
+                            
+                            if (triadData && triadData.notes.includes(note)) {
+                                if (note === rootNote) {
+                                    noteClass += ' triad-note';
+                                } else {
+                                    noteClass += ` triad-${currentTriadType}`;
+                                }
+                            }
                         }
                     }
-                });
-            });
-        }
-        
-        // Renderiza intervalos
-        function renderIntervals() {
-            const rootNote = rootNoteEl.value;
-            
-            fretboardIntervalsData.forEach(string => {
-                string.forEach(noteData => {
-                    const { note, string: stringNum, fret, interval_name } = noteData;
                     
-                    // Verificar se a nota está destacada pelo usuário
-                    const noteKey = `${stringNum}-${fret}`;
-                    const isHighlighted = userHighlightedNotes.has(noteKey);
+                    // Determina o texto a ser exibido (notas ou intervalos)
+                    if (showNotation === 'intervals' && !isHighlighted) {
+                        if (intervalData) {
+                            displayText = intervalData.interval_name;
+                            noteClass += ` interval-${intervalData.interval_name}`;
+                        }
+                    }
                     
-                    const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
-                    
-                    if (fretEl) {
+                    // Cria a nova nota
+                    if (currentMode === 'notes' || currentMode === 'intervals' || isHighlighted || 
+                        (currentMode === 'scales' && scaleData.notes && scaleData.notes.includes(note)) ||
+                        (currentMode === 'chord' && chordData.notes && chordData.notes.includes(note)) ||
+                        (currentMode === 'all-triads' && allTriads[currentTriadType] && allTriads[currentTriadType].notes.includes(note)) ||
+                        (currentMode === 'scale-triads' && scaleData.notes && scaleData.notes.includes(note))) {
+                        
                         const noteEl = document.createElement('div');
+                        noteEl.className = noteClass;
+                        noteEl.textContent = displayText;
                         
-                        if (isHighlighted) {
-                            noteEl.className = 'note user-highlighted';
-                        } else if (note === rootNote) {
-                            noteEl.className = 'note root';
-                        } else {
-                            noteEl.className = `note interval-${interval_name}`;
-                        }
-                        
-                        noteEl.textContent = showNotation === 'intervals' ? interval_name : note;
-                        
-                        // Adicionar evento de clique para destacar a nota
+                        // Adiciona o evento de clique
                         noteEl.addEventListener('click', function(e) {
                             e.stopPropagation();
                             toggleHighlightNote(noteKey);
@@ -1270,197 +1776,305 @@
                         
                         fretEl.appendChild(noteEl);
                     }
-                });
-            });
-        }
-        
-        // Renderiza tríades da escala
-        function renderScaleTriads() {
-            renderNotes();
+                }
+            }
             
-            const triadsListEl = document.getElementById('triads-list');
-            triadsListEl.innerHTML = '';
-            
-            scaleTriads.forEach((triad, index) => {
-                const triadEl = document.createElement('div');
-                triadEl.className = 'legend-item';
+            // Gera dados de escala
+            function generateScaleData(root, scaleType) {
+                const rootIdx = NOTES.indexOf(root);
+                const scaleIntervals = SCALES[scaleType] || SCALES.major;
                 
-                const degreeBadge = document.createElement('span');
-                degreeBadge.className = `triad-badge triad-${getRomanNumeral(triad.degree).toLowerCase()}`;
-                degreeBadge.textContent = getRomanNumeral(triad.degree);
+                let notes = [];
+                let intervals = [];
                 
-                const triadInfoEl = document.createElement('div');
-                triadInfoEl.className = 'triad-info';
-                triadInfoEl.title = TRANSLATIONS[currentLanguage].showButton;
-                
-                let chordName = triad.root;
-                switch(triad.type) {
-                    case 'major': chordName += ''; break;
-                    case 'minor': chordName += 'm'; break;
-                    case 'dim': chordName += 'dim'; break;
-                    case 'aug': chordName += 'aug'; break;
-                    default: chordName += ' ' + triad.type; break;
+                for (const interval of scaleIntervals) {
+                    const noteIdx = (rootIdx + interval) % 12;
+                    const note = NOTES[noteIdx];
+                    
+                    notes.push(note);
+                    intervals.push({
+                        interval: interval,
+                        interval_name: INTERVAL_NAMES[interval],
+                        note: note
+                    });
                 }
                 
-                const noteNames = showNotation === 'notes' ? 
-                    triad.notes.join(', ') : 
-                    triad.intervals.map(i => i.interval_name).join(', ');
-                
-                triadInfoEl.textContent = `${chordName} (${noteNames})`;
-                
-                // Fazer o elemento de informações clicável
-                triadInfoEl.addEventListener('click', () => {
-                    showTriadOnFretboard(triad, index);
-                });
-                
-                triadEl.appendChild(degreeBadge);
-                triadEl.appendChild(triadInfoEl);
-                triadsListEl.appendChild(triadEl);
-            });
-        }
-        
-        // Renderiza todos os tipos de tríades
-        function renderAllTriads() {
-            const allTriadsListEl = document.getElementById('all-triads-list');
-            allTriadsListEl.innerHTML = '';
+                scaleData = { notes, intervals };
+            }
             
-            const rootNote = rootNoteEl.value;
-            const triadTypes = ['major', 'minor', 'dim', 'aug'];
-            
-            triadTypes.forEach(type => {
-                const triadEl = document.createElement('div');
-                triadEl.className = 'legend-item';
+            // Gera dados de acorde
+            function generateChordData(root, chordType) {
+                const rootIdx = NOTES.indexOf(root);
+                const chordIntervals = CHORDS[chordType] || CHORDS.major;
                 
-                const typeBadge = document.createElement('span');
-                typeBadge.className = `triad-badge triad-${type}`;
-                typeBadge.textContent = TRANSLATIONS[currentLanguage].triadNames[type];
+                let notes = [];
+                let intervals = [];
                 
-                const triadInfoEl = document.createElement('div');
-                triadInfoEl.className = 'triad-info';
-                triadInfoEl.title = TRANSLATIONS[currentLanguage].showButton;
-                
-                const triadData = allTriads[type];
-                
-                let chordName = rootNote;
-                switch(type) {
-                    case 'major': chordName += ''; break;
-                    case 'minor': chordName += 'm'; break;
-                    case 'dim': chordName += 'dim'; break;
-                    case 'aug': chordName += 'aug'; break;
-                    default: chordName += ' ' + type; break;
+                for (const interval of chordIntervals) {
+                    const noteIdx = (rootIdx + interval) % 12;
+                    const note = NOTES[noteIdx];
+                    
+                    notes.push(note);
+                    intervals.push({
+                        interval: interval,
+                        interval_name: INTERVAL_NAMES[interval],
+                        note: note
+                    });
                 }
                 
-                const noteNames = showNotation === 'notes' ? 
-                    triadData.notes.join(', ') : 
-                    triadData.intervals.map(i => i.interval_name).join(', ');
-                
-                triadInfoEl.textContent = `${chordName} (${noteNames})`;
-                
-                // Fazer o elemento de informações clicável
-                triadInfoEl.addEventListener('click', () => {
-                    showAllTriadType(type);
-                });
-                
-                triadEl.appendChild(typeBadge);
-                triadEl.appendChild(triadInfoEl);
-                allTriadsListEl.appendChild(triadEl);
-            });
+                chordData = { notes, intervals };
+            }
             
-            showAllTriadType('major');
-        }
-        
-        // Exibe uma tríade da escala no braço
-        function showTriadOnFretboard(triad, triadIndex) {
-            document.querySelectorAll('.note').forEach(el => el.remove());
-            
-            currentTriadIndex = triadIndex;
-            
-            fretboardData.forEach(string => {
-                string.forEach(noteData => {
-                    const { note, string: stringNum, fret } = noteData;
-                    
-                    // Verificar se a nota está destacada pelo usuário
-                    const noteKey = `${stringNum}-${fret}`;
-                    const isHighlighted = userHighlightedNotes.has(noteKey);
-                    
-                    if (triad.notes.includes(note) || isHighlighted) {
-                        const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+            // Gera dados de tríades da escala
+            function generateScaleTriads(root, scaleType) {
+                if (!scaleData.notes.length) {
+                    generateScaleData(root, scaleType);
+                }
+                
+                const scaleNotes = scaleData.notes;
+                const triads = [];
+                
+                let triadTypes = [];
+                if (scaleType === 'major' || scaleType === 'ionian') {
+                    triadTypes = ['major', 'minor', 'minor', 'major', 'major', 'minor', 'dim'];
+                } else if (scaleType === 'minor' || scaleType === 'aeolian') {
+                    triadTypes = ['minor', 'dim', 'major', 'minor', 'minor', 'major', 'major'];
+                } else {
+                    for (let i = 0; i < scaleNotes.length; i++) {
+                        const rootNote = scaleNotes[i];
+                        const thirdIdx = (i + 2) % scaleNotes.length;
+                        const fifthIdx = (i + 4) % scaleNotes.length;
                         
-                        if (fretEl) {
-                            const noteEl = document.createElement('div');
-                            let displayText = note;
-                            
-                            if (isHighlighted) {
-                                noteEl.className = 'note user-highlighted';
-                            } else if (note === triad.root) {
-                                noteEl.className = `note triad-note`;
-                            } else {
-                                noteEl.className = `note chord-note`;
+                        const thirdNote = scaleNotes[thirdIdx];
+                        const fifthNote = scaleNotes[fifthIdx];
+                        
+                        const rootIdx = NOTES.indexOf(rootNote);
+                        const thirdNoteIdx = NOTES.indexOf(thirdNote);
+                        const fifthNoteIdx = NOTES.indexOf(fifthNote);
+                        
+                        const thirdInterval = (thirdNoteIdx - rootIdx + 12) % 12;
+                        const fifthInterval = (fifthNoteIdx - rootIdx + 12) % 12;
+                        
+                        let triadType;
+                        if (thirdInterval === 4 && fifthInterval === 7) {
+                            triadType = 'major';
+                        } else if (thirdInterval === 3 && fifthInterval === 7) {
+                            triadType = 'minor';
+                        } else if (thirdInterval === 3 && fifthInterval === 6) {
+                            triadType = 'dim';
+                        } else if (thirdInterval === 4 && fifthInterval === 8) {
+                            triadType = 'aug';
+                        } else {
+                            triadType = 'unknown';
+                        }
+                        
+                        triadTypes.push(triadType);
+                    }
+                }
+                
+                for (let i = 0; i < scaleNotes.length; i++) {
+                    const rootNote = scaleNotes[i];
+                    if (i < triadTypes.length) {
+                        const triadType = triadTypes[i];
+                        const triadNotes = generateChordNotes(rootNote, triadType);
+                        
+                        const triadIntervals = triadNotes.map(note => {
+                            const noteIdx = NOTES.indexOf(note);
+                            const rootNoteIdx = NOTES.indexOf(rootNote);
+                            const interval = (noteIdx - rootNoteIdx + 12) % 12;
+                            return {
+                                interval: interval,
+                                interval_name: INTERVAL_NAMES[interval],
+                                note: note
+                            };
+                        });
+                        
+                        triads.push({
+                            root: rootNote,
+                            type: triadType,
+                            notes: triadNotes,
+                            intervals: triadIntervals,
+                            degree: i + 1
+                        });
+                    }
+                }
+                
+                scaleTriads = triads;
+            }
+            
+            // Gera notas de um acorde
+            function generateChordNotes(root, chordType) {
+                const rootIdx = NOTES.indexOf(root);
+                const intervals = CHORDS[chordType] || CHORDS.major;
+                
+                return intervals.map(interval => {
+                    const noteIdx = (rootIdx + interval) % 12;
+                    return NOTES[noteIdx];
+                });
+            }
+            
+            // Gera todos os tipos de tríades para uma nota
+            function generateAllTriads(root) {
+                const triadTypes = ['major', 'minor', 'dim', 'aug'];
+                const triads = {};
+                
+                triadTypes.forEach(type => {
+                    const notes = generateChordNotes(root, type);
+                    
+                    const intervals = notes.map(note => {
+                        const noteIdx = NOTES.indexOf(note);
+                        const rootIdx = NOTES.indexOf(root);
+                        const interval = (noteIdx - rootIdx + 12) % 12;
+                        return {
+                            interval: interval,
+                            interval_name: INTERVAL_NAMES[interval],
+                            note: note
+                        };
+                    });
+                    
+                    triads[type] = { notes, intervals };
+                });
+                
+                allTriads = triads;
+                currentTriadType = 'major'; // Definir um tipo padrão
+            }
+            
+            // Renderiza notas no braço
+            function renderNotes() {
+                const rootNote = rootNoteEl.value;
+                
+                fretboardData.forEach((string, stringIdx) => {
+                    string.forEach((noteData, fretIdx) => {
+                        const { note, string: stringNum, fret } = noteData;
+                        const intervalData = fretboardIntervalsData[stringIdx][fretIdx];
+                        
+                        // Verificar se a nota está destacada pelo usuário
+                        const noteKey = `${stringNum}-${fret}`;
+                        const isHighlighted = userHighlightedNotes.has(noteKey);
+                        
+                        let showNote = false;
+                        let noteClass = 'note';
+                        let displayText = note;
+                        
+                        if (currentMode === 'notes') {
+                            showNote = true;
+                            if (note === rootNote && !isHighlighted) {
+                                noteClass += ' root';
                             }
                             
-                            if (showNotation === 'intervals' && !isHighlighted) {
-                                const interval = triad.intervals.find(i => i.note === note);
-                                if (interval) {
-                                    displayText = interval.interval_name;
-                                    noteEl.className += ` interval-${interval.interval_name}`;
+                            if (showNotation === 'intervals') {
+                                displayText = intervalData.interval_name;
+                                if (!isHighlighted) {
+                                    noteClass += ` interval-${intervalData.interval_name}`;
                                 }
                             }
+                        } else if (currentMode === 'scales') {
+                            const scaleNotes = scaleData.notes || [];
+                            const scaleType = scaleTypeEl.value;
                             
-                            noteEl.textContent = displayText;
+                            if (scaleNotes.includes(note)) {
+                                showNote = true;
+                                if (note === rootNote && !isHighlighted) {
+                                    noteClass += ' root';
+                                } else if (!isHighlighted) {
+                                    // Verificar se é uma blue note
+                                    const rootIdx = NOTES.indexOf(rootNote);
+                                    const noteIdx = NOTES.indexOf(note);
+                                    const interval = (noteIdx - rootIdx + 12) % 12;
+                                    
+                                    if ((interval === 6) && 
+                                       (scaleType === 'blues' || 
+                                        scaleType === 'pentatonic_minor_blue' || 
+                                        scaleType === 'pentatonic_major_blue')) {
+                                        noteClass += ' blue-note';
+                                    } else {
+                                        noteClass += ' scale-note';
+                                    }
+                                }
+                                
+                                if (showNotation === 'intervals') {
+                                    const interval = scaleData.intervals.find(i => i.note === note);
+                                    if (interval && !isHighlighted) {
+                                        displayText = interval.interval_name;
+                                        noteClass += ` interval-${interval.interval_name}`;
+                                    }
+                                }
+                            }
+                        } else if (currentMode === 'chord') {
+                            const chordNotes = chordData.notes || [];
                             
-                            // Adicionar evento de clique para destacar a nota
-                            noteEl.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                toggleHighlightNote(noteKey);
-                            });
-                            
-                            fretEl.appendChild(noteEl);
+                            if (chordNotes.includes(note)) {
+                                showNote = true;
+                                if (note === rootNote && !isHighlighted) {
+                                    noteClass += ' root';
+                                } else if (!isHighlighted) {
+                                    noteClass += ' chord-note';
+                                }
+                                
+                                if (showNotation === 'intervals') {
+                                    const interval = chordData.intervals.find(i => i.note === note);
+                                    if (interval && !isHighlighted) {
+                                        displayText = interval.interval_name;
+                                        noteClass += ` interval-${interval.interval_name}`;
+                                    }
+                                }
+                            }
                         }
-                    }
+                        
+                        // Garantir que mostra notas destacadas pelo usuário em qualquer modo
+                        if (isHighlighted) {
+                            showNote = true;
+                            noteClass = 'note user-highlighted';
+                        }
+                        
+                        // Exibe a nota se pertencer ao modo atual ou se estiver destacada
+                        if (showNote) {
+                            const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                            
+                            if (fretEl) {
+                                const noteEl = document.createElement('div');
+                                noteEl.className = noteClass;
+                                noteEl.textContent = displayText;
+                                
+                                // Adicionar evento de clique para destacar a nota
+                                noteEl.addEventListener('click', function(e) {
+                                    e.stopPropagation(); // Evita propagação para outros elementos
+                                    toggleHighlightNote(noteKey);
+                                });
+                                
+                                fretEl.appendChild(noteEl);
+                            }
+                        }
+                    });
                 });
-            });
-        }
-        
-        // Exibe um tipo de tríade no braço
-        function showAllTriadType(triadType) {
-            document.querySelectorAll('.note').forEach(el => el.remove());
+            }
             
-            currentTriadType = triadType;
-            const triadData = allTriads[triadType];
-            const rootNote = rootNoteEl.value;
-            
-            fretboardData.forEach(string => {
-                string.forEach(noteData => {
-                    const { note, string: stringNum, fret } = noteData;
-                    
-                    // Verificar se a nota está destacada pelo usuário
-                    const noteKey = `${stringNum}-${fret}`;
-                    const isHighlighted = userHighlightedNotes.has(noteKey);
-                    
-                    if (triadData.notes.includes(note) || isHighlighted) {
+            // Renderiza intervalos
+            function renderIntervals() {
+                const rootNote = rootNoteEl.value;
+                
+                fretboardIntervalsData.forEach(string => {
+                    string.forEach(noteData => {
+                        const { note, string: stringNum, fret, interval_name } = noteData;
+                        
+                        // Verificar se a nota está destacada pelo usuário
+                        const noteKey = `${stringNum}-${fret}`;
+                        const isHighlighted = userHighlightedNotes.has(noteKey);
+                        
                         const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                         
                         if (fretEl) {
                             const noteEl = document.createElement('div');
-                            let displayText = note;
                             
                             if (isHighlighted) {
                                 noteEl.className = 'note user-highlighted';
                             } else if (note === rootNote) {
-                                noteEl.className = `note triad-note`;
+                                noteEl.className = 'note root';
                             } else {
-                                noteEl.className = `note triad-${triadType}`;
+                                noteEl.className = `note interval-${interval_name}`;
                             }
                             
-                            if (showNotation === 'intervals' && !isHighlighted) {
-                                const interval = triadData.intervals.find(i => i.note === note);
-                                if (interval) {
-                                    displayText = interval.interval_name;
-                                    noteEl.className += ` interval-${interval.interval_name}`;
-                                }
-                            }
-                            
-                            noteEl.textContent = displayText;
+                            noteEl.textContent = showNotation === 'intervals' ? interval_name : note;
                             
                             // Adicionar evento de clique para destacar a nota
                             noteEl.addEventListener('click', function(e) {
@@ -1470,19 +2084,280 @@
                             
                             fretEl.appendChild(noteEl);
                         }
-                    }
+                    });
                 });
-            });
-        }
-        
-        // Função para converter número para numeral romano
-        function getRomanNumeral(num) {
-            const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
-            return romanNumerals[num - 1] || num.toString();
-        }
-        
-        // Inicializa a aplicação
-        init();
+            }
+            
+            // Renderiza tríades da escala
+            function renderScaleTriads() {
+                renderNotes();
+                
+                const triadsListEl = document.getElementById('triads-list');
+                triadsListEl.innerHTML = '';
+                
+                scaleTriads.forEach((triad, index) => {
+                    const triadEl = document.createElement('div');
+                    triadEl.className = 'legend-item';
+                    
+                    const degreeBadge = document.createElement('span');
+                    degreeBadge.className = `triad-badge triad-${getRomanNumeral(triad.degree).toLowerCase()}`;
+                    degreeBadge.textContent = getRomanNumeral(triad.degree);
+                    
+                    const triadInfoEl = document.createElement('div');
+                    triadInfoEl.className = 'triad-info';
+                    triadInfoEl.title = "Visualizar";
+                    
+                    let chordName = triad.root;
+                    switch(triad.type) {
+                        case 'major': chordName += ''; break;
+                        case 'minor': chordName += 'm'; break;
+                        case 'dim': chordName += 'dim'; break;
+                        case 'aug': chordName += 'aug'; break;
+                        default: chordName += ' ' + triad.type; break;
+                    }
+                    
+                    const noteNames = showNotation === 'notes' ? 
+                        triad.notes.join(', ') : 
+                        triad.intervals.map(i => i.interval_name).join(', ');
+                    
+                    triadInfoEl.textContent = `${chordName} (${noteNames})`;
+                    
+                    // Fazer o elemento de informações clicável
+                    triadInfoEl.addEventListener('click', () => {
+                        showTriadOnFretboard(triad, index);
+                    });
+                    
+                    triadEl.appendChild(degreeBadge);
+                    triadEl.appendChild(triadInfoEl);
+                    triadsListEl.appendChild(triadEl);
+                });
+            }
+            
+            // Renderiza todos os tipos de tríades
+            function renderAllTriads() {
+                const allTriadsListEl = document.getElementById('all-triads-list');
+                allTriadsListEl.innerHTML = '';
+                
+                const rootNote = rootNoteEl.value;
+                const triadTypes = ['major', 'minor', 'dim', 'aug'];
+                
+                triadTypes.forEach(type => {
+                    const triadEl = document.createElement('div');
+                    triadEl.className = 'legend-item';
+                    
+                    const typeBadge = document.createElement('span');
+                    typeBadge.className = `triad-badge triad-${type}`;
+                    
+                    // Traduz o tipo de tríade
+                    let triadName;
+                    switch(type) {
+                        case 'major': triadName = 'Maior'; break;
+                        case 'minor': triadName = 'Menor'; break;
+                        case 'dim': triadName = 'Diminuta'; break;
+                        case 'aug': triadName = 'Aumentada'; break;
+                        default: triadName = type; break;
+                    }
+                    typeBadge.textContent = triadName;
+                    
+                    const triadInfoEl = document.createElement('div');
+                    triadInfoEl.className = 'triad-info';
+                    triadInfoEl.title = "Visualizar";
+                    
+                    const triadData = allTriads[type];
+                    
+                    let chordName = rootNote;
+                    switch(type) {
+                        case 'major': chordName += ''; break;
+                        case 'minor': chordName += 'm'; break;
+                        case 'dim': chordName += 'dim'; break;
+                        case 'aug': chordName += 'aug'; break;
+                        default: chordName += ' ' + type; break;
+                    }
+                    
+                    const noteNames = showNotation === 'notes' ? 
+                        triadData.notes.join(', ') : 
+                        triadData.intervals.map(i => i.interval_name).join(', ');
+                    
+                    triadInfoEl.textContent = `${chordName} (${noteNames})`;
+                    
+                    // Fazer o elemento de informações clicável
+                    triadInfoEl.addEventListener('click', () => {
+                        showAllTriadType(type);
+                    });
+                    
+                    triadEl.appendChild(typeBadge);
+                    triadEl.appendChild(triadInfoEl);
+                    allTriadsListEl.appendChild(triadEl);
+                });
+                
+                showAllTriadType('major');
+            }
+            
+            // Exibe uma tríade da escala no braço
+            function showTriadOnFretboard(triad, triadIndex) {
+                document.querySelectorAll('.note').forEach(el => el.remove());
+                
+                currentTriadIndex = triadIndex;
+                
+                fretboardData.forEach(string => {
+                    string.forEach(noteData => {
+                        const { note, string: stringNum, fret } = noteData;
+                        
+                        // Verificar se a nota está destacada pelo usuário
+                        const noteKey = `${stringNum}-${fret}`;
+                        const isHighlighted = userHighlightedNotes.has(noteKey);
+                        
+                        if (triad.notes.includes(note) || isHighlighted) {
+                            const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                            
+                            if (fretEl) {
+                                const noteEl = document.createElement('div');
+                                let displayText = note;
+                                
+                                if (isHighlighted) {
+                                    noteEl.className = 'note user-highlighted';
+                                } else if (note === triad.root) {
+                                    noteEl.className = `note triad-note`;
+                                } else {
+                                    noteEl.className = `note chord-note`;
+                                }
+                                
+                                if (showNotation === 'intervals' && !isHighlighted) {
+                                    const interval = triad.intervals.find(i => i.note === note);
+                                    if (interval) {
+                                        displayText = interval.interval_name;
+                                        noteEl.className += ` interval-${interval.interval_name}`;
+                                    }
+                                }
+                                
+                                noteEl.textContent = displayText;
+                                
+                                // Adicionar evento de clique para destacar a nota
+                                noteEl.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    toggleHighlightNote(noteKey);
+                                });
+                                
+                                fretEl.appendChild(noteEl);
+                            }
+                        }
+                    });
+                });
+                
+                // Atualizar o card de informações para a tríade selecionada
+                const titleEl = document.createElement('h4');
+                titleEl.textContent = `Tríade ${getRomanNumeral(triad.degree)} - ${getTriadName(triad.type)} (${triad.root})`;
+                
+                const contentEl = document.createElement('p');
+                contentEl.textContent = `Visualizando a tríade ${getTriadName(triad.type)} construída sobre o grau ${getRomanNumeral(triad.degree)} da escala. Notas: ${triad.notes.join(', ')}`;
+                
+                infoCardEl.innerHTML = '';
+                infoCardEl.appendChild(titleEl);
+                infoCardEl.appendChild(contentEl);
+            }
+            
+            // Exibe um tipo de tríade no braço
+            function showAllTriadType(triadType) {
+                document.querySelectorAll('.note').forEach(el => el.remove());
+                
+                currentTriadType = triadType;
+                const triadData = allTriads[triadType];
+                const rootNote = rootNoteEl.value;
+                
+                fretboardData.forEach(string => {
+                    string.forEach(noteData => {
+                        const { note, string: stringNum, fret } = noteData;
+                        
+                        // Verificar se a nota está destacada pelo usuário
+                        const noteKey = `${stringNum}-${fret}`;
+                        const isHighlighted = userHighlightedNotes.has(noteKey);
+                        
+                        if (triadData.notes.includes(note) || isHighlighted) {
+                            const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                            
+                            if (fretEl) {
+                                const noteEl = document.createElement('div');
+                                let displayText = note;
+                                
+                                if (isHighlighted) {
+                                    noteEl.className = 'note user-highlighted';
+                                } else if (note === rootNote) {
+                                    noteEl.className = `note triad-note`;
+                                } else {
+                                    noteEl.className = `note triad-${triadType}`;
+                                }
+                                
+                                if (showNotation === 'intervals' && !isHighlighted) {
+                                    const interval = triadData.intervals.find(i => i.note === note);
+                                    if (interval) {
+                                        displayText = interval.interval_name;
+                                        noteEl.className += ` interval-${interval.interval_name}`;
+                                    }
+                                }
+                                
+                                noteEl.textContent = displayText;
+                                
+                                // Adicionar evento de clique para destacar a nota
+                                noteEl.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    toggleHighlightNote(noteKey);
+                                });
+                                
+                                fretEl.appendChild(noteEl);
+                            }
+                        }
+                    });
+                });
+                
+                // Atualizar o card de informações para o tipo de tríade selecionado
+                const titleEl = document.createElement('h4');
+                titleEl.textContent = `Tríade ${getTriadName(triadType)} - ${rootNote}${getChordSuffix(triadType)}`;
+                
+                const contentEl = document.createElement('p');
+                contentEl.textContent = `Visualizando a tríade ${getTriadName(triadType)} para a nota raiz ${rootNote}. Notas: ${triadData.notes.join(', ')}`;
+                
+                infoCardEl.innerHTML = '';
+                infoCardEl.appendChild(titleEl);
+                infoCardEl.appendChild(contentEl);
+            }
+            
+            // Função para converter número para numeral romano
+            function getRomanNumeral(num) {
+                const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+                return romanNumerals[num - 1] || num.toString();
+            }
+            
+            // Obter nome do tipo de tríade
+            function getTriadName(type) {
+                const triadNames = {
+                    'major': 'Maior',
+                    'minor': 'Menor',
+                    'dim': 'Diminuta',
+                    'aug': 'Aumentada'
+                };
+                return triadNames[type] || type;
+            }
+            
+            // Obter sufixo do acorde baseado no tipo
+            function getChordSuffix(type) {
+                const suffixes = {
+                    'major': '',
+                    'minor': 'm',
+                    'dim': 'dim',
+                    'aug': 'aug',
+                    '7': '7',
+                    'maj7': 'maj7',
+                    'm7': 'm7',
+                    'm7b5': 'm7b5'
+                };
+                return suffixes[type] || '';
+            }
+            
+            // Obter nome do acorde
+            function getChordName(root, chordType) {
+                return root + getChordSuffix(chordType);
+            }
+        });
     </script>
 </body>
 </html>
