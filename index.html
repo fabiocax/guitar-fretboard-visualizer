@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -112,92 +113,299 @@
         .fretboard-container {
             overflow-x: auto;
             background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            padding: 30px 25px;
+            margin-bottom: 35px;
+            position: relative;
+            background-image: linear-gradient(to right, #f0f0f0, #fff);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .fretboard-container:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+            transform: translateY(-2px);
         }
         
         .fretboard {
             display: table;
             border-collapse: collapse;
             width: 100%;
+            margin: 5px 0;
+            position: relative;
+            z-index: 1;
+            transform-style: preserve-3d;
+            perspective: 800px;
         }
         
         .string {
             display: table-row;
-            height: 50px;
+            height: 60px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        /* Adicionar sombra para efeito 3D nas cordas */
+        .string:before {
+            content: '';
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(to bottom, 
+                          rgba(255,255,255,0.8) 0%, 
+                          rgba(200,200,200,0.5) 50%, 
+                          rgba(0,0,0,0.2) 100%);
+            top: 50%;
+            pointer-events: none;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .string:hover:before {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            opacity: 1;
         }
         
         .fret {
             display: table-cell;
-            width: 60px;
-            border-right: 2px solid #bbb;
+            width: 65px;
+            border-right: 3px solid #a0a0a0;
             position: relative;
             text-align: center;
             vertical-align: middle;
+            transition: all 0.3s;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05), rgba(0,0,0,0.05));
+        }
+        
+        .fret:hover {
+            background-color: rgba(0,0,0,0.08);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Indicador visual para fret vazio no modo construtor de acordes */
+        .chord-builder-mode .fret:hover::after {
+            content: '+';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(0,0,0,0.3);
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .chord-builder-mode .fret:hover:active::after {
+            opacity: 1;
         }
         
         /* Estilo para destacar o traste 0 (cordas soltas) */
         .fret[data-fret="0"] {
-            background-color: #e8e8e8;
-            border-right: 2px solid #999;
+            background-color: #f0f0f0;
+            border-right: 4px solid #888;
+            width: 50px;
         }
         
         .string:not(:last-child) .fret {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        /* Adiciona madeira texturizada ao fundo */
+        .fretboard:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJ3b29kIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlOGQ5YzgiLz48cGF0aCBkPSJNMCAwIEwxMDAgMTAwIE0yMCAwIEwxMDAgODAgTTAgMjAgTDgwIDEwMCBNNDAgMCBMMTAwIDYwIE0wIDQwIEw2MCAxMDAgTTYwIDAgTDEwMCA0MCBNMCA2MCBMNDAgMTAwIE04MCAwIEwxMDAgMjAgTTAgODAgTDIwIDEwMCIgc3Ryb2tlPSIjZDRiOTk2IiBzdHJva2Utd2lkdGg9IjAuNiIgc3Ryb2tlLW9wYWNpdHk9IjAuMyIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCN3b29kKSIgb3BhY2l0eT0iMC4xNSIvPjwvc3ZnPg==');
+            pointer-events: none;
+            opacity: 0.7;
+            z-index: 0;
+            background-size: 100% 100%;
+            transition: opacity 0.3s;
+        }
+        
+        .fretboard-container:hover .fretboard:before {
+            opacity: 0.9;
+        }
+        
+        /* Add subtle grain overlay */
+        .fretboard:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJub2lzZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNjUiIG51bU9jdGF2ZXM9IjMiIHN0aXRjaFRpbGVzPSJzdGl0Y2giIHJlc3VsdD0idHVyYnVsZW5jZSIvPjxmZURpZmZ1c2VMaWdodGluZyBpbj0idHVyYnVsZW5jZSIgbGlnaHRpbmctY29sb3I9IiNmZmYiIHN1cmZhY2VTY2FsZT0iMS41IiByZXN1bHQ9ImRpZmZ1c2VMaWdodGluZyI+PGZlRGlzdGFudExpZ2h0IGF6aW11dGg9IjQ1IiBlbGV2YXRpb249IjU1Ii8+PC9mZURpZmZ1c2VMaWdodGluZz48ZmVDb21wb3NpdGUgaW49ImRpZmZ1c2VMaWdodGluZyIgaW4yPSJTb3VyY2VHcmFwaGljIiBvcGVyYXRvcj0iYXJpdGhtZXRpYyIgazE9IjEiIGsyPSIwIiBrMz0iMCIgazQ9IjAiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0idHJhbnNwYXJlbnQiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMDgiLz48L3N2Zz4=');
+            pointer-events: none;
+            opacity: 0.3;
+            z-index: 0;
+            mix-blend-mode: overlay;
         }
         
         .fret-number {
             position: absolute;
-            bottom: -25px;
+            bottom: -28px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 12px;
-            color: #666;
+            font-size: 13px;
+            color: #444;
+            font-weight: 600;
+            background-color: #f8f8f8;
+            border-radius: 12px;
+            padding: 3px 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            min-width: 25px;
+            text-align: center;
+        }
+        
+        .fret:hover .fret-number {
+            background-color: #fff;
+            color: #222;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            transform: translateX(-50%) translateY(-2px);
         }
         
         .string-name {
-            width: 30px;
+            width: 45px;
             display: table-cell;
             text-align: center;
             font-weight: bold;
-            background-color: #ddd;
-            color: #333;
-            font-size: 14px;
+            background: linear-gradient(to right, #d8d8d8, #f0f0f0);
+            color: #222;
+            font-size: 16px;
+            border-radius: 6px 0 0 6px;
+            box-shadow: inset -2px 0 4px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.05);
+            text-shadow: 0 1px 1px rgba(255,255,255,0.9);
+            transition: all 0.3s ease;
+            vertical-align: middle;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .string-name:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 8px;
+            height: 1px;
+            background-color: rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        
+        .string:hover .string-name {
+            background: linear-gradient(to right, #d0d0d0, #f8f8f8);
+            color: #000;
+            box-shadow: inset -3px 0 5px rgba(0,0,0,0.2), 0 1px 5px rgba(0,0,0,0.1);
         }
         
         .note {
             display: inline-block;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
+            width: 36px;
+            height: 36px;
+            line-height: 32px;
             border-radius: 50%;
             background-color: #f44336;
             color: white;
             font-weight: bold;
             text-align: center;
-            font-size: 12px;
+            font-size: 14px;
             cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.5);
+            position: relative;
+            z-index: 5;
+            transform-style: preserve-3d;
+        }
+        
+        .note:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            box-shadow: inset 0 -2px 5px rgba(0,0,0,0.2), inset 0 2px 5px rgba(255,255,255,0.2);
+            pointer-events: none;
         }
         
         .note:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            transform: scale(1.15) translateY(-3px) translateZ(10px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.4);
+            font-weight: 800;
+            border-color: rgba(255,255,255,0.7);
+        }
+        
+        .note:active {
+            transform: scale(0.95) translateY(1px);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            transition: all 0.1s;
         }
         
         /* Nota destacada pelo usuário */
         .user-highlighted {
-            background-color: #9c27b0 !important; /* Roxo - prioridade com !important */
-            transform: scale(1.15);
-            box-shadow: 0 0 8px rgba(156, 39, 176, 0.6);
+            /* Sem cor de fundo padrão para permitir personalização */
+            transform: scale(1.25) translateY(-4px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
             z-index: 10; /* Garantir que fique acima das outras */
+            border: 3px solid rgba(255,255,255,0.8);
+            animation: pulse 1.5s infinite alternate;
+            font-weight: 800;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        @keyframes pulse {
+            0% { 
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); 
+                transform: scale(1.25) translateY(-4px);
+            }
+            100% { 
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+                transform: scale(1.28) translateY(-5px);
+            }
+        }
+        
+        /* Add glow effect to highlighted notes */
+        .user-highlighted:before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+            animation: glow 1.5s infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { opacity: 0.5; }
+            100% { opacity: 0.8; }
+        }
+        
+        /* Nota de acorde personalizado */
+        .custom-chord-note {
+            background-color: #ff5722; /* Laranja */
         }
         
         .note.user-highlighted:hover {
-            transform: scale(1.2);
-            box-shadow: 0 0 10px rgba(156, 39, 176, 0.8);
+            transform: scale(1.3) translateY(-6px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+            border-width: 3px;
+            border-color: rgba(255,255,255,0.9);
+            animation-play-state: paused;
         }
         
         /* Estilos da legenda */
@@ -229,6 +437,20 @@
             align-items: center;
             gap: 5px;
             font-size: 14px;
+            flex-wrap: wrap;
+        }
+        
+        .secondary-button {
+            padding: 2px 8px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .secondary-button:hover {
+            background-color: #e0e0e0;
         }
         
         .legend-color {
@@ -374,33 +596,64 @@
         .selection-status {
             display: block;
             text-align: center;
-            font-size: 14px;
-            color: #666;
-            margin-top: 5px;
-            margin-bottom: 10px;
+            font-size: 15px;
+            color: #555;
+            margin-top: 10px;
+            margin-bottom: 15px;
             font-style: italic;
+            padding: 8px 15px;
+            background-color: rgba(0,0,0,0.03);
+            border-radius: 6px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .selection-status:hover {
+            background-color: rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.08);
         }
         
         /* Estilo para marcadores de traste (inlays) */
         .inlay-markers {
             display: flex;
-            margin-bottom: 10px;
-            padding-left: 40px; /* Espaço para a identificação das cordas */
+            margin-bottom: 15px;
+            padding-left: 50px; /* Espaço para a identificação das cordas */
+            position: relative;
         }
         
         .inlay-marker {
-            width: 60px;
-            height: 10px;
+            width: 65px;
+            height: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         
         .inlay-dot {
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background-color: #aaa;
+            background: radial-gradient(circle at 30% 30%, #f8f8f8, #777);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.6), 0 1px 2px rgba(255,255,255,0.8);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .inlay-dot:before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.8);
+            top: 2px;
+            left: 2px;
+            z-index: 2;
+        }
+        
+        .inlay-markers:hover .inlay-dot {
+            transform: scale(1.1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.7), 0 2px 3px rgba(255,255,255,0.9);
         }
         
         .inlay-dot.double-dot {
@@ -410,21 +663,40 @@
         .inlay-dot.double-dot:before {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background-color: #aaa;
-            left: -15px;
+            background: radial-gradient(circle at 30% 30%, #f8f8f8, #777);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.6), 0 1px 2px rgba(255,255,255,0.8);
+            left: -25px;
         }
         
         .inlay-dot.double-dot:after {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background-color: #aaa;
-            right: -15px;
+            background: radial-gradient(circle at 30% 30%, #f8f8f8, #777);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.6), 0 1px 2px rgba(255,255,255,0.8);
+            right: -25px;
+        }
+        
+        /* Add highlight effect to double dots */
+        .inlay-dot.double-dot:before:after, .inlay-dot.double-dot:after:after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.8);
+            top: 2px;
+            left: 2px;
+        }
+        
+        /* Adiciona um marcador especial para o 12º traste */
+        .inlay-marker[data-fret="12"] .inlay-dot {
+            background: radial-gradient(circle at 30% 30%, #f0f0f0, #666);
         }
         
         /* Tabs para organizar a interface */
@@ -631,7 +903,21 @@
         }
         
         /* Modo escuro para suportar preferências do sistema */
+        /* Ajuste de opacidade da textura de madeira no modo escuro */
         @media (prefers-color-scheme: dark) {
+            .fretboard:before {
+                opacity: 0.3;
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJ3b29kIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiM0OTM5MjkiLz48cGF0aCBkPSJNMCAwIEwxMDAgMTAwIE0yMCAwIEwxMDAgODAgTTAgMjAgTDgwIDEwMCBNNDAgMCBMMTAwIDYwIE0wIDQwIEw2MCAxMDAgTTYwIDAgTDEwMCA0MCBNMCA2MCBMNDAgMTAwIE04MCAwIEwxMDAgMjAgTTAgODAgTDIwIDEwMCIgc3Ryb2tlPSIjMzgyZTIxIiBzdHJva2Utd2lkdGg9IjAuNiIgc3Ryb2tlLW9wYWNpdHk9IjAuMyIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCN3b29kKSIgb3BhY2l0eT0iMC4xNSIvPjwvc3ZnPg==');
+            }
+            
+            .fretboard-container:hover .fretboard:before {
+                opacity: 0.4;
+            }
+            
+            .fretboard:after {
+                opacity: 0.2;
+                mix-blend-mode: color-dodge;
+            }
             body {
                 background-color: #222;
                 color: #f1f1f1;
@@ -643,10 +929,19 @@
             
             .main-container,
             .controls,
-            .fretboard-container,
             .legend {
                 background-color: #333;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
+            
+            .fretboard-container {
+                background-color: #333;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+                background-image: linear-gradient(to right, #2a2a2a, #333);
+            }
+            
+            .fretboard-container:hover {
+                box-shadow: 0 12px 30px rgba(0,0,0,0.5);
             }
             
             .subtitle {
@@ -655,6 +950,17 @@
             
             .fret {
                 border-right-color: #555;
+                background-image: linear-gradient(to right, rgba(255,255,255,0.02), rgba(0,0,0,0.2));
+            }
+            
+            .fret:hover {
+                background-color: rgba(255,255,255,0.05);
+                box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+            }
+            
+            /* Adaptação do indicador visual de adição no modo escuro */
+            .chord-builder-mode .fret:hover::after {
+                color: rgba(255,255,255,0.3);
             }
             
             .string:not(:last-child) .fret {
@@ -662,13 +968,144 @@
             }
             
             .fret[data-fret="0"] {
-                background-color: #444;
+                background-color: #2a2a2a;
                 border-right-color: #555;
             }
             
             .string-name {
+                background: linear-gradient(to right, #3a3a3a, #444);
+                color: #f1f1f1;
+                box-shadow: inset -2px 0 4px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+                text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+            }
+            
+            .string-name:after {
+                background-color: rgba(255,255,255,0.1);
+            }
+            
+            .string:hover .string-name {
+                background: linear-gradient(to right, #444, #4a4a4a);
+                color: #fff;
+                box-shadow: inset -3px 0 5px rgba(0,0,0,0.3), 0 1px 5px rgba(0,0,0,0.2);
+            }
+            
+            .string:before {
+                background: linear-gradient(to bottom, 
+                              rgba(255,255,255,0.6) 0%, 
+                              rgba(180,180,180,0.3) 40%, 
+                              rgba(100,100,100,0.2) 60%,
+                              rgba(50,50,50,0.4) 100%);
+                box-shadow: 0 1px 5px rgba(0,0,0,0.5), 0 0 2px rgba(255,255,255,0.3);
+                height: 2px;
+                opacity: 0.9;
+            }
+            
+            .string:hover:before {
+                background: linear-gradient(to bottom, 
+                              rgba(255,255,255,0.8) 0%, 
+                              rgba(200,200,200,0.4) 40%, 
+                              rgba(120,120,120,0.3) 60%,
+                              rgba(80,80,80,0.5) 100%);
+                box-shadow: 0 1px 6px rgba(0,0,0,0.6), 0 0 3px rgba(255,255,255,0.4);
+                opacity: 1;
+            }
+            
+            .note {
+                box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+                border: 2px solid rgba(255,255,255,0.2);
+            }
+            
+            .note:hover {
+                box-shadow: 0 5px 12px rgba(0,0,0,0.6);
+                border-color: rgba(255,255,255,0.3);
+            }
+            
+            .user-highlighted {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+                border: 3px solid rgba(255,255,255,0.3);
+            }
+            
+            @keyframes pulse {
+                0% { 
+                    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6); 
+                    transform: scale(1.25) translateY(-4px);
+                }
+                100% { 
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 255, 255, 0.2);
+                    transform: scale(1.28) translateY(-5px);
+                }
+            }
+            
+            .user-highlighted:before {
+                background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            }
+            
+            /* Adiciona efeito de brilho para notas destacadas no modo escuro */
+            .user-highlighted:after {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                border-radius: 50%;
+                box-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 15px currentColor;
+                opacity: 0.5;
+                z-index: -1;
+                animation: darkGlow 2s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes darkGlow {
+                0% { opacity: 0.3; box-shadow: 0 0 8px rgba(255,255,255,0.1), 0 0 12px currentColor; }
+                100% { opacity: 0.6; box-shadow: 0 0 12px rgba(255,255,255,0.2), 0 0 20px currentColor; }
+            }
+            
+            .fret-number {
+                color: #ccc;
+                background-color: #3a3a3a;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                border: 1px solid rgba(255,255,255,0.05);
+            }
+            
+            .fret:hover .fret-number {
                 background-color: #444;
                 color: #f1f1f1;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+            }
+            
+            .selection-status {
+                color: #ccc;
+                background-color: rgba(255,255,255,0.05);
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+            }
+            
+            .selection-status:hover {
+                background-color: rgba(255,255,255,0.08);
+                box-shadow: inset 0 1px 5px rgba(0,0,0,0.3);
+            }
+            
+            .inlay-dot {
+                background: radial-gradient(circle at 30% 30%, #666, #444);
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.8), 0 1px 2px rgba(255,255,255,0.1);
+            }
+            
+            .inlay-dot:before {
+                background: rgba(255,255,255,0.3);
+            }
+            
+            .inlay-markers:hover .inlay-dot {
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.9), 0 2px 3px rgba(255,255,255,0.1);
+            }
+            
+            .inlay-dot.double-dot:before,
+            .inlay-dot.double-dot:after {
+                background: radial-gradient(circle at 30% 30%, #666, #444);
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.8), 0 1px 2px rgba(255,255,255,0.1);
+            }
+            
+            .inlay-marker[data-fret="12"] .inlay-dot {
+                background: radial-gradient(circle at 30% 30%, #777, #444);
             }
             
             select, button {
@@ -758,9 +1195,11 @@
             <button class="tab-button active" data-mode="notes">🎵 Notas</button>
             <button class="tab-button" data-mode="scales">🎼 Escalas</button>
             <button class="tab-button" data-mode="chord">🎸 Acordes</button>
+            <button class="tab-button" data-mode="arpeggios">🎻 Arpejos</button>
             <button class="tab-button" data-mode="scale-triads">🎶 Tríades da Escala</button>
             <button class="tab-button" data-mode="all-triads">🎹 Tipos de Tríades</button>
             <button class="tab-button" data-mode="intervals">📏 Intervalos</button>
+            <button class="tab-button" data-mode="chord-builder">🛠️ Construtor de Acordes</button>
         </div>
         
         <div class="controls">
@@ -801,13 +1240,19 @@
                     <optgroup label="Escalas Básicas">
                         <option value="major">Maior</option>
                         <option value="minor">Menor</option>
+                        <option value="harmonic_minor">Menor Harmônica</option>
+                        <option value="melodic_minor">Menor Melódica</option>
                         <option value="pentatonic_major">Pentatônica Maior</option>
                         <option value="pentatonic_minor">Pentatônica Menor</option>
                         <option value="pentatonic_minor_blue">Pentatônica Menor com Blue Note</option>
                         <option value="pentatonic_major_blue">Pentatônica Maior com Blue Note</option>
                         <option value="blues">Blues</option>
+                        <option value="whole_tone">Tons Inteiros</option>
+                        <option value="diminished">Diminuta (H-W)</option>
+                        <option value="diminished_inv">Diminuta (W-H)</option>
+                        <option value="chromatic">Cromática</option>
                     </optgroup>
-                    <optgroup label="Modos Gregos">
+                    <optgroup label="Modos da Escala Maior">
                         <option value="ionian">Jônio (Maior)</option>
                         <option value="dorian">Dórico</option>
                         <option value="phrygian">Frígio</option>
@@ -816,20 +1261,131 @@
                         <option value="aeolian">Eólio (Menor)</option>
                         <option value="locrian">Lócrio</option>
                     </optgroup>
+                    <optgroup label="Modos da Escala Menor Harmônica">
+                        <option value="harmonic_minor_1">Menor Harmônica</option>
+                        <option value="locrian_6">Lócrio #6</option>
+                        <option value="ionian_5">Jônio #5</option>
+                        <option value="dorian_4">Dórico #4</option>
+                        <option value="phrygian_3">Frígio Dominante</option>
+                        <option value="lydian_2">Lídio #2</option>
+                        <option value="superlocrian_7">Superlócrio bb7</option>
+                    </optgroup>
+                    <optgroup label="Modos da Escala Menor Melódica">
+                        <option value="melodic_minor_1">Menor Melódica</option>
+                        <option value="dorian_b2">Dórico b2</option>
+                        <option value="lydian_5">Lídio Aumentado</option>
+                        <option value="lydian_7">Lídio Dominante</option>
+                        <option value="mixolydian_6">Mixolídio b6</option>
+                        <option value="locrian_2">Lócrio #2</option>
+                        <option value="altered_scale">Escala Alterada</option>
+                    </optgroup>
+                </select>
+            </div>
+            
+            <div class="control-group" id="scale-pattern-group" style="display: none;">
+                <label for="scale-pattern-type">Padrão de Digitação:</label>
+                <select id="scale-pattern-type">
+                    <option value="none">Sem Padrão</option>
+                    <option value="caged">Sistema CAGED</option>
+                    <option value="three-note">3 Notas por Corda</option>
+                </select>
+            </div>
+            
+            <div class="control-group" id="caged-position-group" style="display: none;">
+                <label for="caged-position">Posição CAGED:</label>
+                <select id="caged-position">
+                    <option value="C">Forma C</option>
+                    <option value="A">Forma A</option>
+                    <option value="G">Forma G</option>
+                    <option value="E">Forma E</option>
+                    <option value="D">Forma D</option>
                 </select>
             </div>
             
             <div class="control-group" id="chord-type-group" style="display: none;">
                 <label for="chord-type">Tipo de Acorde:</label>
                 <select id="chord-type">
-                    <option value="major">Maior</option>
-                    <option value="minor">Menor</option>
-                    <option value="7">Dominante 7</option>
-                    <option value="maj7">Maior 7</option>
-                    <option value="m7">Menor 7</option>
-                    <option value="dim">Diminuto</option>
-                    <option value="aug">Aumentado</option>
-                    <option value="m7b5">Meio-Diminuto (m7b5)</option>
+                    <optgroup label="Tríades">
+                        <option value="major">Maior</option>
+                        <option value="minor">Menor</option>
+                        <option value="dim">Diminuto</option>
+                        <option value="aug">Aumentado</option>
+                        <option value="sus2">Sus2</option>
+                        <option value="sus4">Sus4</option>
+                    </optgroup>
+                    <optgroup label="Tétrades (7ª)">
+                        <option value="7">Dominante 7</option>
+                        <option value="maj7">Maior 7</option>
+                        <option value="m7">Menor 7</option>
+                        <option value="m7b5">Meio-Diminuto (m7b5)</option>
+                        <option value="dim7">Diminuto 7</option>
+                        <option value="6">Maior 6</option>
+                        <option value="m6">Menor 6</option>
+                        <option value="7#5">7 com 5ª aumentada</option>
+                        <option value="7b5">7 com 5ª diminuta</option>
+                        <option value="7sus4">7sus4</option>
+                    </optgroup>
+                    <optgroup label="Extensões (9ª, 11ª, 13ª)">
+                        <option value="9">Dominante 9</option>
+                        <option value="maj9">Maior 9</option>
+                        <option value="m9">Menor 9</option>
+                        <option value="7b9">7(b9)</option>
+                        <option value="7#9">7(#9)</option>
+                        <option value="11">11</option>
+                        <option value="maj11">Maior 11</option>
+                        <option value="m11">Menor 11</option>
+                        <option value="13">13</option>
+                        <option value="maj13">Maior 13</option>
+                        <option value="m13">Menor 13</option>
+                    </optgroup>
+                    <optgroup label="Acordes Add">
+                        <option value="add9">Add9</option>
+                        <option value="madd9">mAdd9</option>
+                    </optgroup>
+                </select>
+            </div>
+            
+            <div class="control-group" id="voicing-select-group" style="display: none;">
+                <label for="voicing-select">Voicing:</label>
+                <select id="voicing-select">
+                    <option value="standard">Padrão</option>
+                    <option value="drop2">Drop 2</option>
+                    <option value="drop3">Drop 3</option>
+                    <option value="shell">Shell Voicing</option>
+                    <option value="quartal">Quartal</option>
+                </select>
+            </div>
+            
+            <!-- Controles para arpejos -->
+            <div class="control-group" id="arpeggio-type-group" style="display: none;">
+                <label for="arpeggio-type">Tipo de Arpejo:</label>
+                <select id="arpeggio-type">
+                    <optgroup label="Tríades">
+                        <option value="major">Maior</option>
+                        <option value="minor">Menor</option>
+                        <option value="dim">Diminuto</option>
+                        <option value="aug">Aumentado</option>
+                    </optgroup>
+                    <optgroup label="Tétrades">
+                        <option value="7">Dominante 7</option>
+                        <option value="maj7">Maior 7</option>
+                        <option value="m7">Menor 7</option>
+                        <option value="m7b5">Meio-Diminuto (m7b5)</option>
+                        <option value="dim7">Diminuto 7</option>
+                        <option value="6">Maior 6</option>
+                        <option value="m6">Menor 6</option>
+                    </optgroup>
+                </select>
+            </div>
+            
+            <div class="control-group" id="arpeggio-position-group" style="display: none;">
+                <label for="arpeggio-position">Posição:</label>
+                <select id="arpeggio-position">
+                    <option value="position1">Posição 1 (Baixa)</option>
+                    <option value="position2">Posição 2</option>
+                    <option value="position3">Posição 3</option>
+                    <option value="position4">Posição 4</option>
+                    <option value="position5">Posição 5 (Alta)</option>
                 </select>
             </div>
             
@@ -844,6 +1400,26 @@
             <div class="control-group">
                 <label>&nbsp;</label>
                 <button id="clear-highlighted">🧹 Limpar Seleção</button>
+            </div>
+            
+            <div class="control-group" id="chord-builder-controls" style="display: none;">
+                <label>Cor da Nota:</label>
+                <select id="note-color-select">
+                    <option value="#9c27b0" selected>Roxo (Padrão)</option>
+                    <option value="#f44336">Vermelho</option>
+                    <option value="#ff9800">Laranja</option>
+                    <option value="#ffeb3b">Amarelo</option>
+                    <option value="#4caf50">Verde</option>
+                    <option value="#2196f3">Azul</option>
+                    <option value="#673ab7">Indigo</option>
+                    <option value="#e91e63">Rosa</option>
+                    <option value="#009688">Teal</option>
+                </select>
+            </div>
+            
+            <div class="control-group" id="chord-builder-save" style="display: none;">
+                <label>&nbsp;</label>
+                <button id="save-custom-chord">💾 Salvar Acorde</button>
             </div>
         </div>
         
@@ -877,6 +1453,13 @@
             <h4>Visualizador de Braço de Guitarra</h4>
             <p>Selecione um modo de visualização nas abas acima para começar a explorar o braço da guitarra. Clique em qualquer nota para destacá-la.</p>
         </div>
+        
+        <div id="custom-chords-container" class="legend" style="display: none; margin-top: 20px; margin-bottom: 20px;">
+            <h3>Acordes Personalizados</h3>
+            <div id="custom-chords-list" class="legend-items">
+                <!-- Lista de acordes personalizados será gerada dinamicamente -->
+            </div>
+        </div>
     </div>
     
     <div class="legend">
@@ -905,6 +1488,10 @@
             <div class="legend-item">
                 <div class="legend-color highlight-note"></div>
                 <span>Nota Destacada</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color custom-chord-note"></div>
+                <span>Nota de Acorde Personalizado</span>
             </div>
             <div class="legend-item" style="background-color: #e8e8e8; padding: 5px; border-radius: 4px;">
                 <span>Cordas Soltas (Traste 0)</span>
@@ -1117,32 +1704,530 @@
             
             // Definição de escalas (intervalos em relação à raiz)
             const SCALES = {
+                // Escalas básicas
                 'major': [0, 2, 4, 5, 7, 9, 11],
                 'minor': [0, 2, 3, 5, 7, 8, 10],
+                'harmonic_minor': [0, 2, 3, 5, 7, 8, 11],
+                'melodic_minor': [0, 2, 3, 5, 7, 9, 11],
                 'pentatonic_major': [0, 2, 4, 7, 9],
                 'pentatonic_minor': [0, 3, 5, 7, 10],
                 'pentatonic_minor_blue': [0, 3, 5, 6, 7, 10],
                 'pentatonic_major_blue': [0, 2, 4, 6, 7, 9],
                 'blues': [0, 3, 5, 6, 7, 10],
-                'ionian': [0, 2, 4, 5, 7, 9, 11],
-                'dorian': [0, 2, 3, 5, 7, 9, 10],
-                'phrygian': [0, 1, 3, 5, 7, 8, 10],
-                'lydian': [0, 2, 4, 6, 7, 9, 11],
-                'mixolydian': [0, 2, 4, 5, 7, 9, 10],
-                'aeolian': [0, 2, 3, 5, 7, 8, 10],
-                'locrian': [0, 1, 3, 5, 6, 8, 10]
+                
+                // Modos da escala maior (modos gregos)
+                'ionian': [0, 2, 4, 5, 7, 9, 11],         // Modo 1 - Jônio (escala maior)
+                'dorian': [0, 2, 3, 5, 7, 9, 10],         // Modo 2 - Dórico
+                'phrygian': [0, 1, 3, 5, 7, 8, 10],       // Modo 3 - Frígio
+                'lydian': [0, 2, 4, 6, 7, 9, 11],         // Modo 4 - Lídio
+                'mixolydian': [0, 2, 4, 5, 7, 9, 10],     // Modo 5 - Mixolídio
+                'aeolian': [0, 2, 3, 5, 7, 8, 10],        // Modo 6 - Eólio (escala menor natural)
+                'locrian': [0, 1, 3, 5, 6, 8, 10],        // Modo 7 - Lócrio
+                
+                // Modos da escala menor harmônica
+                'harmonic_minor_1': [0, 2, 3, 5, 7, 8, 11],       // Menor Harmônica
+                'locrian_6': [0, 1, 3, 5, 6, 9, 10],              // Lócrio #6
+                'ionian_5': [0, 2, 4, 5, 8, 9, 11],               // Jônio #5
+                'dorian_4': [0, 2, 3, 6, 7, 9, 10],               // Dórico #4
+                'phrygian_3': [0, 1, 4, 5, 7, 8, 10],             // Frígio Dominante (Frígio #3)
+                'lydian_2': [0, 3, 4, 6, 7, 9, 11],               // Lídio #2
+                'superlocrian_7': [0, 1, 3, 4, 6, 8, 9],          // Superlócrio bb7
+                
+                // Modos da escala menor melódica
+                'melodic_minor_1': [0, 2, 3, 5, 7, 9, 11],        // Menor Melódica (Jazz)
+                'dorian_b2': [0, 1, 3, 5, 7, 9, 10],              // Dórico b2
+                'lydian_5': [0, 2, 4, 6, 8, 9, 11],               // Lídio Aumentado
+                'lydian_7': [0, 2, 4, 6, 7, 9, 10],               // Lídio Dominante
+                'mixolydian_6': [0, 2, 4, 5, 7, 8, 10],           // Mixolídio b6
+                'locrian_2': [0, 2, 3, 5, 6, 8, 10],              // Lócrio #2
+                'altered_scale': [0, 1, 3, 4, 6, 8, 10],          // Escala Alterada
+                
+                // Outras escalas importantes
+                'whole_tone': [0, 2, 4, 6, 8, 10],                // Escala de Tons Inteiros
+                'diminished': [0, 2, 3, 5, 6, 8, 9, 11],          // Escala Diminuta (Meio-Tom - Tom)
+                'diminished_inv': [0, 1, 3, 4, 6, 7, 9, 10],      // Escala Diminuta (Tom - Meio-Tom)
+                'chromatic': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // Escala Cromática
+            };
+            
+            // Definição de padrões CAGED para escalas maiores
+            // Cada padrão define o fret de início e as posições no braço da guitarra (string, fret relativo à posição)
+            const CAGED_PATTERNS = {
+                'C': {
+                    // Posição C (começando no fret 0, 3 ou 8)
+                    majorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 2], [6, 3],
+                        // string 5 (A)
+                        [5, 0], [5, 2], [5, 3],
+                        // string 4 (D)
+                        [4, 0], [4, 2], [4, 3], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 4],
+                        // string 2 (B)
+                        [2, 1], [2, 3], [2, 5],
+                        // string 1 (E)
+                        [1, 0], [1, 3], [1, 5]
+                    ],
+                    minorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 2], [6, 3],
+                        // string 5 (A)
+                        [5, 0], [5, 2], [5, 3],
+                        // string 4 (D)
+                        [4, 0], [4, 2], [4, 3], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 3],
+                        // string 2 (B)
+                        [2, 1], [2, 3], [2, 4],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 3]
+                    ],
+                    rootPosition: [8, 3, 0]  // Possíveis posições da tônica (frets)
+                },
+                'A': {
+                    // Posição A (começando no fret 0, 5 ou 12)
+                    majorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 2], [6, 4],
+                        // string 5 (A)
+                        [5, 0], [5, 2], [5, 4],
+                        // string 4 (D)
+                        [4, 1], [4, 2], [4, 4], 
+                        // string 3 (G)
+                        [3, 1], [3, 2], [3, 4],
+                        // string 2 (B)
+                        [2, 0], [2, 2], [2, 3],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 4]
+                    ],
+                    minorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 2], [6, 3],
+                        // string 5 (A)
+                        [5, 0], [5, 2], [5, 3],
+                        // string 4 (D)
+                        [4, 0], [4, 2], [4, 4], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 4],
+                        // string 2 (B)
+                        [2, 0], [2, 1], [2, 3],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 3]
+                    ],
+                    rootPosition: [0, 5, 12]  // Possíveis posições da tônica (frets)
+                },
+                'G': {
+                    // Posição G (começando no fret 0, 3 ou 10)
+                    majorScale: [
+                        // string 6 (E)
+                        [6, 2], [6, 3], [6, 5],
+                        // string 5 (A)
+                        [5, 2], [5, 3], [5, 5],
+                        // string 4 (D)
+                        [5, 2], [5, 4], [5, 5], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 4],
+                        // string 2 (B)
+                        [2, 0], [2, 1], [2, 3],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 3]
+                    ],
+                    minorScale: [
+                        // string 6 (E)
+                        [6, 2], [6, 3], [6, 5],
+                        // string 5 (A)
+                        [5, 2], [5, 3], [5, 5],
+                        // string 4 (D)
+                        [4, 2], [4, 3], [4, 5], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 3],
+                        // string 2 (B)
+                        [2, 0], [2, 1], [2, 3],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 3]
+                    ],
+                    rootPosition: [3, 10]  // Possíveis posições da tônica (frets)
+                },
+                'E': {
+                    // Posição E (começando no fret 0, 7 ou 12)
+                    majorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 2], [6, 4],
+                        // string 5 (A)
+                        [5, 0], [5, 2], [5, 4],
+                        // string 4 (D)
+                        [4, 1], [4, 2], [4, 4], 
+                        // string 3 (G)
+                        [3, 1], [3, 2], [3, 4],
+                        // string 2 (B)
+                        [2, 0], [2, 2], [2, 4],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 4]
+                    ],
+                    minorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 2], [6, 3],
+                        // string 5 (A)
+                        [5, 0], [5, 2], [5, 3],
+                        // string 4 (D)
+                        [4, 0], [4, 2], [4, 4], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 4],
+                        // string 2 (B)
+                        [2, 0], [2, 1], [2, 3],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 3]
+                    ],
+                    rootPosition: [0, 7, 12]  // Possíveis posições da tônica (frets)
+                },
+                'D': {
+                    // Posição D (começando no fret 0, 5 ou 10)
+                    majorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 2], [6, 3],
+                        // string 5 (A)
+                        [5, 0], [5, 2], [5, 3],
+                        // string 4 (D)
+                        [4, 0], [4, 2], [4, 4], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 4],
+                        // string 2 (B)
+                        [2, 1], [2, 3], [2, 5],
+                        // string 1 (E)
+                        [1, 0], [1, 2], [1, 3]
+                    ],
+                    minorScale: [
+                        // string 6 (E)
+                        [6, 0], [6, 1], [6, 3],
+                        // string 5 (A)
+                        [5, 0], [5, 1], [5, 3],
+                        // string 4 (D)
+                        [4, 0], [4, 2], [4, 3], 
+                        // string 3 (G)
+                        [3, 0], [3, 2], [3, 3],
+                        // string 2 (B)
+                        [2, 1], [2, 3], [2, 4],
+                        // string 1 (E)
+                        [1, 0], [1, 1], [1, 3]
+                    ],
+                    rootPosition: [0, 5, 10]  // Possíveis posições da tônica (frets)
+                }
+            };
+            
+            // Definição de padrões de arpejos em diferentes posições
+            const ARPEGGIO_PATTERNS = {
+                // Tríade maior em 5 posições diferentes
+                'major': {
+                    'position1': [
+                        // Posição baixa (Forma E)
+                        [6, 0], [5, 2], [4, 2], [3, 1], [2, 0], [1, 0]
+                    ],
+                    'position2': [
+                        // Segunda posição (Forma G)
+                        [6, 3], [5, 2], [4, 0], [3, 0], [2, 0], [1, 3]
+                    ],
+                    'position3': [
+                        // Posição média (Forma C)
+                        [6, 8], [5, 7], [4, 5], [3, 5], [2, 5], [1, 8]
+                    ],
+                    'position4': [
+                        // Quarta posição (Forma A)
+                        [6, 12], [5, 12], [4, 9], [3, 9], [2, 8], [1, 12]
+                    ],
+                    'position5': [
+                        // Posição alta (Forma D)
+                        [6, 10], [5, 10], [4, 12], [3, 12], [2, 10], [1, 10]
+                    ]
+                },
+                // Tríade menor em 5 posições
+                'minor': {
+                    'position1': [
+                        // Posição baixa (Forma Em)
+                        [6, 0], [5, 2], [4, 2], [3, 0], [2, 0], [1, 0]
+                    ],
+                    'position2': [
+                        // Segunda posição (Forma Gm)
+                        [6, 3], [5, 1], [4, 0], [3, 0], [2, 0], [1, 3]
+                    ],
+                    'position3': [
+                        // Posição média (Forma Cm)
+                        [6, 8], [5, 7], [4, 5], [3, 4], [2, 5], [1, 8]
+                    ],
+                    'position4': [
+                        // Quarta posição (Forma Am)
+                        [6, 12], [5, 12], [4, 9], [3, 9], [2, 8], [1, 12]
+                    ],
+                    'position5': [
+                        // Posição alta (Forma Dm)
+                        [6, 10], [5, 10], [4, 12], [3, 10], [2, 10], [1, 10]
+                    ]
+                },
+                // Tríade diminuta em 5 posições
+                'dim': {
+                    'position1': [
+                        [6, 0], [5, 1], [4, 2], [3, 0], [2, 0], [1, 1]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 1], [4, 0], [3, 0], [2, 0], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 6], [5, 4], [4, 5], [3, 3], [2, 3], [1, 6]
+                    ],
+                    'position4': [
+                        [6, 9], [5, 7], [4, 8], [3, 6], [2, 6], [1, 9]
+                    ],
+                    'position5': [
+                        [6, 0], [5, 10], [4, 11], [3, 9], [2, 9], [1, 0]
+                    ]
+                },
+                // Tríade aumentada em 5 posições
+                'aug': {
+                    'position1': [
+                        [6, 0], [5, 3], [4, 2], [3, 1], [2, 1], [1, 0]
+                    ],
+                    'position2': [
+                        [6, 4], [5, 3], [4, 1], [3, 1], [2, 0], [1, 4]
+                    ],
+                    'position3': [
+                        [6, 8], [5, 7], [4, 5], [3, 5], [2, 4], [1, 8]
+                    ],
+                    'position4': [
+                        [6, 0], [5, 11], [4, 9], [3, 9], [2, 8], [1, 0]
+                    ],
+                    'position5': [
+                        [6, 4], [5, 3], [4, 1], [3, 1], [2, 0], [1, 4]
+                    ]
+                },
+                // Dominante 7 em 5 posições
+                '7': {
+                    'position1': [
+                        [6, 0], [5, 2], [4, 0], [3, 1], [2, 0], [1, 0]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 2], [4, 3], [3, 0], [2, 3], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 7], [5, 7], [4, 5], [3, 5], [2, 5], [1, 6]
+                    ],
+                    'position4': [
+                        [6, 10], [5, 9], [4, 9], [3, 9], [2, 8], [1, 10]
+                    ],
+                    'position5': [
+                        [6, 0], [5, 0], [4, 0], [3, 0], [2, 1], [1, 0]
+                    ]
+                },
+                // Maior 7 em 5 posições
+                'maj7': {
+                    'position1': [
+                        [6, 0], [5, 2], [4, 1], [3, 1], [2, 0], [1, 0]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 2], [4, 4], [3, 0], [2, 4], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 7], [5, 7], [4, 5], [3, 5], [2, 5], [1, 7]
+                    ],
+                    'position4': [
+                        [6, 10], [5, 10], [4, 9], [3, 9], [2, 8], [1, 10]
+                    ],
+                    'position5': [
+                        [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0]
+                    ]
+                },
+                // Menor 7 em 5 posições
+                'm7': {
+                    'position1': [
+                        [6, 0], [5, 2], [4, 0], [3, 0], [2, 0], [1, 0]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 1], [4, 3], [3, 0], [2, 3], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 7], [5, 7], [4, 5], [3, 4], [2, 5], [1, 6]
+                    ],
+                    'position4': [
+                        [6, 10], [5, 9], [4, 9], [3, 8], [2, 8], [1, 10]
+                    ],
+                    'position5': [
+                        [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0]
+                    ]
+                },
+                // Meio-diminuto em 5 posições
+                'm7b5': {
+                    'position1': [
+                        [6, 0], [5, 1], [4, 0], [3, 0], [2, 0], [1, 1]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 1], [4, 3], [3, 0], [2, 2], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 5], [5, 4], [4, 5], [3, 3], [2, 5], [1, 5]
+                    ],
+                    'position4': [
+                        [6, 8], [5, 8], [4, 8], [3, 6], [2, 8], [1, 8]
+                    ],
+                    'position5': [
+                        [6, 11], [5, 10], [4, 11], [3, 9], [2, 10], [1, 11]
+                    ]
+                },
+                // Diminuto 7 em 5 posições
+                'dim7': {
+                    'position1': [
+                        [6, 0], [5, 1], [4, 2], [3, 0], [2, 1], [1, 0]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 4], [4, 2], [3, 3], [2, 2], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 6], [5, 7], [4, 5], [3, 6], [2, 5], [1, 6]
+                    ],
+                    'position4': [
+                        [6, 9], [5, 10], [4, 8], [3, 9], [2, 8], [1, 9]
+                    ],
+                    'position5': [
+                        [6, 0], [5, 1], [4, 11], [3, 0], [2, 11], [1, 0]
+                    ]
+                },
+                // Maior 6 em 5 posições
+                '6': {
+                    'position1': [
+                        [6, 0], [5, 2], [4, 2], [3, 1], [2, 2], [1, 0]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 2], [4, 4], [3, 2], [2, 0], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 7], [5, 7], [4, 6], [3, 5], [2, 5], [1, 7]
+                    ],
+                    'position4': [
+                        [6, 10], [5, 9], [4, 9], [3, 9], [2, 9], [1, 10]
+                    ],
+                    'position5': [
+                        [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0]
+                    ]
+                },
+                // Menor 6 em 5 posições
+                'm6': {
+                    'position1': [
+                        [6, 0], [5, 2], [4, 2], [3, 0], [2, 2], [1, 0]
+                    ],
+                    'position2': [
+                        [6, 3], [5, 1], [4, 4], [3, 2], [2, 0], [1, 3]
+                    ],
+                    'position3': [
+                        [6, 7], [5, 7], [4, 6], [3, 4], [2, 5], [1, 7]
+                    ],
+                    'position4': [
+                        [6, 10], [5, 9], [4, 9], [3, 8], [2, 9], [1, 10]
+                    ],
+                    'position5': [
+                        [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0]
+                    ]
+                }
+            };
+            
+            // Definição de padrões de 3 notas por corda
+            const THREE_NOTES_PATTERNS = {
+                'major': [
+                    // String 6
+                    [[6, 0], [6, 2], [6, 4]],
+                    // String 5
+                    [[5, 0], [5, 2], [5, 4]],
+                    // String 4
+                    [[4, 0], [4, 2], [4, 4]],
+                    // String 3
+                    [[3, 0], [3, 2], [3, 4]],
+                    // String 2
+                    [[2, 0], [2, 2], [2, 4]],
+                    // String 1
+                    [[1, 0], [1, 2], [1, 4]]
+                ],
+                'minor': [
+                    // String 6
+                    [[6, 0], [6, 2], [6, 3]],
+                    // String 5
+                    [[5, 0], [5, 2], [5, 3]],
+                    // String 4
+                    [[4, 0], [4, 2], [4, 3]],
+                    // String 3
+                    [[3, 0], [3, 2], [3, 3]],
+                    // String 2
+                    [[2, 0], [2, 2], [2, 3]],
+                    // String 1
+                    [[1, 0], [1, 2], [1, 3]]
+                ],
+                'pentatonic_major': [
+                    // String 6
+                    [[6, 0], [6, 2], [6, 4]],
+                    // String 5
+                    [[5, 0], [5, 2]],
+                    // String 4
+                    [[4, 0], [4, 2], [4, 4]],
+                    // String 3
+                    [[3, 0], [3, 2]],
+                    // String 2
+                    [[2, 0], [2, 3]],
+                    // String 1
+                    [[1, 0], [1, 2], [1, 4]]
+                ],
+                'pentatonic_minor': [
+                    // String 6
+                    [[6, 0], [6, 3]],
+                    // String 5
+                    [[5, 0], [5, 3], [5, 5]],
+                    // String 4
+                    [[4, 0], [4, 2]],
+                    // String 3
+                    [[3, 0], [3, 2], [3, 5]],
+                    // String 2
+                    [[2, 0], [2, 3]],
+                    // String 1
+                    [[1, 0], [1, 3], [1, 5]]
+                ]
             };
             
             // Definição de acordes (intervalos em relação à raiz)
             const CHORDS = {
+                // Tríades básicas
                 'major': [0, 4, 7],
                 'minor': [0, 3, 7],
                 'dim': [0, 3, 6],
                 'aug': [0, 4, 8],
-                '7': [0, 4, 7, 10],
-                'maj7': [0, 4, 7, 11],
-                'm7': [0, 3, 7, 10],
-                'm7b5': [0, 3, 6, 10]
+                
+                // Tétrades básicas (7ª)
+                '7': [0, 4, 7, 10],        // Dominante 7
+                'maj7': [0, 4, 7, 11],     // Maior 7
+                'm7': [0, 3, 7, 10],       // Menor 7
+                'm7b5': [0, 3, 6, 10],     // Meio-diminuto
+                'dim7': [0, 3, 6, 9],      // Diminuto 7
+                '6': [0, 4, 7, 9],         // Maior 6
+                'm6': [0, 3, 7, 9],        // Menor 6
+                '7#5': [0, 4, 8, 10],      // Dominante 7 com 5ª aumentada
+                '7b5': [0, 4, 6, 10],      // Dominante 7 com 5ª diminuta
+                
+                // Acordes de 9ª
+                '9': [0, 4, 7, 10, 14],    // Dominante 9
+                'maj9': [0, 4, 7, 11, 14], // Maior 9
+                'm9': [0, 3, 7, 10, 14],   // Menor 9
+                '7b9': [0, 4, 7, 10, 13],  // Dominante 7 com 9ª bemol
+                '7#9': [0, 4, 7, 10, 15],  // Dominante 7 com 9ª sustenida
+                
+                // Acordes de 11ª
+                '11': [0, 4, 7, 10, 14, 17],      // Dominante 11
+                'maj11': [0, 4, 7, 11, 14, 17],   // Maior 11
+                'm11': [0, 3, 7, 10, 14, 17],     // Menor 11
+                
+                // Acordes de 13ª
+                '13': [0, 4, 7, 10, 14, 21],      // Dominante 13
+                'maj13': [0, 4, 7, 11, 14, 21],   // Maior 13
+                'm13': [0, 3, 7, 10, 14, 21],     // Menor 13
+                
+                // Acordes com tensões (sus, add)
+                'sus2': [0, 2, 7],         // Suspenso 2
+                'sus4': [0, 5, 7],         // Suspenso 4
+                '7sus4': [0, 5, 7, 10],    // Dominante 7 sus4
+                'add9': [0, 4, 7, 14],     // Maior com 9ª adicionada
+                'madd9': [0, 3, 7, 14]     // Menor com 9ª adicionada
             };
             
             // Elementos DOM
@@ -1151,9 +2236,19 @@
             const tabButtonsEl = document.querySelectorAll('.tab-button');
             const rootNoteEl = document.getElementById('root-note');
             const scaleTypeEl = document.getElementById('scale-type');
+            const scalePatternTypeEl = document.getElementById('scale-pattern-type');
+            const cagedPositionEl = document.getElementById('caged-position');
             const chordTypeEl = document.getElementById('chord-type');
+            const voicingSelectEl = document.getElementById('voicing-select');
+            const arpeggioTypeEl = document.getElementById('arpeggio-type');
+            const arpeggioPositionEl = document.getElementById('arpeggio-position');
             const scaleTypeGroupEl = document.getElementById('scale-type-group');
+            const scalePatternGroupEl = document.getElementById('scale-pattern-group');
+            const cagedPositionGroupEl = document.getElementById('caged-position-group');
             const chordTypeGroupEl = document.getElementById('chord-type-group');
+            const voicingSelectGroupEl = document.getElementById('voicing-select-group');
+            const arpeggioTypeGroupEl = document.getElementById('arpeggio-type-group');
+            const arpeggioPositionGroupEl = document.getElementById('arpeggio-position-group');
             const clearHighlightedEl = document.getElementById('clear-highlighted');
             const displayToggleEl = document.getElementById('display-toggle');
             const intervalsLegendEl = document.getElementById('intervals-legend');
@@ -1193,6 +2288,12 @@
             // Notas que o usuário destacou manualmente
             let userHighlightedNotes = new Set();
             
+            // Cores das notas destacadas
+            let noteColors = {};
+            
+            // Acordes personalizados salvos pelo usuário
+            let customChords = [];
+            
             // Inicialização principal
             initFretboard();
             initInlayMarkers();
@@ -1205,6 +2306,41 @@
             
             // Configura todos os event listeners
             function setupEventListeners() {
+                // Botão para salvar acorde personalizado
+                document.getElementById('save-custom-chord').addEventListener('click', saveCustomChord);
+                
+                // Evento para mudança de cor da nota
+                document.getElementById('note-color-select').addEventListener('change', function() {
+                    // Apenas armazena a nova cor selecionada, sem mudar as notas existentes
+                    const selectedColor = this.value;
+                    
+                    // Exibir mensagem indicativa
+                    const status = document.getElementById('selection-status');
+                    status.textContent = `Nova cor selecionada: ${getColorName(selectedColor)}. Clique nas notas para adicionar com esta cor.`;
+                    
+                    // Função auxiliar para obter o nome da cor pelo valor hexadecimal
+                    function getColorName(hex) {
+                        const colorNames = {
+                            '#9c27b0': 'Roxo',
+                            '#f44336': 'Vermelho',
+                            '#ff9800': 'Laranja',
+                            '#ffeb3b': 'Amarelo',
+                            '#4caf50': 'Verde',
+                            '#2196f3': 'Azul',
+                            '#673ab7': 'Indigo',
+                            '#e91e63': 'Rosa',
+                            '#009688': 'Teal'
+                        };
+                        return colorNames[hex] || hex;
+                    }
+                    
+                    // Tempo para ocultar a mensagem após 3 segundos
+                    setTimeout(() => {
+                        if (currentMode === 'chord-builder') {
+                            updateSelectionStatus();
+                        }
+                    }, 3000);
+                });
                 // Event listeners para os botões de tab
                 tabButtonsEl.forEach(btn => {
                     btn.addEventListener('click', function() {
@@ -1243,6 +2379,17 @@
                 rootNoteEl.addEventListener('change', updateFretboard);
                 scaleTypeEl.addEventListener('change', updateFretboard);
                 chordTypeEl.addEventListener('change', updateFretboard);
+                voicingSelectEl.addEventListener('change', updateFretboard);
+                arpeggioTypeEl.addEventListener('change', updateFretboard);
+                arpeggioPositionEl.addEventListener('change', updateFretboard);
+                
+                // Event listeners para os padrões de digitação
+                scalePatternTypeEl.addEventListener('change', function() {
+                    updateControlsVisibility();
+                    updateFretboard();
+                });
+                
+                cagedPositionEl.addEventListener('change', updateFretboard);
                 
                 // Event listener para alteração de instrumento
                 instrumentSelectEl.addEventListener('change', function() {
@@ -1437,13 +2584,14 @@
                 
                 // Adicionar espaço para nomes das cordas
                 const spacer = document.createElement('div');
-                spacer.style.width = '30px';
+                spacer.style.width = '40px'; // Aumentado para combinar com a largura do string-name
                 inlayMarkersEl.appendChild(spacer);
                 
                 // Criar marcadores para cada traste
                 for (let i = 0; i <= NUM_FRETS; i++) {
                     const markerEl = document.createElement('div');
                     markerEl.className = 'inlay-marker';
+                    markerEl.setAttribute('data-fret', i);
                     
                     // Adicionar bolinhas nos trastes 3, 5, 7, 9
                     if ([3, 5, 7, 9].includes(i)) {
@@ -1481,6 +2629,27 @@
                         fretEl.dataset.string = i + 1;
                         fretEl.dataset.fret = j;
                         
+                        // Obter a nota correspondente a esta posição
+                        const stringNote = currentTuning[i];
+                        const noteInfo = getFretNote(stringNote, j);
+                        
+                        // Adicionar tooltip para mostrar informações sobre a posição
+                        fretEl.title = `Corda ${i+1} (${stringNote}) - Fret ${j} - Nota: ${noteInfo}`;
+                        
+                        // Adiciona evento de clique para permitir adicionar notas em casas vazias
+                        fretEl.addEventListener('click', function(e) {
+                            // Só permitir adicionar notas em casas vazias no modo de construtor de acordes
+                            // e apenas se clicar diretamente no fret (não em uma nota existente)
+                            if (currentMode === 'chord-builder' && e.target === this) {
+                                const stringNum = parseInt(this.dataset.string);
+                                const fret = parseInt(this.dataset.fret);
+                                const noteKey = `${stringNum}-${fret}`;
+                                
+                                // Adicionar a nota usando a função existente
+                                addNoteAtEmptyFret(noteKey);
+                            }
+                        });
+                        
                         if (i === 0) {
                             const fretNumberEl = document.createElement('div');
                             fretNumberEl.className = 'fret-number';
@@ -1492,6 +2661,14 @@
                     }
                     
                     fretboardEl.appendChild(stringEl);
+                }
+                
+                // Função auxiliar para calcular a nota em um fret específico
+                function getFretNote(stringNote, fret) {
+                    const noteIndex = NOTES.indexOf(stringNote);
+                    if (noteIndex === -1) return "?";
+                    const newNoteIndex = (noteIndex + fret) % 12;
+                    return NOTES[newNoteIndex];
                 }
             }
             
@@ -1510,12 +2687,46 @@
                         contentEl.textContent = 'Visualizando os intervalos em relação à nota raiz selecionada. Os intervalos são codificados por cores.';
                         break;
                     case 'scales':
-                        titleEl.textContent = `Escala ${getScaleTypeName(scaleTypeEl.value)} de ${rootNoteEl.value}`;
-                        contentEl.textContent = `Visualizando as notas da escala. As notas em vermelho são a nota raiz, as verdes são notas da escala, e as azuis escuras são blue notes (quando aplicável).`;
+                        const scaleTypeName = getScaleTypeName(scaleTypeEl.value);
+                        let patternInfo = '';
+                        
+                        // Adicionar informação sobre o padrão de digitação, se selecionado
+                        if (scalePatternTypeEl.value !== 'none') {
+                            if (scalePatternTypeEl.value === 'caged') {
+                                patternInfo = ` - Padrão CAGED ${cagedPositionEl.value}`;
+                            } else if (scalePatternTypeEl.value === 'three-note') {
+                                patternInfo = ` - Padrão 3 Notas por Corda`;
+                            }
+                        }
+                        
+                        titleEl.textContent = `Escala ${scaleTypeName} de ${rootNoteEl.value}${patternInfo}`;
+                        
+                        // Texto descritivo
+                        const patternType = scalePatternTypeEl.value;
+                        if (patternType === 'none') {
+                            contentEl.textContent = `Visualizando todas as notas da escala. As notas em vermelho são a nota raiz, as verdes são notas da escala, e as azuis escuras são blue notes (quando aplicável).`;
+                        } else if (patternType === 'caged') {
+                            contentEl.textContent = `Visualizando o padrão CAGED forma ${cagedPositionEl.value} para a escala. Os padrões CAGED são baseados nas 5 formas de acordes básicos e ajudam a visualizar a escala em diferentes regiões do braço.`;
+                        } else if (patternType === 'three-note') {
+                            contentEl.textContent = `Visualizando o padrão de 3 notas por corda. Este sistema coloca 3 notas em cada corda (quando possível), facilitando digitações consistentes por todo o braço.`;
+                        }
                         break;
                     case 'chord':
-                        titleEl.textContent = `Acorde ${getChordName(rootNoteEl.value, chordTypeEl.value)}`;
+                        const chordName = getChordName(rootNoteEl.value, chordTypeEl.value);
+                        const voicingName = voicingSelectEl.value !== 'standard' 
+                            ? ` com voicing ${getVoicingName(voicingSelectEl.value)}` 
+                            : '';
+                            
+                        titleEl.textContent = `Acorde ${chordName}${voicingName}`;
                         contentEl.textContent = `Visualizando as notas do acorde. A nota raiz está em vermelho e as demais notas do acorde em azul.`;
+                        break;
+                        
+                    case 'arpeggios':
+                        const arpeggioName = getChordName(rootNoteEl.value, arpeggioTypeEl.value);
+                        const positionName = getPositionName(arpeggioPositionEl.value);
+                        
+                        titleEl.textContent = `Arpejo ${arpeggioName} - ${positionName}`;
+                        contentEl.textContent = `Visualizando o arpejo ${arpeggioName} na ${positionName.toLowerCase()}. Os arpejos mostram as notas do acorde tocadas sequencialmente em vez de simultaneamente.`;
                         break;
                     case 'scale-triads':
                         titleEl.textContent = 'Tríades da Escala';
@@ -1524,6 +2735,10 @@
                     case 'all-triads':
                         titleEl.textContent = 'Tipos de Tríades';
                         contentEl.textContent = `Visualizando os diferentes tipos de tríades para a nota raiz ${rootNoteEl.value}. Clique em um tipo de tríade abaixo para vê-la no braço.`;
+                        break;
+                    case 'chord-builder':
+                        titleEl.textContent = 'Construtor de Acordes';
+                        contentEl.textContent = 'Clique nas notas no braço para construir seu próprio acorde. Use o botão "Salvar Acorde" para guardar sua criação.';
                         break;
                 }
                 
@@ -1535,20 +2750,49 @@
             // Retorna o nome do tipo de escala
             function getScaleTypeName(type) {
                 const scaleNames = {
+                    // Escalas básicas
                     'major': 'Maior',
                     'minor': 'Menor',
+                    'harmonic_minor': 'Menor Harmônica',
+                    'melodic_minor': 'Menor Melódica',
                     'pentatonic_major': 'Pentatônica Maior',
                     'pentatonic_minor': 'Pentatônica Menor',
                     'pentatonic_minor_blue': 'Pentatônica Menor com Blue Note',
                     'pentatonic_major_blue': 'Pentatônica Maior com Blue Note',
                     'blues': 'Blues',
+                    
+                    // Modos da escala maior (modos gregos)
                     'ionian': 'Jônio (Maior)',
                     'dorian': 'Dórico',
                     'phrygian': 'Frígio',
                     'lydian': 'Lídio',
                     'mixolydian': 'Mixolídio',
                     'aeolian': 'Eólio (Menor)',
-                    'locrian': 'Lócrio'
+                    'locrian': 'Lócrio',
+                    
+                    // Modos da escala menor harmônica
+                    'harmonic_minor_1': 'Menor Harmônica',
+                    'locrian_6': 'Lócrio #6',
+                    'ionian_5': 'Jônio #5',
+                    'dorian_4': 'Dórico #4',
+                    'phrygian_3': 'Frígio Dominante',
+                    'lydian_2': 'Lídio #2',
+                    'superlocrian_7': 'Superlócrio bb7',
+                    
+                    // Modos da escala menor melódica
+                    'melodic_minor_1': 'Menor Melódica',
+                    'dorian_b2': 'Dórico b2',
+                    'lydian_5': 'Lídio Aumentado',
+                    'lydian_7': 'Lídio Dominante',
+                    'mixolydian_6': 'Mixolídio b6',
+                    'locrian_2': 'Lócrio #2',
+                    'altered_scale': 'Escala Alterada',
+                    
+                    // Outras escalas importantes
+                    'whole_tone': 'Tons Inteiros',
+                    'diminished': 'Diminuta (H-W)',
+                    'diminished_inv': 'Diminuta (W-H)',
+                    'chromatic': 'Cromática'
                 };
                 
                 return scaleNames[type] || type;
@@ -1615,11 +2859,32 @@
                 // Atualizar o status de seleção
                 updateSelectionStatus();
                 
-                scaleTypeGroupEl.style.display = (currentMode === 'scales' || currentMode === 'scale-triads') ? 'flex' : 'none';
+                const isScaleMode = currentMode === 'scales' || currentMode === 'scale-triads';
+                
+                // Controles de escala
+                scaleTypeGroupEl.style.display = isScaleMode ? 'flex' : 'none';
+                scalePatternGroupEl.style.display = currentMode === 'scales' ? 'flex' : 'none';
+                
+                // Mostrar/esconder seleção de posição CAGED dependendo da seleção do padrão
+                const showCagedPositions = currentMode === 'scales' && 
+                                           scalePatternTypeEl.value === 'caged';
+                cagedPositionGroupEl.style.display = showCagedPositions ? 'flex' : 'none';
+                
+                // Controles de acorde
                 chordTypeGroupEl.style.display = currentMode === 'chord' ? 'flex' : 'none';
+                voicingSelectGroupEl.style.display = currentMode === 'chord' ? 'flex' : 'none';
+                
+                // Controles de arpejos
+                arpeggioTypeGroupEl.style.display = currentMode === 'arpeggios' ? 'flex' : 'none';
+                arpeggioPositionGroupEl.style.display = currentMode === 'arpeggios' ? 'flex' : 'none';
+                
+                // Outros controles
                 triadsInfoEl.style.display = currentMode === 'scale-triads' ? 'block' : 'none';
                 allTriadsInfoEl.style.display = currentMode === 'all-triads' ? 'block' : 'none';
                 intervalsLegendEl.style.display = (showNotation === 'intervals' || currentMode === 'intervals') ? 'flex' : 'none';
+                document.getElementById('chord-builder-controls').style.display = currentMode === 'chord-builder' ? 'flex' : 'none';
+                document.getElementById('chord-builder-save').style.display = currentMode === 'chord-builder' ? 'flex' : 'none';
+                document.getElementById('custom-chords-container').style.display = currentMode === 'chord-builder' ? 'block' : 'none';
             }
             
             // Atualiza o braço
@@ -1631,12 +2896,29 @@
                 generateIntervalsData(rootNote);
                 updateSelectionStatus();
                 
+                // Adicionar ou remover classe do modo construtor de acordes para estilo visual
+                const fretboardContainerEl = document.querySelector('.fretboard-container');
+                if (currentMode === 'chord-builder') {
+                    fretboardContainerEl.classList.add('chord-builder-mode');
+                } else {
+                    fretboardContainerEl.classList.remove('chord-builder-mode');
+                }
+                
                 if (currentMode === 'scales') {
                     generateScaleData(rootNote, scaleTypeEl.value);
-                    renderNotes();
+                    
+                    // Verificar se um padrão de digitação foi selecionado
+                    const patternType = scalePatternTypeEl.value;
+                    if (patternType !== 'none') {
+                        renderScalePattern(patternType);
+                    } else {
+                        renderNotes();
+                    }
                 } else if (currentMode === 'chord') {
                     generateChordData(rootNote, chordTypeEl.value);
                     renderNotes();
+                } else if (currentMode === 'arpeggios') {
+                    renderArpeggios(rootNote, arpeggioTypeEl.value, arpeggioPositionEl.value);
                 } else if (currentMode === 'scale-triads') {
                     generateScaleData(rootNote, scaleTypeEl.value);
                     generateScaleTriads(rootNote, scaleTypeEl.value);
@@ -1646,11 +2928,364 @@
                     renderAllTriads();
                 } else if (currentMode === 'intervals') {
                     renderIntervals();
+                } else if (currentMode === 'chord-builder') {
+                    renderChordBuilder();
                 } else {
                     renderNotes();
                 }
                 
                 updateInfoCard();
+            }
+            
+            // Renderiza arpejos no braço da guitarra
+            function renderArpeggios(rootNote, arpeggioType, position) {
+                // Verificar se o tipo de arpejo existe
+                if (!ARPEGGIO_PATTERNS[arpeggioType] || !ARPEGGIO_PATTERNS[arpeggioType][position]) {
+                    // Fallback para major/position1 se o arpejo solicitado não existir
+                    arpeggioType = 'major';
+                    position = 'position1';
+                }
+                
+                // Obter o padrão do arpejo
+                const arpeggioPattern = ARPEGGIO_PATTERNS[arpeggioType][position];
+                
+                // Calcular o deslocamento com base na nota raiz
+                const rootIdx = NOTES.indexOf(rootNote);
+                const adjustedPattern = [];
+                
+                // Ajustar o padrão para a nota raiz
+                for (const pos of arpeggioPattern) {
+                    const stringNum = pos[0];
+                    const fretOffset = pos[1];
+                    
+                    // Calcular o fret ajustado considerando a afinação da corda
+                    const stringNote = currentTuning[stringNum - 1];
+                    const stringNoteIdx = NOTES.indexOf(stringNote);
+                    
+                    // Calcular quanto precisamos ajustar para que a nota E na corda 6 seja a nota raiz
+                    const referenceNoteIdx = 4; // Índice da nota E no array NOTES
+                    let adjustment = 0;
+                    
+                    if (stringNum === 6) {
+                        // Para a sexta corda, calcular o ajuste baseado na diferença entre E e a nota raiz
+                        adjustment = (rootIdx - referenceNoteIdx + 12) % 12;
+                    } else {
+                        // Para outras cordas, manter o padrão relativo
+                        adjustment = (rootIdx - referenceNoteIdx + 12) % 12;
+                    }
+                    
+                    // Calcular o fret absoluto
+                    const absoluteFret = (fretOffset + adjustment) % (NUM_FRETS + 1);
+                    
+                    adjustedPattern.push([stringNum, absoluteFret]);
+                }
+                
+                // Obter as notas do arpejo para colorir corretamente
+                const arpeggioChord = CHORDS[arpeggioType] || [];
+                const arpeggioNotes = arpeggioChord.map(interval => {
+                    const noteIdx = (rootIdx + interval) % 12;
+                    return NOTES[noteIdx];
+                });
+                
+                // Adicionar a nota raiz se não estiver no acorde (improvável, mas por segurança)
+                if (!arpeggioNotes.includes(rootNote)) {
+                    arpeggioNotes.unshift(rootNote);
+                }
+                
+                // Renderizar as notas do arpejo
+                for (const pos of adjustedPattern) {
+                    const stringNum = pos[0];
+                    const fret = pos[1];
+                    
+                    // Verificar se o braço tem este local
+                    const stringIdx = stringNum - 1;
+                    if (stringIdx >= fretboardData.length || fret > NUM_FRETS) {
+                        continue;
+                    }
+                    
+                    // Obter a nota nesta posição
+                    const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                    if (!noteData) continue;
+                    
+                    const { note } = noteData;
+                    let noteClass = 'note';
+                    let displayText = note;
+                    
+                    // Aplicar cores: vermelho para raiz, azul para outras notas do arpejo
+                    if (note === rootNote) {
+                        noteClass += ' root';
+                    } else if (arpeggioNotes.includes(note)) {
+                        noteClass += ' chord-note';
+                    } else {
+                        continue; // Pular notas que não fazem parte do arpejo
+                    }
+                    
+                    // Alterar a exibição para intervalos se necessário
+                    if (showNotation === 'intervals') {
+                        const noteIdx = NOTES.indexOf(note);
+                        const interval = (noteIdx - rootIdx + 12) % 12;
+                        displayText = INTERVAL_NAMES[interval] || interval.toString();
+                        noteClass += ` interval-${INTERVAL_NAMES[interval].replace('#', 'sharp').replace('b', 'flat')}`;
+                    }
+                    
+                    // Criar e adicionar o elemento visual da nota
+                    const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                    if (!fretEl) continue;
+                    
+                    const noteEl = document.createElement('div');
+                    noteEl.className = noteClass;
+                    noteEl.textContent = displayText;
+                    noteEl.dataset.note = note;
+                    
+                    // Adicionar evento de clique para destacar a nota
+                    noteEl.addEventListener('click', function() {
+                        const noteKey = `${stringNum}-${fret}`;
+                        toggleHighlightNote(noteKey);
+                    });
+                    
+                    fretEl.appendChild(noteEl);
+                }
+            }
+            
+            // Renderiza padrões de digitação para escalas
+            function renderScalePattern(patternType) {
+                const rootNote = rootNoteEl.value;
+                const scaleType = scaleTypeEl.value;
+                let patternPositions = [];
+                
+                if (patternType === 'caged') {
+                    // Usar padrão CAGED
+                    const cagePosition = cagedPositionEl.value;
+                    patternPositions = getCAGEDPatternPositions(rootNote, scaleType, cagePosition);
+                } else if (patternType === 'three-note') {
+                    // Usar padrão de 3 notas por corda
+                    patternPositions = getThreeNotePatternPositions(rootNote, scaleType);
+                }
+                
+                // Renderizar o padrão no braço
+                renderPatternNotes(patternPositions);
+            }
+            
+            // Obtém posições absolutas do padrão CAGED ajustado para a nota raiz
+            function getCAGEDPatternPositions(rootNote, scaleType, cagePosition) {
+                // Se não tivermos um padrão para este tipo de escala, reverter para maior ou menor
+                let scalePatternType = scaleType;
+                if (!CAGED_PATTERNS[cagePosition].hasOwnProperty(scaleType + 'Scale')) {
+                    // Verificar se a escala é maior ou menor (baseado no 3º grau)
+                    const scale = SCALES[scaleType];
+                    if (scale && scale.includes(3)) {
+                        scalePatternType = 'minor';
+                    } else {
+                        scalePatternType = 'major';
+                    }
+                }
+                
+                // Obter o padrão base
+                const patternKey = scalePatternType === 'minor' ? 'minorScale' : 'majorScale';
+                const basePattern = CAGED_PATTERNS[cagePosition][patternKey];
+                
+                // Encontrar o fret base para este padrão
+                const rootIdx = NOTES.indexOf(rootNote);
+                let baseFret = 0;
+                
+                // Determinar o fret de início com base na forma CAGED e na nota raiz
+                switch(cagePosition) {
+                    case 'C':
+                        // Forma C - raiz na 5ª corda
+                        if (rootNote === 'C') baseFret = 3;
+                        else {
+                            // Encontrar onde a nota raiz está na 5ª corda
+                            const fiftString = currentTuning[4]; // 5ª corda
+                            const fiftStringRootIdx = NOTES.indexOf(fiftString);
+                            baseFret = (rootIdx - fiftStringRootIdx + 12) % 12;
+                        }
+                        break;
+                    case 'A': 
+                        // Forma A - raiz na 5ª corda
+                        if (rootNote === 'A') baseFret = 0;
+                        else {
+                            const fiftString = currentTuning[4]; // 5ª corda
+                            const fiftStringRootIdx = NOTES.indexOf(fiftString);
+                            baseFret = (rootIdx - fiftStringRootIdx + 12) % 12;
+                        }
+                        break;
+                    case 'G':
+                        // Forma G - raiz na 6ª corda
+                        if (rootNote === 'G') baseFret = 3;
+                        else {
+                            const sixtString = currentTuning[5]; // 6ª corda
+                            const sixtStringRootIdx = NOTES.indexOf(sixtString);
+                            baseFret = (rootIdx - sixtStringRootIdx + 12) % 12;
+                        }
+                        break;
+                    case 'E':
+                        // Forma E - raiz na 6ª corda
+                        if (rootNote === 'E') baseFret = 0;
+                        else {
+                            const sixtString = currentTuning[5]; // 6ª corda
+                            const sixtStringRootIdx = NOTES.indexOf(sixtString);
+                            baseFret = (rootIdx - sixtStringRootIdx + 12) % 12;
+                        }
+                        break;
+                    case 'D':
+                        // Forma D - raiz na 4ª corda
+                        if (rootNote === 'D') baseFret = 0;
+                        else {
+                            const fourthString = currentTuning[3]; // 4ª corda
+                            const fourthStringRootIdx = NOTES.indexOf(fourthString);
+                            baseFret = (rootIdx - fourthStringRootIdx + 12) % 12;
+                        }
+                        break;
+                }
+                
+                // Ensure baseFret is within playable range
+                if (baseFret > NUM_FRETS - 4) {
+                    baseFret = baseFret % 12;
+                }
+                
+                // Mapear para posições absolutas
+                return basePattern.map(pos => {
+                    const stringNum = pos[0];
+                    const relativeFret = pos[1];
+                    const absoluteFret = (baseFret + relativeFret) % (NUM_FRETS + 1);
+                    return [stringNum, absoluteFret];
+                });
+            }
+            
+            // Obtém posições absoltas do padrão 3-notas-por-corda ajustado para a nota raiz
+            function getThreeNotePatternPositions(rootNote, scaleType) {
+                // Se não tivermos um padrão para este tipo de escala, reverter para maior ou menor
+                let patternType = scaleType;
+                if (!THREE_NOTES_PATTERNS.hasOwnProperty(scaleType)) {
+                    // Verificar se a escala é maior ou menor (baseado no 3º grau)
+                    const scale = SCALES[scaleType];
+                    if (scale && scale.includes(3)) {
+                        patternType = 'minor';
+                    } else {
+                        patternType = 'major';
+                    }
+                }
+                
+                // Obter a escala completa
+                const scaleIntervals = SCALES[scaleType] || SCALES.major;
+                const rootIdx = NOTES.indexOf(rootNote);
+                const scaleNotes = scaleIntervals.map(interval => {
+                    const noteIdx = (rootIdx + interval) % 12;
+                    return NOTES[noteIdx];
+                });
+                
+                // Função para encontrar a primeira ocorrência da nota raiz em uma string
+                function findRootFret(stringNum) {
+                    const stringNote = currentTuning[stringNum - 1];
+                    const stringIdx = NOTES.indexOf(stringNote);
+                    let fret = 0;
+                    
+                    // Procurar a primeira ocorrência da nota raiz nessa corda
+                    while (fret <= NUM_FRETS) {
+                        const noteIdx = (stringIdx + fret) % 12;
+                        if (NOTES[noteIdx] === rootNote) {
+                            return fret;
+                        }
+                        fret++;
+                    }
+                    
+                    return 0; // Fallback
+                }
+                
+                // Encontrar o fret da nota raiz na 6ª corda para usar como referência
+                const rootFret = findRootFret(6);
+                
+                let allPositions = [];
+                
+                // Para cada string, gerar os padrões a partir da nota raiz
+                for (let stringIdx = 0; stringIdx < currentTuning.length; stringIdx++) {
+                    const stringNum = stringIdx + 1;
+                    const stringNote = currentTuning[stringIdx];
+                    const stringNoteIdx = NOTES.indexOf(stringNote);
+                    
+                    // Verificar se temos um padrão para esta corda
+                    if (THREE_NOTES_PATTERNS[patternType][stringIdx]) {
+                        const stringPattern = THREE_NOTES_PATTERNS[patternType][stringIdx];
+                        
+                        // Ajustar cada posição baseado na nota raiz
+                        stringPattern.forEach(pos => {
+                            const relativeFret = pos[1];
+                            const absoluteFret = (rootFret + relativeFret) % (NUM_FRETS + 1);
+                            allPositions.push([stringNum, absoluteFret]);
+                        });
+                    }
+                }
+                
+                return allPositions;
+            }
+            
+            // Renderiza notas baseado nas posições do padrão
+            function renderPatternNotes(positions) {
+                // Se não há posições para exibir, mostrar todas as notas
+                if (!positions || positions.length === 0) {
+                    renderNotes();
+                    return;
+                }
+                
+                const rootNote = rootNoteEl.value;
+                
+                // Para cada posição no padrão
+                for (const position of positions) {
+                    const stringNum = position[0];
+                    const fret = position[1];
+                    const stringIdx = stringNum - 1;
+                    
+                    // Verificar se a string e fret estão no range válido
+                    if (stringIdx >= fretboardData.length || fret > NUM_FRETS) {
+                        continue;
+                    }
+                    
+                    // Obter dados da nota
+                    const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                    if (!noteData) continue;
+                    
+                    const { note } = noteData;
+                    let noteClass = 'note';
+                    let displayText = note;
+                    
+                    // Verificar se a nota está na escala
+                    const inScale = scaleData.notes.includes(note);
+                    
+                    if (inScale) {
+                        if (note === rootNote) {
+                            noteClass += ' root';
+                        } else {
+                            noteClass += ' scale-note';
+                        }
+                    } else {
+                        continue; // Pular notas que não estão na escala
+                    }
+                    
+                    // Exibir o nome da nota ou o grau
+                    if (showNotation === 'intervals') {
+                        const noteIdx = NOTES.indexOf(note);
+                        const rootIdx = NOTES.indexOf(rootNote);
+                        const interval = (noteIdx - rootIdx + 12) % 12;
+                        displayText = INTERVAL_NAMES[interval] || interval.toString();
+                    }
+                    
+                    // Criar o elemento visual da nota
+                    const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                    if (!fretEl) continue;
+                    
+                    const noteEl = document.createElement('div');
+                    noteEl.className = noteClass;
+                    noteEl.textContent = displayText;
+                    noteEl.dataset.note = note;
+                    
+                    // Adicionar evento de clique para destacar a nota
+                    noteEl.addEventListener('click', function() {
+                        const noteKey = `${stringNum}-${fret}`;
+                        toggleHighlightNote(noteKey);
+                    });
+                    
+                    fretEl.appendChild(noteEl);
+                }
             }
             
             // Função para limpar notas destacadas pelo usuário
@@ -1662,18 +3297,155 @@
             
             // Alternar destaque de uma nota
             function toggleHighlightNote(noteKey) {
-                if (userHighlightedNotes.has(noteKey)) {
-                    userHighlightedNotes.delete(noteKey);
+                // No modo de construtor de acordes, implementamos a funcionalidade de duplo clique
+                if (currentMode === 'chord-builder') {
+                    const now = Date.now();
+                    const lastClick = lastClickTimestamps[noteKey] || 0;
+                    const isDoubleClick = (now - lastClick) < 300; // 300ms é um bom intervalo para detectar duplo clique
+                    
+                    // Atualizar o timestamp do último clique
+                    lastClickTimestamps[noteKey] = now;
+                    
+                    // Se a nota já está destacada e é um duplo clique, removê-la
+                    if (userHighlightedNotes.has(noteKey) && isDoubleClick) {
+                        userHighlightedNotes.delete(noteKey);
+                        
+                        // Atualizar a interface após remover a nota
+                        updateSelectionStatus();
+                        
+                        // Remover a nota existente e não adicionar uma nova
+                        const [stringNum, fret] = noteKey.split('-').map(Number);
+                        const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                        if (fretEl) {
+                            const existingNote = fretEl.querySelector('.note');
+                            if (existingNote) {
+                                existingNote.remove();
+                            }
+                        }
+                        
+                        updateCustomChordsList();
+                        return; // Importante: retornar após remover para evitar recriação da nota
+                    } 
+                    // Se a nota já está destacada (clique único), não fazer nada
+                    else if (userHighlightedNotes.has(noteKey)) {
+                        return;
+                    }
+                    // Se é uma nota não destacada, adicionar à seleção
+                    else {
+                        // Obter a cor atual selecionada
+                        const colorSelect = document.getElementById('note-color-select');
+                        const selectedColor = colorSelect.value;
+                        
+                        // Armazenar a nota com sua cor selecionada
+                        userHighlightedNotes.add(noteKey);
+                        // Armazenar a cor em um objeto global
+                        noteColors[noteKey] = selectedColor;
+                    }
                 } else {
-                    userHighlightedNotes.add(noteKey);
+                    // Comportamento original para outros modos
+                    if (userHighlightedNotes.has(noteKey)) {
+                        userHighlightedNotes.delete(noteKey);
+                    } else {
+                        userHighlightedNotes.add(noteKey);
+                    }
                 }
+                
                 updateSelectionStatus();
                 updateSingleNote(noteKey);
+                
+                // Se estiver no modo de construtor de acordes, atualizar a visualização
+                if (currentMode === 'chord-builder') {
+                    updateCustomChordsList();
+                }
             }
             
             // Atualiza o status de seleção
             function updateSelectionStatus() {
-                selectionStatusEl.textContent = `Clique em qualquer nota para destacá-la. Notas destacadas: ${userHighlightedNotes.size}`;
+                if (currentMode === 'chord-builder') {
+                    const colorSelect = document.getElementById('note-color-select');
+                    const colorName = getColorNameForStatus(colorSelect.value);
+                    selectionStatusEl.textContent = `Cor atual: ${colorName}. Clique para adicionar, clique duplo para remover. Notas selecionadas: ${userHighlightedNotes.size}`;
+                } else {
+                    selectionStatusEl.textContent = `Clique em qualquer nota para destacá-la. Notas destacadas: ${userHighlightedNotes.size}`;
+                }
+                
+                // Função auxiliar para obter o nome da cor
+                function getColorNameForStatus(hex) {
+                    const colorNames = {
+                        '#9c27b0': 'Roxo',
+                        '#f44336': 'Vermelho',
+                        '#ff9800': 'Laranja',
+                        '#ffeb3b': 'Amarelo',
+                        '#4caf50': 'Verde',
+                        '#2196f3': 'Azul',
+                        '#673ab7': 'Indigo',
+                        '#e91e63': 'Rosa',
+                        '#009688': 'Teal'
+                    };
+                    return colorNames[hex] || hex;
+                }
+            }
+            
+            // Armazenar o timestamp do último clique para cada casa
+            const lastClickTimestamps = {};
+            
+            // Função para adicionar ou remover uma nota em uma casa no modo de construtor de acordes
+            function addNoteAtEmptyFret(noteKey) {
+                // Verificar se estamos no modo correto
+                if (currentMode !== 'chord-builder') return;
+                
+                const [stringNum, fret] = noteKey.split('-').map(Number);
+                const stringIdx = stringNum - 1;
+                const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                
+                if (!noteData) return;
+                
+                const now = Date.now();
+                const lastClick = lastClickTimestamps[noteKey] || 0;
+                const isDoubleClick = (now - lastClick) < 300; // 300ms é o mesmo intervalo usado em toggleHighlightNote
+                
+                // Atualizar o timestamp do último clique
+                lastClickTimestamps[noteKey] = now;
+                
+                // Verificar se a casa já tem uma nota e se é um duplo clique
+                if (userHighlightedNotes.has(noteKey) && isDoubleClick) {
+                    // Se for um duplo clique em uma nota existente, remover a nota
+                    userHighlightedNotes.delete(noteKey);
+                    
+                    // Atualizar a interface após remover a nota
+                    updateSelectionStatus();
+                    
+                    // Remover a nota visualmente sem renderizar nada novo
+                    const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
+                    if (fretEl) {
+                        const existingNote = fretEl.querySelector('.note');
+                        if (existingNote) {
+                            existingNote.remove();
+                        }
+                    }
+                    
+                    updateCustomChordsList();
+                    return; // Importante: retornar após remover
+                }
+                // Se a casa já tem uma nota (clique único), não fazer nada
+                else if (userHighlightedNotes.has(noteKey)) {
+                    return;
+                }
+                // Se é uma casa vazia, adicionar a nota
+                else {
+                    // Obter a cor atual selecionada
+                    const colorSelect = document.getElementById('note-color-select');
+                    const selectedColor = colorSelect.value;
+                    
+                    // Adicionar a nota à lista de notas destacadas
+                    userHighlightedNotes.add(noteKey);
+                    noteColors[noteKey] = selectedColor;
+                    
+                    // Atualizar a interface para mostrar a nova nota
+                    updateSelectionStatus();
+                    updateSingleNote(noteKey);
+                    updateCustomChordsList();
+                }
             }
             
             // Atualiza apenas a nota específica que foi clicada
@@ -1681,27 +3453,28 @@
                 const [stringNum, fret] = noteKey.split('-').map(Number);
                 const fretEl = document.querySelector(`.fret[data-string="${stringNum}"][data-fret="${fret}"]`);
                 
-                if (fretEl) {
-                    // Remove a nota atual
-                    const existingNote = fretEl.querySelector('.note');
-                    if (existingNote) {
-                        existingNote.remove();
-                    }
-                    
-                    // Recupera os dados da nota
-                    const stringIdx = stringNum - 1;
-                    const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
-                    const intervalData = fretboardIntervalsData[stringIdx].find(n => n.fret === fret);
-                    
-                    if (!noteData) return;
-                    
-                    const { note } = noteData;
-                    const rootNote = rootNoteEl.value;
-                    const isHighlighted = userHighlightedNotes.has(noteKey);
-                    
-                    // Recria a nota com o estado correto
-                    let noteClass = 'note';
-                    let displayText = note;
+                if (!fretEl) return;
+                
+                // Remove a nota atual
+                const existingNote = fretEl.querySelector('.note');
+                if (existingNote) {
+                    existingNote.remove();
+                }
+                
+                // Recupera os dados da nota
+                const stringIdx = stringNum - 1;
+                const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                const intervalData = fretboardIntervalsData[stringIdx].find(n => n.fret === fret);
+                
+                if (!noteData) return;
+                
+                const { note } = noteData;
+                const rootNote = rootNoteEl.value;
+                const isHighlighted = userHighlightedNotes.has(noteKey);
+                
+                // Recria a nota com o estado correto
+                let noteClass = 'note';
+                let displayText = note;
                     
                     if (isHighlighted) {
                         noteClass += ' user-highlighted';
@@ -1770,11 +3543,52 @@
                         (currentMode === 'scales' && scaleData.notes && scaleData.notes.includes(note)) ||
                         (currentMode === 'chord' && chordData.notes && chordData.notes.includes(note)) ||
                         (currentMode === 'all-triads' && allTriads[currentTriadType] && allTriads[currentTriadType].notes.includes(note)) ||
-                        (currentMode === 'scale-triads' && scaleData.notes && scaleData.notes.includes(note))) {
+                        (currentMode === 'scale-triads' && scaleData.notes && scaleData.notes.includes(note)) ||
+                        (currentMode === 'chord-builder')) {
                         
                         const noteEl = document.createElement('div');
                         noteEl.className = noteClass;
                         noteEl.textContent = displayText;
+                        
+                        // Adicionar tooltip com informações detalhadas da nota
+                        const stringName = currentTuning[stringIdx];
+                        
+                        // Criar texto do tooltip com base no modo atual
+                        let tooltipText = `Corda ${stringNum} (${stringName}) - Fret ${fret} - Nota: ${note}`;
+                        
+                        // Adicionar informação sobre intervalos quando relevante
+                        if (showNotation === 'intervals' && intervalData) {
+                            tooltipText += ` - Intervalo: ${intervalData.interval_name}`;
+                        }
+                        
+                        // Adicionar informação sobre o tipo da nota baseado no modo atual
+                        if (isHighlighted) {
+                            tooltipText += ' - Nota destacada';
+                            if (currentMode === 'chord-builder' && noteColors[noteKey]) {
+                                const colorName = getColorNameForNote(noteColors[noteKey]);
+                                tooltipText += ` (${colorName})`;
+                            }
+                        } else {
+                            if (currentMode === 'scales' && scaleData.notes && scaleData.notes.includes(note)) {
+                                tooltipText += ' - Nota da escala';
+                            } else if (currentMode === 'chord' && chordData.notes && chordData.notes.includes(note)) {
+                                tooltipText += ' - Nota do acorde';
+                            }
+                        }
+                        
+                        noteEl.title = tooltipText;
+                        
+                        // Aplicar a cor personalizada para notas destacadas no modo construtor
+                        if (isHighlighted) {
+                            if (currentMode === 'chord-builder') {
+                                // Definir a cor da nota com base na cor escolhida ou padrão roxo
+                                noteEl.style.backgroundColor = noteColors[noteKey] || '#9c27b0';
+                                noteEl.style.boxShadow = `0 0 8px ${noteColors[noteKey] || '#9c27b0'}`;
+                            } else {
+                                // Para outros modos, usar cor roxa padrão
+                                noteEl.style.backgroundColor = '#9c27b0';
+                            }
+                        }
                         
                         // Adiciona o evento de clique
                         noteEl.addEventListener('click', function(e) {
@@ -1783,8 +3597,23 @@
                         });
                         
                         fretEl.appendChild(noteEl);
+                        
+                        // Função para obter o nome da cor pelo valor hexadecimal
+                        function getColorNameForNote(hex) {
+                            const colorNames = {
+                                '#9c27b0': 'Roxo',
+                                '#f44336': 'Vermelho',
+                                '#ff9800': 'Laranja',
+                                '#ffeb3b': 'Amarelo',
+                                '#4caf50': 'Verde',
+                                '#2196f3': 'Azul',
+                                '#673ab7': 'Indigo',
+                                '#e91e63': 'Rosa',
+                                '#009688': 'Teal'
+                            };
+                            return colorNames[hex] || hex;
+                        }
                     }
-                }
             }
             
             // Gera dados de escala
@@ -1830,7 +3659,158 @@
                     });
                 }
                 
-                chordData = { notes, intervals };
+                chordData = { 
+                    notes, 
+                    intervals,
+                    root: root,
+                    type: chordType 
+                };
+                
+                // Aplicar o voicing selecionado
+                const voicingType = voicingSelectEl.value;
+                if (voicingType !== 'standard') {
+                    applyVoicing(voicingType);
+                }
+            }
+            
+            // Aplica diferentes voicings aos acordes
+            function applyVoicing(voicingType) {
+                // Se o acorde possui menos de 3 notas, não podemos aplicar voicings
+                if (chordData.notes.length < 3) return;
+                
+                // Fazer uma cópia das notas e intervalos originais
+                const originalNotes = [...chordData.notes];
+                const originalIntervals = chordData.intervals.map(i => ({ ...i }));
+                
+                switch (voicingType) {
+                    case 'drop2':
+                        // Drop 2: segunda nota do topo é deslocada uma oitava abaixo
+                        if (originalNotes.length >= 4) {
+                            const secondFromTop = originalNotes[originalNotes.length - 2];
+                            const secondFromTopInterval = originalIntervals[originalIntervals.length - 2];
+                            
+                            // Reordenar as notas
+                            const newNotes = [
+                                secondFromTop,
+                                ...originalNotes.slice(0, originalNotes.length - 2),
+                                originalNotes[originalNotes.length - 1]
+                            ];
+                            
+                            // Reorganizar os intervalos
+                            const newIntervals = [
+                                secondFromTopInterval,
+                                ...originalIntervals.slice(0, originalIntervals.length - 2),
+                                originalIntervals[originalIntervals.length - 1]
+                            ];
+                            
+                            chordData.notes = newNotes;
+                            chordData.intervals = newIntervals;
+                        }
+                        break;
+                        
+                    case 'drop3':
+                        // Drop 3: terceira nota do topo é deslocada uma oitava abaixo
+                        if (originalNotes.length >= 4) {
+                            const thirdFromTop = originalNotes[originalNotes.length - 3];
+                            const thirdFromTopInterval = originalIntervals[originalIntervals.length - 3];
+                            
+                            // Reordenar as notas
+                            const newNotes = [
+                                thirdFromTop,
+                                ...originalNotes.slice(0, originalNotes.length - 3),
+                                ...originalNotes.slice(originalNotes.length - 2)
+                            ];
+                            
+                            // Reorganizar os intervalos
+                            const newIntervals = [
+                                thirdFromTopInterval,
+                                ...originalIntervals.slice(0, originalIntervals.length - 3),
+                                ...originalIntervals.slice(originalIntervals.length - 2)
+                            ];
+                            
+                            chordData.notes = newNotes;
+                            chordData.intervals = newIntervals;
+                        }
+                        break;
+                        
+                    case 'shell':
+                        // Shell voicing: apenas root, 3ª e 7ª (ou 6ª se não houver 7ª)
+                        const shellNotes = [];
+                        const shellIntervals = [];
+                        
+                        // Root (sempre presente)
+                        const rootIndex = originalNotes.indexOf(chordData.root);
+                        if (rootIndex !== -1) {
+                            shellNotes.push(originalNotes[rootIndex]);
+                            shellIntervals.push(originalIntervals[rootIndex]);
+                        }
+                        
+                        // Buscar a 3ª (maior ou menor)
+                        const thirdMajorIndex = originalIntervals.findIndex(i => i.interval === 4);
+                        const thirdMinorIndex = originalIntervals.findIndex(i => i.interval === 3);
+                        
+                        if (thirdMajorIndex !== -1) {
+                            shellNotes.push(originalNotes[thirdMajorIndex]);
+                            shellIntervals.push(originalIntervals[thirdMajorIndex]);
+                        } else if (thirdMinorIndex !== -1) {
+                            shellNotes.push(originalNotes[thirdMinorIndex]);
+                            shellIntervals.push(originalIntervals[thirdMinorIndex]);
+                        }
+                        
+                        // Buscar a 7ª (maior ou menor) ou 6ª
+                        const seventhMajorIndex = originalIntervals.findIndex(i => i.interval === 11);
+                        const seventhMinorIndex = originalIntervals.findIndex(i => i.interval === 10);
+                        const sixthIndex = originalIntervals.findIndex(i => i.interval === 9);
+                        
+                        if (seventhMajorIndex !== -1) {
+                            shellNotes.push(originalNotes[seventhMajorIndex]);
+                            shellIntervals.push(originalIntervals[seventhMajorIndex]);
+                        } else if (seventhMinorIndex !== -1) {
+                            shellNotes.push(originalNotes[seventhMinorIndex]);
+                            shellIntervals.push(originalIntervals[seventhMinorIndex]);
+                        } else if (sixthIndex !== -1) {
+                            shellNotes.push(originalNotes[sixthIndex]);
+                            shellIntervals.push(originalIntervals[sixthIndex]);
+                        }
+                        
+                        if (shellNotes.length >= 2) { // Só aplicar se tivermos pelo menos 2 notas
+                            chordData.notes = shellNotes;
+                            chordData.intervals = shellIntervals;
+                        }
+                        break;
+                        
+                    case 'quartal':
+                        // Voicing em quartas (sobrepor intervalos de 4ª justa)
+                        const rootNote = chordData.root;
+                        const rootIdx = NOTES.indexOf(rootNote);
+                        
+                        // Construir uma série de notas em quartas a partir da raiz
+                        const quartalNotes = [rootNote];
+                        const quartalIntervals = [{
+                            interval: 0,
+                            interval_name: '1P',
+                            note: rootNote
+                        }];
+                        
+                        // Adicionar mais 3 notas em quartas ascendentes (5 semitons = 4ª justa)
+                        let currentIdx = rootIdx;
+                        for (let i = 0; i < 3; i++) {
+                            currentIdx = (currentIdx + 5) % 12; // 4ª justa = 5 semitons
+                            const quartalNote = NOTES[currentIdx];
+                            const intervalValue = (5 * (i + 1)) % 12;
+                            
+                            quartalNotes.push(quartalNote);
+                            quartalIntervals.push({
+                                interval: intervalValue,
+                                interval_name: INTERVAL_NAMES[intervalValue] || `+${intervalValue}`,
+                                note: quartalNote
+                            });
+                        }
+                        
+                        chordData.notes = quartalNotes;
+                        chordData.intervals = quartalIntervals;
+                        break;
+                }
             }
             
             // Gera dados de tríades da escala
@@ -2349,14 +4329,46 @@
             // Obter sufixo do acorde baseado no tipo
             function getChordSuffix(type) {
                 const suffixes = {
+                    // Tríades básicas
                     'major': '',
                     'minor': 'm',
                     'dim': 'dim',
                     'aug': 'aug',
+                    
+                    // Tétrades básicas (7ª)
                     '7': '7',
                     'maj7': 'maj7',
                     'm7': 'm7',
-                    'm7b5': 'm7b5'
+                    'm7b5': 'm7b5',
+                    'dim7': 'dim7',
+                    '6': '6',
+                    'm6': 'm6',
+                    '7#5': '7#5',
+                    '7b5': '7b5',
+                    
+                    // Acordes de 9ª
+                    '9': '9',
+                    'maj9': 'maj9',
+                    'm9': 'm9',
+                    '7b9': '7b9',
+                    '7#9': '7#9',
+                    
+                    // Acordes de 11ª
+                    '11': '11',
+                    'maj11': 'maj11',
+                    'm11': 'm11',
+                    
+                    // Acordes de 13ª
+                    '13': '13',
+                    'maj13': 'maj13',
+                    'm13': 'm13',
+                    
+                    // Acordes com tensões (sus, add)
+                    'sus2': 'sus2',
+                    'sus4': 'sus4',
+                    '7sus4': '7sus4',
+                    'add9': 'add9',
+                    'madd9': 'madd9'
                 };
                 return suffixes[type] || '';
             }
@@ -2364,6 +4376,191 @@
             // Obter nome do acorde
             function getChordName(root, chordType) {
                 return root + getChordSuffix(chordType);
+            }
+            
+            // Obter nome do voicing
+            function getVoicingName(voicingType) {
+                const voicingNames = {
+                    'standard': 'Padrão',
+                    'drop2': 'Drop 2',
+                    'drop3': 'Drop 3',
+                    'shell': 'Shell',
+                    'quartal': 'Quartal'
+                };
+                return voicingNames[voicingType] || voicingType;
+            }
+            
+            // Obter nome da posição do arpejo
+            function getPositionName(position) {
+                const positionNames = {
+                    'position1': 'Posição 1 (Baixa)',
+                    'position2': 'Posição 2',
+                    'position3': 'Posição 3 (Média)',
+                    'position4': 'Posição 4',
+                    'position5': 'Posição 5 (Alta)'
+                };
+                return positionNames[position] || position;
+            }
+            
+            // Renderiza o modo de construtor de acordes
+            function renderChordBuilder() {
+                // Mostrar todas as notas no braço para permitir a seleção
+                renderNotes();
+                updateCustomChordsList();
+                
+                // Atualizar status com instruções para o construtor de acordes
+                updateSelectionStatus();
+            }
+            
+            // Atualiza a lista de acordes personalizados
+            function updateCustomChordsList() {
+                const customChordsListEl = document.getElementById('custom-chords-list');
+                customChordsListEl.innerHTML = '';
+                
+                if (currentMode !== 'chord-builder') return;
+                
+                // Coletar as notas destacadas para o acorde atual sendo construído
+                const currentChordNotes = [];
+                userHighlightedNotes.forEach(noteKey => {
+                    const [stringNum, fret] = noteKey.split('-').map(Number);
+                    const stringIdx = stringNum - 1;
+                    const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                    if (noteData) {
+                        currentChordNotes.push(noteData.note);
+                    }
+                });
+                
+                // Exibir o acorde atual sendo construído
+                if (currentChordNotes.length > 0) {
+                    const currentChordEl = document.createElement('div');
+                    currentChordEl.className = 'legend-item';
+                    currentChordEl.innerHTML = `<strong>Acorde Atual:</strong> ${currentChordNotes.join(', ')}`;
+                    customChordsListEl.appendChild(currentChordEl);
+                }
+                
+                // Exibir os acordes personalizados salvos
+                if (customChords.length > 0) {
+                    const savedChordsTitle = document.createElement('div');
+                    savedChordsTitle.className = 'legend-item';
+                    savedChordsTitle.style.width = '100%';
+                    savedChordsTitle.style.marginTop = '10px';
+                    savedChordsTitle.style.borderTop = '1px solid #ddd';
+                    savedChordsTitle.style.paddingTop = '10px';
+                    savedChordsTitle.innerHTML = '<strong>Acordes Salvos:</strong>';
+                    customChordsListEl.appendChild(savedChordsTitle);
+                    
+                    customChords.forEach((chord, index) => {
+                        const chordEl = document.createElement('div');
+                        chordEl.className = 'legend-item';
+                        chordEl.style.display = 'flex';
+                        chordEl.style.justifyContent = 'space-between';
+                        chordEl.style.width = '100%';
+                        chordEl.style.padding = '5px';
+                        chordEl.style.margin = '5px 0';
+                        chordEl.style.backgroundColor = '#f5f5f5';
+                        chordEl.style.borderRadius = '4px';
+                        
+                        const chordNameEl = document.createElement('span');
+                        chordNameEl.textContent = chord.name ? chord.name : `Acorde #${index + 1}`;
+                        
+                        const chordNotesEl = document.createElement('span');
+                        chordNotesEl.textContent = chord.notes.join(', ');
+                        
+                        const actionsEl = document.createElement('div');
+                        
+                        const loadBtn = document.createElement('button');
+                        loadBtn.className = 'secondary-button';
+                        loadBtn.style.marginRight = '5px';
+                        loadBtn.textContent = 'Carregar';
+                        loadBtn.addEventListener('click', () => loadCustomChord(chord));
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'secondary-button';
+                        deleteBtn.textContent = 'Excluir';
+                        deleteBtn.addEventListener('click', () => deleteCustomChord(index));
+                        
+                        actionsEl.appendChild(loadBtn);
+                        actionsEl.appendChild(deleteBtn);
+                        
+                        chordEl.appendChild(chordNameEl);
+                        chordEl.appendChild(chordNotesEl);
+                        chordEl.appendChild(actionsEl);
+                        
+                        customChordsListEl.appendChild(chordEl);
+                    });
+                }
+            }
+            
+            // Salva o acorde personalizado
+            function saveCustomChord() {
+                // Coletar as notas destacadas como um acorde personalizado
+                const chordNotes = [];
+                const chordPositions = {};
+                
+                userHighlightedNotes.forEach(noteKey => {
+                    const [stringNum, fret] = noteKey.split('-').map(Number);
+                    const stringIdx = stringNum - 1;
+                    const noteData = fretboardData[stringIdx].find(n => n.fret === fret);
+                    if (noteData) {
+                        chordNotes.push(noteData.note);
+                        // Armazenar a posição junto com a cor
+                        chordPositions[noteKey] = noteColors[noteKey] || '#9c27b0';
+                    }
+                });
+                
+                if (chordNotes.length > 0) {
+                    // Solicitar um nome para o acorde
+                    let chordName = prompt('Nome para o acorde:', '');
+                    
+                    if (chordName !== null) {
+                        // Adicionar à lista de acordes personalizados
+                        customChords.push({
+                            name: chordName,
+                            notes: chordNotes,
+                            positions: chordPositions
+                        });
+                        
+                        // Atualizar a interface
+                        updateCustomChordsList();
+                        alert(`Acorde "${chordName}" salvo com sucesso!`);
+                    }
+                } else {
+                    alert('Selecione pelo menos uma nota para salvar um acorde.');
+                }
+            }
+            
+            // Carregar um acorde personalizado
+            function loadCustomChord(chord) {
+                // Limpar as notas destacadas atuais
+                userHighlightedNotes.clear();
+                noteColors = {};
+                
+                // Adicionar as notas do acorde salvo com suas cores
+                if (typeof chord.positions === 'object' && !Array.isArray(chord.positions)) {
+                    // Formato novo com cores
+                    Object.keys(chord.positions).forEach(position => {
+                        userHighlightedNotes.add(position);
+                        noteColors[position] = chord.positions[position];
+                    });
+                } else if (Array.isArray(chord.positions)) {
+                    // Formato antigo (compatibilidade)
+                    chord.positions.forEach(position => {
+                        userHighlightedNotes.add(position);
+                        noteColors[position] = '#9c27b0'; // Cor padrão
+                    });
+                }
+                
+                // Atualizar a interface
+                updateSelectionStatus();
+                updateFretboard();
+            }
+            
+            // Excluir um acorde personalizado
+            function deleteCustomChord(index) {
+                if (confirm('Tem certeza que deseja excluir este acorde?')) {
+                    customChords.splice(index, 1);
+                    updateCustomChordsList();
+                }
             }
         });
     </script>
