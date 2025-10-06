@@ -1279,6 +1279,46 @@
                         <option value="locrian_2">Lócrio #2</option>
                         <option value="altered_scale">Escala Alterada</option>
                     </optgroup>
+                    <optgroup label="Escalas Exóticas e Étnicas">
+                        <option value="byzantine">Bizantina (Double Harmonic)</option>
+                        <option value="enigmatic">Enigmática</option>
+                        <option value="hungarian_major">Húngara Maior</option>
+                        <option value="hungarian_minor">Húngara Menor</option>
+                        <option value="persian">Persa</option>
+                        <option value="arabic">Árabe</option>
+                        <option value="gypsy">Cigana</option>
+                        <option value="spanish">Espanhola (Frígio Maior)</option>
+                        <option value="neapolitan_major">Napolitana Maior</option>
+                        <option value="neapolitan_minor">Napolitana Menor</option>
+                        <option value="hindu">Hindu</option>
+                        <option value="jewish">Judaica (Ahava Raba)</option>
+                    </optgroup>
+                    <optgroup label="Escalas Japonesas">
+                        <option value="hirajoshi">Hirajoshi</option>
+                        <option value="in_sen">In Sen</option>
+                        <option value="iwato">Iwato</option>
+                        <option value="yo">Yo</option>
+                    </optgroup>
+                    <optgroup label="Outras Culturas">
+                        <option value="balinese">Balinesa (Pelog)</option>
+                        <option value="chinese">Chinesa</option>
+                        <option value="mongolian">Mongol</option>
+                    </optgroup>
+                    <optgroup label="Escalas Bebop">
+                        <option value="bebop_dominant">Bebop Dominante</option>
+                        <option value="bebop_major">Bebop Maior</option>
+                        <option value="bebop_minor">Bebop Menor</option>
+                        <option value="bebop_dorian">Bebop Dórico</option>
+                    </optgroup>
+                    <optgroup label="Escalas Modernas e Sintéticas">
+                        <option value="prometheus">Prometeu</option>
+                        <option value="tritone">Trítono</option>
+                        <option value="scriabin">Scriabin (Prometeu Místico)</option>
+                        <option value="augmented">Aumentada</option>
+                        <option value="leading_whole_tone">Tons Inteiros com Sensível</option>
+                        <option value="istrian">Istriana</option>
+                        <option value="ukrainian_dorian">Dórico Ucraniano</option>
+                    </optgroup>
                 </select>
             </div>
             
@@ -1441,7 +1481,7 @@
                 <!-- Lista de tríades será gerada dinamicamente -->
             </div>
         </div>
-        
+
         <div id="all-triads-info" class="legend" style="display: none; margin-top: 20px; margin-bottom: 20px;">
             <h3>Tipos de Tríades</h3>
             <div id="all-triads-list" class="legend-items">
@@ -1746,7 +1786,47 @@
                 'whole_tone': [0, 2, 4, 6, 8, 10],                // Escala de Tons Inteiros
                 'diminished': [0, 2, 3, 5, 6, 8, 9, 11],          // Escala Diminuta (Meio-Tom - Tom)
                 'diminished_inv': [0, 1, 3, 4, 6, 7, 9, 10],      // Escala Diminuta (Tom - Meio-Tom)
-                'chromatic': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // Escala Cromática
+                'chromatic': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], // Escala Cromática
+
+                // Escalas exóticas e étnicas
+                'byzantine': [0, 1, 4, 5, 7, 8, 11],              // Bizantina (Double Harmonic)
+                'enigmatic': [0, 1, 4, 6, 8, 10, 11],             // Enigmática
+                'hungarian_major': [0, 3, 4, 6, 7, 9, 10],        // Húngara Maior
+                'hungarian_minor': [0, 2, 3, 6, 7, 8, 11],        // Húngara Menor
+                'persian': [0, 1, 4, 5, 6, 8, 11],                // Persa
+                'arabic': [0, 2, 4, 5, 6, 8, 10],                 // Árabe
+                'gypsy': [0, 2, 3, 6, 7, 8, 11],                  // Cigana
+                'spanish': [0, 1, 4, 5, 7, 8, 10],                // Espanhola (Frígio Maior)
+                'neapolitan_major': [0, 1, 3, 5, 7, 9, 11],       // Napolitana Maior
+                'neapolitan_minor': [0, 1, 3, 5, 7, 8, 11],       // Napolitana Menor
+                'hindu': [0, 2, 4, 5, 7, 8, 11],                  // Hindu
+
+                // Escalas japonesas
+                'hirajoshi': [0, 2, 3, 7, 8],                     // Japonesa Hirajoshi
+                'in_sen': [0, 1, 5, 7, 10],                       // Japonesa In Sen
+                'iwato': [0, 1, 5, 6, 10],                        // Japonesa Iwato
+                'yo': [0, 2, 5, 7, 9],                            // Japonesa Yo
+
+                // Escalas de outras culturas
+                'balinese': [0, 1, 3, 7, 8],                      // Balinesa (Pelog)
+                'chinese': [0, 4, 6, 7, 11],                      // Chinesa
+                'mongolian': [0, 2, 4, 7, 9],                     // Mongol
+                'jewish': [0, 1, 4, 5, 7, 8, 10],                 // Judaica (Ahava Raba)
+
+                // Escalas Bebop
+                'bebop_dominant': [0, 2, 4, 5, 7, 9, 10, 11],     // Bebop Dominante
+                'bebop_major': [0, 2, 4, 5, 7, 8, 9, 11],         // Bebop Maior
+                'bebop_minor': [0, 2, 3, 5, 7, 8, 9, 10],         // Bebop Menor
+                'bebop_dorian': [0, 2, 3, 4, 5, 7, 9, 10],        // Bebop Dórico
+
+                // Outras escalas modernas e sintéticas
+                'prometheus': [0, 2, 4, 6, 9, 10],                // Prometeu
+                'tritone': [0, 1, 4, 6, 7, 10],                   // Trítono
+                'scriabin': [0, 1, 4, 7, 9],                      // Scriabin (Prometeu Místico)
+                'augmented': [0, 3, 4, 7, 8, 11],                 // Aumentada
+                'leading_whole_tone': [0, 2, 4, 6, 8, 10, 11],    // Tons Inteiros com Sensível
+                'istrian': [0, 1, 3, 4, 6, 7],                    // Istriana
+                'ukrainian_dorian': [0, 2, 3, 6, 7, 9, 10]        // Dórico Ucraniano
             };
             
             // Definição de padrões CAGED para escalas maiores
@@ -2760,7 +2840,7 @@
                     'pentatonic_minor_blue': 'Pentatônica Menor com Blue Note',
                     'pentatonic_major_blue': 'Pentatônica Maior com Blue Note',
                     'blues': 'Blues',
-                    
+
                     // Modos da escala maior (modos gregos)
                     'ionian': 'Jônio (Maior)',
                     'dorian': 'Dórico',
@@ -2769,7 +2849,7 @@
                     'mixolydian': 'Mixolídio',
                     'aeolian': 'Eólio (Menor)',
                     'locrian': 'Lócrio',
-                    
+
                     // Modos da escala menor harmônica
                     'harmonic_minor_1': 'Menor Harmônica',
                     'locrian_6': 'Lócrio #6',
@@ -2778,7 +2858,7 @@
                     'phrygian_3': 'Frígio Dominante',
                     'lydian_2': 'Lídio #2',
                     'superlocrian_7': 'Superlócrio bb7',
-                    
+
                     // Modos da escala menor melódica
                     'melodic_minor_1': 'Menor Melódica',
                     'dorian_b2': 'Dórico b2',
@@ -2787,14 +2867,54 @@
                     'mixolydian_6': 'Mixolídio b6',
                     'locrian_2': 'Lócrio #2',
                     'altered_scale': 'Escala Alterada',
-                    
+
                     // Outras escalas importantes
                     'whole_tone': 'Tons Inteiros',
                     'diminished': 'Diminuta (H-W)',
                     'diminished_inv': 'Diminuta (W-H)',
-                    'chromatic': 'Cromática'
+                    'chromatic': 'Cromática',
+
+                    // Escalas exóticas e étnicas
+                    'byzantine': 'Bizantina (Double Harmonic)',
+                    'enigmatic': 'Enigmática',
+                    'hungarian_major': 'Húngara Maior',
+                    'hungarian_minor': 'Húngara Menor',
+                    'persian': 'Persa',
+                    'arabic': 'Árabe',
+                    'gypsy': 'Cigana',
+                    'spanish': 'Espanhola (Frígio Maior)',
+                    'neapolitan_major': 'Napolitana Maior',
+                    'neapolitan_minor': 'Napolitana Menor',
+                    'hindu': 'Hindu',
+                    'jewish': 'Judaica (Ahava Raba)',
+
+                    // Escalas japonesas
+                    'hirajoshi': 'Hirajoshi',
+                    'in_sen': 'In Sen',
+                    'iwato': 'Iwato',
+                    'yo': 'Yo',
+
+                    // Outras culturas
+                    'balinese': 'Balinesa (Pelog)',
+                    'chinese': 'Chinesa',
+                    'mongolian': 'Mongol',
+
+                    // Escalas Bebop
+                    'bebop_dominant': 'Bebop Dominante',
+                    'bebop_major': 'Bebop Maior',
+                    'bebop_minor': 'Bebop Menor',
+                    'bebop_dorian': 'Bebop Dórico',
+
+                    // Escalas modernas e sintéticas
+                    'prometheus': 'Prometeu',
+                    'tritone': 'Trítono',
+                    'scriabin': 'Scriabin (Prometeu Místico)',
+                    'augmented': 'Aumentada',
+                    'leading_whole_tone': 'Tons Inteiros com Sensível',
+                    'istrian': 'Istriana',
+                    'ukrainian_dorian': 'Dórico Ucraniano'
                 };
-                
+
                 return scaleNames[type] || type;
             }
             
@@ -2860,7 +2980,7 @@
                 updateSelectionStatus();
                 
                 const isScaleMode = currentMode === 'scales' || currentMode === 'scale-triads';
-                
+
                 // Controles de escala
                 scaleTypeGroupEl.style.display = isScaleMode ? 'flex' : 'none';
                 scalePatternGroupEl.style.display = currentMode === 'scales' ? 'flex' : 'none';
@@ -3539,7 +3659,7 @@
                     }
                     
                     // Cria a nova nota
-                    if (currentMode === 'notes' || currentMode === 'intervals' || isHighlighted || 
+                    if (currentMode === 'notes' || currentMode === 'intervals' || isHighlighted ||
                         (currentMode === 'scales' && scaleData.notes && scaleData.notes.includes(note)) ||
                         (currentMode === 'chord' && chordData.notes && chordData.notes.includes(note)) ||
                         (currentMode === 'all-triads' && allTriads[currentTriadType] && allTriads[currentTriadType].notes.includes(note)) ||
@@ -3889,7 +4009,7 @@
                 
                 scaleTriads = triads;
             }
-            
+
             // Gera notas de um acorde
             function generateChordNotes(root, chordType) {
                 const rootIdx = NOTES.indexOf(root);
@@ -4120,7 +4240,7 @@
                     triadsListEl.appendChild(triadEl);
                 });
             }
-            
+
             // Renderiza todos os tipos de tríades
             function renderAllTriads() {
                 const allTriadsListEl = document.getElementById('all-triads-list');
